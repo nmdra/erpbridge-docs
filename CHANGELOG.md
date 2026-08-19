@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- Navbar reordered: **SDK** entry moved to right after **Bridgectl** (before Roadmap and FAQ)
 - Site title shortened from "ERPBridge Docs" to "ERPBridge" (navbar, hero, browser tab)
 - Hero primary button renamed to **Try ERPBridge**
 - Hero illustration redesigned: minimal composition (no text labels) showing data transformation — raw ERP packets flow into the hub and leave as structured packets for AI agents
