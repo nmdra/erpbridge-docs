@@ -5,7 +5,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: 'ERPBridge Docs',
+  title: 'ERPBridge',
   tagline: 'Connect your legacy ERP to AI-based workflows without changing your code base',
   favicon: 'img/logo.svg',
 
@@ -109,7 +109,7 @@ const config: Config = {
       respectPrefersColorScheme: true,
     },
     navbar: {
-      title: 'ERPBridge Docs',
+title: 'ERPBridge',
       logo: {
         alt: 'ERPBridge Logo',
         src: 'img/logo.svg',

@@ -23,7 +23,7 @@ function HomepageHeader() {
               <Link
                 className="button button--secondary button--lg"
                 to="/docs/erpbridge/intro">
-                Get Started
+                Try ERPBridge
               </Link>
               <Link
                 className="button button--secondary button--lg"

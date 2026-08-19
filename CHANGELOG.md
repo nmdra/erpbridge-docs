@@ -8,6 +8,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- Site title shortened from "ERPBridge Docs" to "ERPBridge" (navbar, hero, browser tab)
+- Hero primary button renamed to **Try ERPBridge**
+- Hero illustration redesigned: minimal composition (no text labels) showing data transformation — raw ERP packets flow into the hub and leave as structured packets for AI agents
 - Site tagline updated to "Connect your legacy ERP to AI-based workflows without changing your code base" (homepage hero, meta description, `llms.txt`)
 - Homepage feature sections extended to six: the original **MCP Made Simple**, **Tool Registry**, and **Resilient by Default**, plus **Non-Invasive Integration**, **AI-Agent-First Design**, and **BYOERP — Bring Your Own ERP**, each with a custom icon
 
