@@ -5,9 +5,6 @@ description: Connect a new ERP system to ERPBridge in under 10 minutes with the 
 keywords: [onboarding, ERP, register, generate, apply, bridgectl]
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 # ERPBridge Onboarding Guide
 
 > Connect a new ERP system to ERPBridge in under 10 minutes with the `bridgectl` CLI.
@@ -89,10 +86,10 @@ It helps the LLM layer understand the purpose of the API. The command fails with
 Convert the OpenAPI spec of your ERP into MCP tool schemas:
 
 ```bash title="Generate schemas from OpenAPI"
-./bridgectl tool generate --api erp --openapi mock-erp/openapi.yaml -o yaml > schemas/erp/generated.yaml
+./bridgectl tool generate --api erp --openapi mock-erp/openapi.yaml
 ```
 
-The command prints one YAML document per generated tool to stdout. Save each document as a separate file, or keep the output as one manifest file for Step 5.
+The command writes one JSON schema file per generated tool into `schemas/erp/` (one directory per module), for example `schemas/erp/list_employees.json`. It also prints the generated schemas to stdout — ignore that output; the files on disk are what you apply in the next step.
 
 :::tip Check the path first
 If you are unsure the spec exists: `ls mock-erp/openapi.yaml`
@@ -104,24 +101,15 @@ The `schemas/` directory is **not tracked by git**. Generate the schemas on each
 
 ## Step 5 — Apply Tools to the Registry
 
-Upload your schemas to the ERPBridge server.
+Upload your schemas to the ERPBridge server. Point `apply` at the directory the generator wrote.
 
-<Tabs groupId="apply">
-  <TabItem value="single" label="Apply a single tool">
-
-```bash title="Apply one tool"
-./bridgectl tool apply -f schemas/erp/list_employees.json
-```
-
-  </TabItem>
-  <TabItem value="dir" label="Apply a directory (recursive)">
-
-```bash title="Apply all tools in a directory"
+```bash title="Apply all generated tools"
 ./bridgectl tool apply -f schemas/erp/
 ```
 
-  </TabItem>
-</Tabs>
+:::tip Why not redirect stdout to a YAML file
+The generator writes individual `.json` files to disk for you. If you pipe the stdout output to a file and apply it, `apply` fails — it accepts a single schema or a directory of schema files, not a multi-document manifest.
+:::
 
 ## Step 6 — Verify Everything Is Working
 
