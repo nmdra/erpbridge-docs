@@ -13,10 +13,49 @@ Authentication protects the management endpoints and MCP transport from unauthor
 
 - The MCP endpoint (`/mcp/`) and direct API endpoints are **open** — no authentication is enforced yet.
 - Token-based authentication is **planned** and will land in an upcoming release (see [Roadmap](../roadmap/overview.mdx)).
+- Outbound authentication to the upstream ERP **is** implemented — see [Outbound ERP authentication](#outbound-erp-authentication) below.
 
 :::caution Production deployment
 Until authentication lands, the server should only be exposed on trusted networks. Do not put an unauthenticated ERPBridge server directly on the public internet.
 :::
+
+## Outbound ERP authentication
+
+When a tool executes, the connector authenticates to the upstream ERP using the `spec.security` block of the tool schema.
+
+| `authType` | Header sent | Use case |
+| :--- | :--- | :--- |
+| `api-key` | `Authorization: <key>` | Simple API keys; also accepts Frappe `token key:secret`. |
+| `basic` | `Authorization: Basic <base64(key)>` | Basic HTTP auth. |
+| `bearer` | `Authorization: Bearer <key>` | OAuth2 / bearer tokens. |
+
+**Credential resolution** — `credentialRef` names an environment variable on the server. The connector reads `os.Getenv(credentialRef)` and uses that value as the key. If the variable is unset, the literal `credentialRef` string is used as a fallback so local testing works without server-side configuration.
+
+```json title="Tool schema — outbound auth"
+"spec": {
+  "execution": {
+    "type": "http",
+    "method": "GET",
+    "endpoint": "https://erp.example.com/api/v1/resource/Employee"
+  },
+  "security": {
+    "authType": "bearer",
+    "credentialRef": "ERP_API_TOKEN"
+  }
+}
+```
+
+:::tip Secrets stay out of the registry
+Never put the secret value in the schema. Always reference it through `credentialRef` so it resolves from the server environment.
+:::
+
+### Data redaction
+
+The logger automatically masks sensitive values before they reach console output, broadcast streams, or MCP log streams:
+
+- **Redacted keys:** `password`, `token`, `api_key`, `secret`, `authorization`, `ssn`, `national_id`, `bank_account`, plus field prefixes `Secret`/`Private` and struct tags `secret`/`pii`/`masq`.
+- **Sensitive types:** `APIToken`, `Password`, `AuthHeader`, `SecretKey`, `PII`.
+- **Regex masking:** any `Bearer <value>` becomes `Bearer [REDACTED]`.
 
 ## Planned design
 

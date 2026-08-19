@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Corrected the MCP handshake URL from `POST /mcp/initialize` to `POST /mcp/` with a JSON-RPC `initialize` request in the Transports and Connectivity guides (drift from server.go:465)
 - Cache guide: TTL now documented as defaulting to `0` (no expiry), and `bridgectl cache flush` documented with the positional tool argument instead of the non-existent `--tool` flag
 - REST API reference: documented all 11 Prometheus metrics (names, types, labels), the `201` apply response envelope, the `422` admission status, and the `/api/tools/invoke`, `/api/cache/stats`, `/api/cache/flush` response envelopes (drift from internal/metrics/metrics.go and internal/mcp/server.go)
+- Authentication guide: added outbound ERP authentication (`api-key`/`basic`/`bearer` header construction and `credentialRef` resolution) and the logger's data redaction rules (drift from internal/mcp/tool.go and internal/logger/mcp_handler.go)
 
 ### Added
 
