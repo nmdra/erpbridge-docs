@@ -9,7 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Changed
 
 - Site tagline updated to "Connect your legacy ERP to AI-based workflows without changing your code base" (homepage hero, meta description, `llms.txt`)
-- Homepage feature sections replaced: **Non-Invasive Integration**, **AI-Agent-First Design**, and **BYOERP — Bring Your Own ERP**, each with a new custom icon
+- Homepage feature sections extended to six: the original **MCP Made Simple**, **Tool Registry**, and **Resilient by Default**, plus **Non-Invasive Integration**, **AI-Agent-First Design**, and **BYOERP — Bring Your Own ERP**, each with a custom icon
 
 ### Fixed
 
