@@ -146,6 +146,12 @@ title: 'ERPBridge',
           label: 'FAQ',
         },
         {
+          type: 'docSidebar',
+          sidebarId: 'sdkSidebar',
+          position: 'left',
+          label: 'SDK',
+        },
+        {
           href: 'https://github.com/nmdra/ERPBridge',
           label: 'Source',
           position: 'right',
@@ -178,6 +184,10 @@ title: 'ERPBridge',
             {
               label: 'FAQ',
               to: '/docs/faq',
+            },
+            {
+              label: 'SDK',
+              to: '/docs/sdk/overview',
             },
           ],
         },

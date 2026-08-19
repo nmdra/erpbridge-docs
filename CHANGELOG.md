@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- New **ERPBridge SDK** section (work in progress) documenting the upcoming SDK with a built-in MCP client, log aggregation, and metrics viewing
 - New global FAQ page (`/docs/faq`) answering common project-level questions, linked from the navbar and footer
 - ERPBridge FAQ expanded with sections on MCP clients & transports, caching, notifications & system tools, and errors & exit codes
 - Roadmap page rewritten with shipped/in-flight status tables and phased plan
