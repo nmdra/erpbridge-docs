@@ -14,4 +14,5 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Roadmap section for upcoming projects in the ERPBridge family
 - Local search via `@easyops-cn/docusaurus-search-local`
 - GitHub Pages CI/CD: `test-deploy.yml` (PR build check) and `deploy.yml` (build + deploy on push to `main`)
+- AI-readiness: `docusaurus-plugin-copy-page-button` (copy page as Markdown, open in ChatGPT/Claude/Gemini, MCP server install for Cursor/VS Code, per-page `.md` routes) and `docusaurus-plugin-llms` (`llms.txt` + `llms-full.txt` per the llmstxt.org standard)
 - README, AGENTS.md, and this changelog

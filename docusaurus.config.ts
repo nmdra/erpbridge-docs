@@ -80,6 +80,27 @@ const config: Config = {
         docsRouteBasePath: '/docs',
       },
     ],
+    [
+      'docusaurus-plugin-copy-page-button',
+      {
+        generateMarkdownRoutes: true,
+        mcpServer: {
+          name: 'ERPBridge',
+          type: 'stdio',
+          command: 'erpbridge-server',
+          args: ['--stdio'],
+        },
+      },
+    ],
+    [
+      'docusaurus-plugin-llms',
+      {
+        generateLLMsTxt: true,
+        generateLLMsFullTxt: true,
+        description:
+          'Documentation for ERPBridge — connect legacy ERP systems to AI agents through the Model Context Protocol.',
+      },
+    ],
   ],
 
   themeConfig: {

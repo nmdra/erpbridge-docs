@@ -29,3 +29,4 @@ Rules for agents making changes to this repository.
 - Docs are plain Markdown, not MDX (`markdown.format: 'md'` in `docusaurus.config.ts`) — do not introduce JSX/React components in `.md` files.
 - Each product gets its own section under `docs/<product>/`; register new sections in `sidebars.ts` and the navbar in `docusaurus.config.ts`.
 - Prefer relative links between docs pages.
+- The build auto-generates AI-readiness artifacts (`llms.txt`, `llms-full.txt`, and per-page `.md` files). Verify they still generate after content changes (`npm run build` fails otherwise).

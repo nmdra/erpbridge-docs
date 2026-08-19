@@ -29,6 +29,14 @@ docs/
 └── roadmap/     # upcoming projects and plans
 ```
 
+## AI readiness
+
+The site is optimized for LLM consumption:
+
+- **`llms.txt` / `llms-full.txt`** — generated at build time by `docusaurus-plugin-llms` (llmstxt.org standard) and served at `/erpbridge-docs/llms.txt` and `/erpbridge-docs/llms-full.txt`.
+- **Per-page Markdown** — every doc is also served as raw Markdown at `/{path}.md`.
+- **Copy page button** — `docusaurus-plugin-copy-page-button` adds a "copy as Markdown / open in ChatGPT / Claude / Gemini" button to every page, plus a one-click MCP server install for Cursor/VS Code.
+
 ## Deployment
 
 Pushing to `main` triggers `.github/workflows/deploy.yml`, which builds the site and deploys to GitHub Pages via `actions/deploy-pages`. Pull requests are build-checked by `.github/workflows/test-deploy.yml`.
