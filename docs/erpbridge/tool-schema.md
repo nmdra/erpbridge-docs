@@ -1,0 +1,112 @@
+---
+sidebar_position: 8
+---
+
+# MCP Tool Schema Reference (V2)
+
+ERPBridge uses a Kubernetes-style declarative resource format to define tools. This ensures tools are versioned, intent-based, and decoupled from the underlying ERP structure.
+
+---
+
+## 🏗 Resource Structure
+
+A tool definition is composed of four main sections: `apiVersion/kind`, `metadata`, `spec`, and `status` (internal only).
+
+```yaml
+apiVersion: erpbridge.io/v1
+kind: MCPTool
+metadata:
+  name: list_employees
+  version: 1.2.0
+  module: hr
+spec:
+  description: { ... }
+  inputSchema: { ... }
+  execution: { ... }
+  security: { ... }
+  cache: { ... }
+  routing: { ... }
+```
+
+---
+
+## 🔑 Field Definitions
+
+### `metadata`
+Identity and grouping information.
+- **`name`**: (String) Unique identifier. Use **intent-based names** (e.g., `list_employees`) instead of technical ones (e.g., `get_resource_employee`).
+- **`version`**: (String) SemVer version (e.g., `1.0.0`).
+- **`module`**: (String) Logical grouping for access control and organization.
+
+### `spec.description`
+High-signal information to help the LLM select the correct tool.
+- **`short`**: (String) Concise summary of what the tool does.
+- **`whenToUse`**: (Array) List of scenarios where this tool is appropriate.
+- **`whenNotToUse`**: (Array) List of similar scenarios where you must not use this tool.
+- **`examples`**: (Array) Sample user queries that trigger this tool.
+
+### `spec.inputSchema`
+Standard JSON Schema defining the arguments. **Strict typing is mandatory.**
+- Use `properties` to define fields and `required` to enforce them.
+- **Avoid "filters" strings**: Break down complex query requirements into individual typed properties.
+
+### `spec.execution`
+Technical mapping to the ERP API.
+- **`method`**: (String) `GET`, `POST`, `PUT`, `DELETE`.
+- **`endpoint`**: (String) The ERP API URL path.
+- **`mapping`**: (Map) Optional. Maps LLM arg names to ERP parameter names.
+- **`responsePath`**: (String) JSON key to extract from the ERP response (e.g., `"data"` or `"message"`).
+
+### `spec.security`
+Authentication strategy.
+- **`authType`**: `api-key`, `bearer`, or `basic`.
+- **`credentialRef`**: The name of the environment variable containing the secret. **Never embed raw secrets here.**
+
+---
+
+## 📝 Annotated Example
+
+```yaml
+apiVersion: erpbridge.io/v1
+kind: MCPTool
+metadata:
+  name: create_purchase_invoice
+  version: 1.0.0
+  module: finance
+spec:
+  description:
+    short: "Create a new purchase invoice draft."
+    whenToUse:
+      - "User wants to record a new supplier bill"
+      - "Adding an invoice to the finance module"
+  inputSchema:
+    type: object
+    properties:
+      supplier:
+        type: string
+        description: "The name of the vendor"
+      amount:
+        type: number
+        description: "Total invoice amount"
+    required: ["supplier", "amount"]
+  execution:
+    type: http
+    method: POST
+    endpoint: "/api/resource/Purchase Invoice"
+    responsePath: "data" # ERP returns { "data": { ... } }, we only want the inner object
+  security:
+    authType: api-key
+    credentialRef: ERP_FINANCE_KEY # Resolves to ENV["ERP_FINANCE_KEY"]
+  cache:
+    enabled: false # Don't cache write operations
+    invalidateOn: ["list_purchase_invoices"] # Flush list cache when a new one is created
+```
+
+---
+
+## 🚀 Transitioning from V1
+If you have old schemas, use `bridgectl tool generate` to convert them, or manually update the following:
+1. Wrap the schema in `spec`.
+2. Move `name`, `version`, `module` to `metadata`.
+3. Separate `endpoint` into `execution` and `security`.
+4. Ensure naming is lowercase and uses underscores.
