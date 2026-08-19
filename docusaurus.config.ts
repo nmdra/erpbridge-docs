@@ -32,6 +32,14 @@ const config: Config = {
   // CommonMark — safe for shell snippets like `<(...)` or `$(...)`.
   markdown: {
     format: 'detect',
+    // Mermaid diagrams in fenced ```mermaid code blocks (requires @docusaurus/theme-mermaid).
+    mermaid: true,
+    // future.v4 disables the mdx1Compat defaults; re-enable the admonition
+    // title preprocessor so `:::tip My title` keeps working with
+    // remark-directive v3 (which no longer parses same-line labels).
+    mdx1Compat: {
+      admonitions: true,
+    },
   },
 
   // Even if you don't use internationalization, you can use this field to set
@@ -99,9 +107,6 @@ const config: Config = {
     colorMode: {
       defaultMode: 'dark',
       respectPrefersColorScheme: true,
-    },
-    markdown: {
-      mermaid: true,
     },
     navbar: {
       title: 'ERPBridge Docs',

@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 - Hand-written pages converted from Markdown to **MDX** (`.mdx`) and upgraded with Docusaurus native features: `Tabs`, admonitions, collapsible `<details>`, code block titles, and richer front matter (description, keywords)
 - `markdown.format` switched from `'md'` to `'detect'` so `.mdx` pages get full MDX while the generated cobra CLI reference stays CommonMark-safe
+- Fixed MDX rendering: moved `mermaid` into the top-level `markdown` config (was misplaced in `themeConfig`) and re-enabled `mdx1Compat.admonitions` (disabled by `future.v4`) so `:::tip Title` admonitions render instead of showing as literal text
 - Reordered server sidebar: Introduction → Quickstart → Onboarding → Connectivity → Transports → Architecture → Tool Schema → MCP Client Guide → Auth → Docker → Environment Variables → Caching → API → FAQ
 - Bridgectl sidebar now groups commands by parent command (api, tool, cache, log, context, other)
 
