@@ -140,6 +140,12 @@ title: 'ERPBridge',
           label: 'Roadmap',
         },
         {
+          type: 'doc',
+          docId: 'faq',
+          position: 'left',
+          label: 'FAQ',
+        },
+        {
           href: 'https://github.com/nmdra/ERPBridge',
           label: 'Source',
           position: 'right',
@@ -168,6 +174,10 @@ title: 'ERPBridge',
             {
               label: 'Roadmap',
               to: '/docs/roadmap/overview',
+            },
+            {
+              label: 'FAQ',
+              to: '/docs/faq',
             },
           ],
         },

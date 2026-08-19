@@ -1,0 +1,68 @@
+---
+sidebar_position: 1
+title: FAQ
+description: Quick answers to the most common questions about ERPBridge and Bridgectl.
+keywords: [faq, overview, quick answers]
+---
+
+# FAQ
+
+Quick answers to the most common questions about the ERPBridge project.
+
+<details>
+<summary>What is ERPBridge?</summary>
+
+ERPBridge is MCP middleware that connects legacy ERP systems to AI agents over the Model Context Protocol — without changing the ERP code base.
+
+</details>
+
+<details>
+<summary>How does it work?</summary>
+
+You register your ERP's APIs once with `bridgectl`. ERPBridge generates MCP tool schemas and exposes them over streamable HTTP or stdio, so AI agents can discover and call ERP functions directly.
+
+</details>
+
+<details>
+<summary>Do I have to modify my ERP?</summary>
+
+No. ERPBridge is non-invasive. It sits on top of your ERP and works with the APIs you already have.
+
+</details>
+
+<details>
+<summary>What ERP systems can I connect?</summary>
+
+Any ERP that exposes a REST API. Bring your own ERP: on-premise racks, cloud suites, or custom services.
+
+</details>
+
+<details>
+<summary>Which AI agents work with ERPBridge?</summary>
+
+Any MCP-capable client: Claude, Cursor, and other local agents via stdio; Postman and remote clients via streamable HTTP.
+
+</details>
+
+<details>
+<summary>What is Bridgectl?</summary>
+
+Bridgectl is the developer CLI for the ERPBridge ecosystem. It manages API registrations, tool schemas, cache, logs, and contexts.
+
+</details>
+
+<details>
+<summary>Where do I start?</summary>
+
+Follow the [Quickstart](./erpbridge/quickstart.mdx). A mock ERP and Docker compose setup let you evaluate the bridge in minutes.
+
+</details>
+
+<details>
+<summary>Where can I get help?</summary>
+
+- Report bugs and request features in [GitHub Issues](https://github.com/nmdra/ERPBridge/issues)
+- Read the [ERPBridge FAQ](./erpbridge/faq.mdx) for configuration and troubleshooting
+- See [CHANGELOG.md](https://github.com/nmdra/ERPBridge/blob/main/CHANGELOG.mdx) for release notes
+
+</details>

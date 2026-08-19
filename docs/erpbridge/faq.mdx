@@ -7,6 +7,38 @@ keywords: [faq, configuration, cache, redis, upgrade, troubleshooting]
 
 # Frequently Asked Questions
 
+## MCP Clients & Transports
+
+<details>
+<summary>Which MCP clients can connect to the server?</summary>
+
+The server supports two transports:
+
+- **Streamable HTTP** for remote and web-based clients (for example Postman) at `http://localhost:8080/mcp/`
+- **Stdio** for local agents (Claude, Cursor) by running the binary with `--stdio`
+
+See the [Connectivity & Transport Guide](./connectivity.mdx) for session setup.
+
+</details>
+
+<details>
+<summary>Which MCP protocol version does the server negotiate?</summary>
+
+The server speaks MCP 2025-03-26 and negotiates up to 2025-11-25 during the `initialize` handshake. Clients send `POST /mcp/initialize`, then continue with session-managed requests.
+
+</details>
+
+<details>
+<summary>How do I connect from Postman?</summary>
+
+1. Send `POST http://localhost:8080/mcp/` with `Content-Type: application/json`
+2. The `initialize` handshake creates a session
+3. Use the returned session ID in `Mcp-Session-Id` for subsequent requests, then call `tools/list`
+
+The [Postman setup](https://github.com/nmdra/ERPBridge/blob/main/docs/connectivity.md) in the repository shows the full flow.
+
+</details>
+
 ## Configuration
 
 <details>
@@ -63,6 +95,91 @@ Set `APP_ENV=production`.
 No. The cache is optional. If `REDIS_URL` is empty, the server disables the cache and tool calls still work. The cache endpoints return `503`.
 
 </details>
+
+<details>
+<summary>How does caching work and what is the default TTL?</summary>
+
+The cache stores exact-match tool responses keyed by tool name, role, and request hash. By default responses do not expire (`ttl: 0`). Set a TTL in the server config to expire entries, or flush manually:
+
+```bash title="Flush the cache"
+bridgectl cache flush
+```
+
+See the [Exact Match Caching](./caching.mdx) guide.
+
+</details>
+
+<details>
+<summary>When is a cached entry invalidated?</summary>
+
+A tool schema can declare `flushOn` with a field path. When a tool call modifies that field, the server removes matching cache entries. To invalidate everything for a module, flush by module or use `bridgectl cache flush`.
+
+</details>
+
+<details>
+<summary>How does the server protect ERP credentials?</summary>
+
+Tool schemas reference credentials by name (`credentialRef`). The server resolves the reference from environment variables at call time, so schemas never contain raw secrets. Logs redact sensitive values: tokens, passwords, authorization headers, and PII, plus any value flagged with `secret` or `pii` tags. See [the redaction reference](./environment-variables.mdx).
+
+</details>
+
+## Notifications & System Tools
+
+<details>
+<summary>What notifications does the server emit?</summary>
+
+The server sends MCP notifications for long-running work:
+
+- `notifications/progress` — progress on tool calls
+- `notifications/alert` — alert-level events
+- `notifications/message` — informational messages
+- `notifications/tool_deleted` — when a tool disappears from the registry
+
+</details>
+
+<details>
+<summary>What are the system tools?</summary>
+
+Two built-in tools help you verify the bridge:
+
+- `system.progress_test` — streams progress notifications
+- `system.sensitive_log_test` — exercises log redaction
+
+</details>
+
+## Errors & Exit Codes
+
+<details>
+<summary>What do bridgectl exit codes mean?</summary>
+
+- `0` success
+- `1` general error
+- `2` bad arguments
+- `3` not found
+- `4` authentication failure
+- `5` conflict
+- `6` timeout
+- `7` precondition failed
+
+</details>
+
+<details>
+<summary>How do I handle errors from the bridge in an agent?</summary>
+
+Failures that an agent can act on return a machine-readable JSON body:
+
+```json
+{
+  "error": "tool_execution_failed",
+  "message": "The ERP service is unreachable",
+  "suggestion": "Check that ERP_BASE_URL points at a running ERP",
+  "code": 1
+}
+```
+
+</details>
+
+## Upgrades
 
 ## Tools & Schemas
 

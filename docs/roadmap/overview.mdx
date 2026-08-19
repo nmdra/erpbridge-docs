@@ -1,25 +1,61 @@
 ---
 sidebar_position: 1
 title: Roadmap
-description: Active projects, planned work, and how to add a new project to this documentation site.
-keywords: [roadmap, projects, planning]
+description: Where ERPBridge is today, what is planned next, and how to influence the direction.
+keywords: [roadmap, projects, planning, status]
 ---
 
 # Roadmap
 
-This documentation site hosts guides for all ERPBridge-related projects. Each product gets its own section.
+ERPBridge connects legacy ERP systems to AI-based workflows without changing the ERP code base. This page shows what is shipped, what is in flight, and where the project is heading.
 
-## Active projects
+## Where we are
 
-- **[ERPBridge](../erpbridge/intro.mdx)** — MCP middleware for legacy ERP systems.
-- **[Bridgectl](../bridgectl/overview.mdx)** — developer CLI for the ERPBridge ecosystem.
+### Shipped
 
-## Planned
+| Area | What works today |
+| :--- | :--- |
+| MCP middleware | Streamable HTTP and stdio transports, tool discovery, calls, and notifications over MCP 2025-03-26 (negotiates up to 2025-11-25) |
+| Tool registry | Register ERPs, generate and validate tool schemas, soft/hard delete, versioned tools, 10-second reconciliation |
+| Resilience | 15s HTTP timeout, circuit breaker, retry with jitter on network errors and 429/5xx |
+| Caching | Optional exact-match cache (Redis), flush and stats endpoints, `flushOn` per-tool invalidation |
+| Observability | Structured logs (JSON in production), Prometheus metrics, per-component log levels |
+| Security | Credential references resolved from environment variables, secret redaction in logs, exit codes 0-7 |
+| CLI | `bridgectl` with API, tool, cache, log, context, and completion commands |
 
-| Project | Status | Notes |
+### In flight
+
+| Work | Status | Notes |
 | :--- | :--- | :--- |
-| ERPBridge authentication (token-based) | In planning | `API_AUTH_TOKEN` + scoped API tokens; see [Authentication](../erpbridge/auth.mdx) |
-| ERPBridge hardening | In planning | Cache fallback, security, correctness fixes |
+| Token-based authentication | In planning | `API_AUTH_TOKEN` plus scoped API tokens; see [Authentication](../erpbridge/auth.mdx) |
+| Cache hardening | Planned | Auto-flush bypass when the cache is disabled; correct module flush patterns (`flush-on` variants) |
+| Cache configuration alias | Planned | Support `invalidateOn` as an alias for `flushOn` in the server config |
+| Configurable resource base URL | Planned | Honor `ERP_BASE_URL` for static resources instead of a hardcoded default |
+| CLI flag cleanup | Planned | Remove shadowed `-o/--output` flag on tool commands |
+
+## Phases
+
+### Phase 1 — Foundation (shipped)
+
+The bridge, registry, CLI, and documentation are usable end to end. A mock ERP and Docker compose setup make evaluation a five-minute task.
+
+### Phase 2 — Hardening & security (current focus)
+
+Authentication, cache correctness, configuration aliases, and resource URL handling. Each item lands with tests and a docs update in the same commit.
+
+### Phase 3 — Ecosystem (candidate ideas)
+
+Ideas under discussion, not commitments:
+
+- MCP 2025-11-25 feature adoption as clients support it
+- Prebuilt connectors for popular ERPs
+- Schema distribution (central registry or Git-based sync)
+
+## How to influence the roadmap
+
+- Report bugs and request features in [GitHub Issues](https://github.com/nmdra/ERPBridge/issues)
+- Check [CHANGELOG.md](https://github.com/nmdra/ERPBridge/blob/main/CHANGELOG.mdx) for the latest release notes
+- The milestone list on GitHub tracks what lands next
 
 ## Adding a new project
 

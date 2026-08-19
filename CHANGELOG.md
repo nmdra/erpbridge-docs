@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+
+- New global FAQ page (`/docs/faq`) answering common project-level questions, linked from the navbar and footer
+- ERPBridge FAQ expanded with sections on MCP clients & transports, caching, notifications & system tools, and errors & exit codes
+- Roadmap page rewritten with shipped/in-flight status tables and phased plan
+
 ### Changed
 
 - Site title shortened from "ERPBridge Docs" to "ERPBridge" (navbar, hero, browser tab)
