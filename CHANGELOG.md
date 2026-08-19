@@ -15,6 +15,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Connectivity guide: documented connector resilience (15s timeout, 3-attempt retry with jitter, gobreaker circuit breaker thresholds) that was previously undocumented (internal/connector/client.go)
 - Onboarding guide: corrected the batch-apply workflow — `tool generate` writes individual `.json` files into `schemas/erp/`; the now-recommended flow applies the directory instead of the broken stdout-YAML redirect (internal/idp/generator.go)
 - Bridgectl overview: documented exit codes 0–7 and the structured `AgentActionableError` JSON payload for agents; aligned the typical-workflow snippet with the corrected generate/apply flow (internal/cli/errors.go)
+- Tool schema reference: documented `metadata.isActive`, `spec.outputSchema` runtime validation, `spec.execution.type`, `spec.routing`, `spec.lifecycle`, and corrected the cache invalidation field to `flushOn` (internal/mcp/tool.go)
+- MCP client guide: added the built-in system tools (`system.progress_test`, `system.sensitive_log_test`) and the `notifications/progress` + `notifications/alert` payloads; aligned protocol version (`2025-03-26`) and tool names (`list_purchase_invoices`) with current code
+- Environment variables guide: added `MOCK_ERP_LOG_LEVEL`
+- Quickstart: corrected the direct-invoke tool name from `erp.list_employees` to `list_employees`
 
 ### Added
 

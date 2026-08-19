@@ -73,7 +73,7 @@ You can change the port with the `MCP_PORT` environment variable or the full add
 ```bash title="Health check via initialize"
 curl -s -o /dev/null -w "%{http_code}" -X POST http://localhost:8080/mcp/ \
   -H "Content-Type: application/json" \
-  -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"test","version":"0.1.0"}}}'
+  -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-03-26","capabilities":{},"clientInfo":{"name":"test","version":"0.1.0"}}}'
 ```
 
 You see `200`.
@@ -141,7 +141,7 @@ Send an `initialize` request first. The server replies with a `Mcp-Session-Id` h
   "id": 1,
   "method": "initialize",
   "params": {
-    "protocolVersion": "2024-11-05",
+    "protocolVersion": "2025-03-26",
     "capabilities": {
       "logging": {},
       "prompts": {},
@@ -175,7 +175,7 @@ init_payload = {
     "id": 1,
     "method": "initialize",
     "params": {
-        "protocolVersion": "2024-11-05",
+        "protocolVersion": "2025-03-26",
         "capabilities": {"tools": {}, "resources": {}, "prompts": {}},
         "clientInfo": {"name": "python-client", "version": "0.1.0"},
     },
@@ -215,7 +215,7 @@ call_resp = session.post(
         "id": 3,
         "method": "tools/call",
         "params": {
-            "name": "finance.list_invoices_api_v1_finance_invoices_get",
+            "name": "list_purchase_invoices",
             "arguments": {},
         },
     },
@@ -264,7 +264,7 @@ send({
     "id": 1,
     "method": "initialize",
     "params": {
-        "protocolVersion": "2024-11-05",
+        "protocolVersion": "2025-03-26",
         "capabilities": {"tools": {}, "resources": {}, "prompts": {}},
         "clientInfo": {"name": "python-stdio", "version": "0.1.0"},
     },
@@ -283,7 +283,7 @@ send({
     "id": 3,
     "method": "tools/call",
     "params": {
-        "name": "finance.list_invoices_api_v1_finance_invoices_get",
+        "name": "list_purchase_invoices",
         "arguments": {},
     },
 })
@@ -312,7 +312,7 @@ async function main() {
       id: 1,
       method: "initialize",
       params: {
-        protocolVersion: "2024-11-05",
+        protocolVersion: "2025-03-26",
         capabilities: { tools: {}, resources: {}, prompts: {} },
         clientInfo: { name: "ts-client", version: "0.1.0" },
       },
@@ -360,7 +360,7 @@ async function main() {
       id: 3,
       method: "tools/call",
       params: {
-        name: "finance.list_invoices_api_v1_finance_invoices_get",
+        name: "list_purchase_invoices",
         arguments: {},
       },
     }),
@@ -414,7 +414,7 @@ async function main() {
     id: 1,
     method: "initialize",
     params: {
-      protocolVersion: "2024-11-05",
+      protocolVersion: "2025-03-26",
       capabilities: { tools: {}, resources: {}, prompts: {} },
       clientInfo: { name: "ts-stdio", version: "0.1.0" },
     },
@@ -434,7 +434,7 @@ async function main() {
     id: 3,
     method: "tools/call",
     params: {
-      name: "finance.list_invoices_api_v1_finance_invoices_get",
+      name: "list_purchase_invoices",
       arguments: {},
     },
   });
@@ -565,6 +565,80 @@ Used for system-wide alerts or administrative broadcasts.
   }
 }
 ```
+
+#### `notifications/progress`
+
+Sent in real time by long-running tools. Each event reports one step of the operation.
+
+```json title="progress notification"
+{
+  "method": "notifications/progress",
+  "params": {
+    "progress": 3,
+    "total": 10,
+    "message": "Processing step 3/10..."
+  }
+}
+```
+
+#### `notifications/alert`
+
+Sent when a tool call fails or a condition needs attention.
+
+```json title="alert notification"
+{
+  "method": "notifications/alert",
+  "params": {
+    "message": "Upstream ERP request failed: transient erp error: 503",
+    "severity": "warning"
+  }
+}
+```
+
+## Built-in System Tools
+
+The server registers two demonstration tools that are always available. Use them to verify client behavior before you connect a real ERP.
+
+### `system.progress_test`
+
+Emits one `notifications/progress` event every 200ms so you can verify your client renders progress updates over the SSE stream.
+
+```json title="Call system.progress_test"
+{
+  "jsonrpc": "2.0",
+  "id": 11,
+  "method": "tools/call",
+  "params": {
+    "name": "system.progress_test",
+    "arguments": { "steps": 5 }
+  }
+}
+```
+
+| Argument | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `steps` | integer | `10` | Number of steps to simulate. Max `100`. |
+
+### `system.sensitive_log_test`
+
+Emits a log line containing the `token` and `message` you pass in. The logger redacts the token before it reaches your client, so this is a quick way to verify [redaction](#automatic-redaction) works end to end.
+
+```json title="Call system.sensitive_log_test"
+{
+  "jsonrpc": "2.0",
+  "id": 12,
+  "method": "tools/call",
+  "params": {
+    "name": "system.sensitive_log_test",
+    "arguments": { "token": "sk-secret-value", "message": "hello" }
+  }
+}
+```
+
+| Argument | Type | Description |
+| :--- | :--- | :--- |
+| `token` | string | A sensitive value that must be redacted from logs. |
+| `message` | string | A normal message that stays visible. |
 
 ## Error Handling
 

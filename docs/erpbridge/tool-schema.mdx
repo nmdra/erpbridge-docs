@@ -38,6 +38,7 @@ Identity and grouping information.
 - **`name`**: (String) Unique identifier. Use **intent-based names** (e.g., `list_employees`) instead of technical ones (e.g., `get_resource_employee`).
 - **`version`**: (String) SemVer version (e.g., `1.0.0`).
 - **`module`**: (String) Logical grouping for access control and organization.
+- **`isActive`**: (Boolean, optional) Soft-delete flag. When `false`, the tool disappears from MCP `tools/list` and direct resolution but stays in the registry.
 
 ### `spec.description`
 
@@ -55,10 +56,18 @@ Standard JSON Schema defining the arguments. **Strict typing is mandatory.**
 - Use `properties` to define fields and `required` to enforce them.
 - **Avoid "filters" strings**: Break down complex query requirements into individual typed properties.
 
+### `spec.outputSchema`
+
+Optional JSON Schema describing the shape of a successful ERP response. When present, the server **validates every 2xx response against it at runtime** using `jsonschema/v6`.
+
+- A response that violates the schema fails the tool call with a validation error instead of returning malformed data to the agent.
+- Generated schemas come from the OpenAPI `200`/`201` response definitions and are dereferenced (no `$ref`).
+
 ### `spec.execution`
 
 Technical mapping to the ERP API.
 
+- **`type`**: (String) Execution style. Currently only `http`.
 - **`method`**: (String) `GET`, `POST`, `PUT`, `DELETE`.
 - **`endpoint`**: (String) The ERP API URL path.
 - **`mapping`**: (Map) Optional. Maps LLM arg names to ERP parameter names.
@@ -74,6 +83,23 @@ Authentication strategy.
 :::danger Secrets never belong in schemas
 The admission controller rejects tool definitions whose endpoint path contains secret-like patterns (e.g., `token ` or `key=`). Credentials are resolved from environment variables at call time only.
 :::
+
+### `spec.routing`
+
+Optional hints that improve LLM tool selection.
+
+- **`priority`**: (Number) Relative preference when several tools could answer. Higher wins.
+- **`signals`**: (Array of strings) Positive trigger phrases for this tool.
+- **`antiSignals`**: (Array of strings) Phrases that must **not** trigger this tool.
+
+### `spec.lifecycle`
+
+Optional support status for a tool version.
+
+- **`status`**: `stable`, `deprecated`, or `sunset`.
+- **`deprecatedAt`**: (String, optional) ISO date when deprecation started.
+- **`sunsetAt`**: (String, optional) ISO date when the tool is removed.
+- **`replacement`**: (String, optional) Name of the tool that replaces this one.
 
 ## Annotated Example
 
@@ -110,11 +136,11 @@ spec:
     credentialRef: ERP_FINANCE_KEY # Resolves to ENV["ERP_FINANCE_KEY"]
   cache:
     enabled: false # Don't cache write operations
-    invalidateOn: ["list_purchase_invoices"] # Flush list cache when a new one is created
+    flushOn: ["list_purchase_invoices"] # Flush list cache when a new one is created
 ```
 
-:::note `invalidateOn` vs `flushOn`
-`invalidateOn` is the schema-level field. When the schema is applied, the server maps it to the runtime `flushOn` list used by the [cache middleware](./caching.mdx).
+:::note `flushOn` is the schema field
+The cache invalidation field is `flushOn` — an array of tool names to flush when this tool runs. The older `invalidateOn` spelling is not read by the server and is ignored silently; use `flushOn`.
 :::
 
 ## Transitioning from V1
