@@ -67,7 +67,19 @@ ERPBridge includes built-in protection for underlying ERP systems.
 - **Rate Limiting:** Request throttling is enforced per-session (token bucket).
 - **Default Limits:** 5 requests per second with a burst of 10 (configurable via environment variables).
 
-## 5. Monitoring & Health
+## 5. Connector Resilience
+
+Every outbound call to an upstream ERP goes through a resilient client with three layers of defense. This keeps legacy ERP systems stable even when AI agents send a heavy or bursty workload.
+
+- **Request timeout:** 15 seconds per HTTP request.
+- **Retry with backoff:** transient failures are retried up to **3 attempts** with a 500ms base delay plus up to 100ms of random jitter. Network errors and HTTP `429` / `5xx` responses are retried; other responses are returned immediately.
+- **Circuit breaker:** after at least 5 requests with a failure ratio of 60% or higher, the breaker opens and blocks further calls for 30 seconds. While open, a maximum of 3 test requests probe the ERP before the breaker closes again. Every state change is logged.
+
+:::note Why it matters
+Without resilience, one slow or failing ERP endpoint would stall every AI agent that depends on it. The circuit breaker fails fast during outages and the retry policy absorbs transient spikes.
+:::
+
+## 6. Monitoring & Health
 
 Standard endpoints for system health and observability.
 
