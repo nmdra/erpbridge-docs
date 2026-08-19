@@ -8,6 +8,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- Docs pages now show a **version badge** ("Version: Alpha (v0.2.0-alpha.5)") matching the upstream ERPBridge release tag
+- Homepage redesigned with a modern dark theme: release badge pill, gradient title, atmospheric radial glows, and a **bridgectl terminal mockup** hero card
+- Homepage **Start building** section with 6 pathway cards (**Quickstart**, **Onboarding Guide**, **Bridgectl CLI**, **ERPBridge SDK**, **REST API Reference**, and **Roadmap**) with circular animated arrow-chip buttons
 - New **ERPBridge SDK** section (work in progress) documenting the upcoming SDK with a built-in MCP client, log aggregation, and metrics viewing
 - New global FAQ page (`/docs/faq`) answering common project-level questions, linked from the navbar and footer
 - ERPBridge FAQ expanded with sections on MCP clients & transports, caching, notifications & system tools, and errors & exit codes
@@ -15,6 +18,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- Navbar: "Source" and "GitHub" text links replaced with a single **GitHub icon** linking to the main ERPBridge repo (docs repo link stays in the footer)
+- Navbar restyled with a **frosted-glass** effect (backdrop blur + translucent background)
+- Homepage feature cards modernized into a clean **3×2 grid** with large left-aligned icons, hover lift, and dark-mode border glow
 - Navbar reordered: **SDK** entry moved to right after **Bridgectl** (before Roadmap and FAQ)
 - Site title shortened from "ERPBridge Docs" to "ERPBridge" (navbar, hero, browser tab)
 - Hero primary button renamed to **Try ERPBridge**

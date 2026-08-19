@@ -28,3 +28,28 @@
   --ifm-color-primary-lightest: #4fddbf;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
+
+/* Frosted-glass navbar */
+.navbar {
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  background-color: rgba(255, 255, 255, 0.85);
+  box-shadow: none;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+}
+
+[data-theme='dark'] .navbar {
+  background-color: rgba(27, 27, 29, 0.85);
+}
+
+/* GitHub icon link in the navbar (icon only, no badge/pill) */
+.header-github-link {
+  display: flex;
+  align-items: center;
+  color: var(--ifm-font-color-base);
+  transition: color 0.15s ease;
+}
+
+.header-github-link:hover {
+  color: var(--ifm-color-primary);
+}

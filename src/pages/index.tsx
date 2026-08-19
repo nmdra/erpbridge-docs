@@ -1,5 +1,4 @@
 import type {ReactNode} from 'react';
-import clsx from 'clsx';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
@@ -8,36 +7,113 @@ import Heading from '@theme/Heading';
 
 import styles from './index.module.css';
 
+function ReleaseBadge() {
+  return (
+    <Link to="/docs/roadmap/overview" className={styles.releaseBadge}>
+      <span className={styles.releaseDot} />
+      Alpha (v0.2.0-alpha.5)
+    </Link>
+  );
+}
+
+function TerminalLine({
+  prompt,
+  command,
+  output,
+}: {
+  prompt: string;
+  command?: string;
+  output?: ReactNode;
+}) {
+  return (
+    <div className={styles.terminalLine}>
+      <span className={styles.terminalPrompt}>{prompt}</span>
+      {command && <span className={styles.terminalCommand}>{command}</span>}
+      {output && <div className={styles.terminalOutput}>{output}</div>}
+    </div>
+  );
+}
+
+function TerminalMockup() {
+  return (
+    <div className={styles.terminalCard}>
+      <div className={styles.terminalBar}>
+        <span className={styles.terminalDot} />
+        <span className={styles.terminalDot} />
+        <span className={styles.terminalDot} />
+        <span className={styles.terminalTitle}>bridgectl — erpbridge shell</span>
+      </div>
+      <div className={styles.terminalBody}>
+        <TerminalLine
+          prompt="$"
+          command="bridgectl api register --name erp.sales --url https://erp.example/api"
+          output={<span className={styles.outputMuted}>✓ registered erp.sales (REST)</span>}
+        />
+        <TerminalLine
+          prompt="$"
+          command="bridgectl tool generate --api erp.sales"
+          output={<span className={styles.outputMuted}>✓ generated 3 MCP tool schemas</span>}
+        />
+        <TerminalLine
+          prompt="$"
+          command="bridgectl tool apply schemas/erp/"
+          output={<span className={styles.outputOk}>✓ applied 3 tools in 42ms — reconciled</span>}
+        />
+        <TerminalLine
+          prompt="$"
+          command="bridgectl api test erp.sales"
+          output={
+            <>
+              <span className={styles.outputOk}>200 OK</span>{' '}
+              <span className={styles.outputMuted}>— 1 invoice returned</span>
+            </>
+          }
+        />
+        <TerminalLine
+          prompt="$"
+          command="bridgectl log tail --level info"
+          output={
+            <>
+              <span className={styles.outputDim}>[info] mcp:tool invoked list_sales_invoices</span>
+              <br />
+              <span className={styles.outputDim}>[info] cache:miss tool=list_sales_invoices</span>
+            </>
+          }
+        />
+        <div className={styles.terminalLine}>
+          <span className={styles.terminalPrompt}>$</span>
+          <span className={styles.terminalCursor} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function HomepageHeader() {
   const {siteConfig} = useDocusaurusContext();
   return (
-    <header className={clsx('hero hero--primary', styles.heroBanner)}>
+    <header className={styles.heroBanner}>
+      <div className={styles.heroGlow} aria-hidden="true" />
+      <div className={styles.heroGrid} aria-hidden="true" />
       <div className="container">
         <div className={styles.heroRow}>
-          <div>
-            <Heading as="h1" className="hero__title">
+          <div className={styles.heroText}>
+            <ReleaseBadge />
+            <Heading as="h1" className={styles.heroTitle}>
               {siteConfig.title}
             </Heading>
-            <p className="hero__subtitle">{siteConfig.tagline}</p>
+            <p className={styles.heroSubtitle}>{siteConfig.tagline}</p>
             <div className={styles.buttons}>
-              <Link
-                className="button button--secondary button--lg"
-                to="/docs/erpbridge/intro">
+              <Link className={styles.primaryButton} to="/docs/erpbridge/intro">
                 Try ERPBridge
               </Link>
-              <Link
-                className="button button--secondary button--lg"
-                to="/docs/erpbridge/quickstart">
+              <Link className={styles.secondaryButton} to="/docs/erpbridge/quickstart">
                 Quickstart
               </Link>
             </div>
           </div>
-          <div className={styles.heroImageWrap}>
-            <img
-              src="img/erp-bridge.svg"
-              alt="ERPBridge connecting a legacy ERP to AI-based workflows without touching the ERP code base"
-              className={styles.heroImage}
-            />
+          <div className={styles.heroVisual}>
+            <TerminalMockup />
           </div>
         </div>
       </div>
