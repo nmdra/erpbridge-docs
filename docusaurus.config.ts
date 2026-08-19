@@ -7,7 +7,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 const config: Config = {
   title: 'ERPBridge Docs',
   tagline: 'Connect your ERP to AI agents through the Model Context Protocol',
-  favicon: 'img/favicon.ico',
+  favicon: 'img/logo.svg',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
@@ -51,20 +51,7 @@ const config: Config = {
           // Remove this to remove the "edit this page" links.
           editUrl: 'https://github.com/nmdra/erpbridge-docs/tree/main/',
         },
-        blog: {
-          showReadingTime: true,
-          feedOptions: {
-            type: ['rss', 'atom'],
-            xslt: true,
-          },
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl: 'https://github.com/nmdra/erpbridge-docs/tree/main/',
-          // Useful options to enforce blogging best practices
-          onInlineTags: 'warn',
-          onInlineAuthors: 'warn',
-          onUntruncatedBlogPosts: 'warn',
-        },
+        blog: false,
         theme: {
           customCss: './src/css/custom.css',
         },
@@ -105,7 +92,7 @@ const config: Config = {
 
   themeConfig: {
     // Replace with your project's social card
-    image: 'img/docusaurus-social-card.jpg',
+    image: 'img/logo.svg',
     colorMode: {
       defaultMode: 'dark',
       respectPrefersColorScheme: true,
@@ -129,7 +116,6 @@ const config: Config = {
           position: 'left',
           label: 'Roadmap',
         },
-        {to: '/blog', label: 'Blog', position: 'left'},
         {
           href: 'https://github.com/nmdra/ERPBridge',
           label: 'Source',
@@ -174,10 +160,6 @@ const config: Config = {
         {
           title: 'More',
           items: [
-            {
-              label: 'Blog',
-              to: '/blog',
-            },
             {
               label: 'Docs repo',
               href: 'https://github.com/nmdra/erpbridge-docs',

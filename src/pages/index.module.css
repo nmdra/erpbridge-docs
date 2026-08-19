@@ -16,8 +16,46 @@
   }
 }
 
-.buttons {
+.heroRow {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 3rem;
+  text-align: left;
+}
+
+@media screen and (max-width: 996px) {
+  .heroRow {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+.heroImageWrap {
+  flex-shrink: 0;
+}
+
+.heroImage {
+  max-width: 460px;
+  width: 100%;
+  height: auto;
+}
+
+@media screen and (max-width: 996px) {
+  .heroImage {
+    max-width: 320px;
+  }
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: flex-start;
+}
+
+@media screen and (max-width: 996px) {
+  .buttons {
+    justify-content: center;
+  }
 }

@@ -8,6 +8,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- Custom ERPBridge branding: new logo, hero illustration (ERP ↔ AI bridge over MCP), and feature illustrations for the homepage
+- Blog section disabled (hidden from navbar/footer, plugin turned off)
+
+### Added
+
 - Docusaurus 3.10 site (TypeScript) with project-page deployment at https://blog.nimendra.xyz/erpbridge-docs/
 - ERPBridge product docs section ported from the ERPBridge repo `docs/` tree (guides, REST API reference, and full `bridgectl` CLI reference)
 - New pages: Introduction, Quickstart, Transports, Authentication (planned design)

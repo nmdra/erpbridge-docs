@@ -12,7 +12,7 @@ type FeatureItem = {
 const FeatureList: FeatureItem[] = [
   {
     title: 'MCP Made Simple',
-    Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
+    Svg: require('@site/static/img/feature-mcp.svg').default,
     description: (
       <>
         ERPBridge exposes ERP functionality as MCP tools over streamable HTTP
@@ -22,7 +22,7 @@ const FeatureList: FeatureItem[] = [
   },
   {
     title: 'Tool Registry',
-    Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
+    Svg: require('@site/static/img/feature-registry.svg').default,
     description: (
       <>
         Register ERP APIs once with <code>bridgectl</code>, then generate and
@@ -32,7 +32,7 @@ const FeatureList: FeatureItem[] = [
   },
   {
     title: 'Resilient by Default',
-    Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
+    Svg: require('@site/static/img/feature-resilient.svg').default,
     description: (
       <>
         Built-in caching, rate limiting, structured logs, and Prometheus

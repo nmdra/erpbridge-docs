@@ -13,21 +13,32 @@ function HomepageHeader() {
   return (
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
       <div className="container">
-        <Heading as="h1" className="hero__title">
-          {siteConfig.title}
-        </Heading>
-        <p className="hero__subtitle">{siteConfig.tagline}</p>
-        <div className={styles.buttons}>
-          <Link
-            className="button button--secondary button--lg"
-            to="/docs/erpbridge/intro">
-            Get Started
-          </Link>
-          <Link
-            className="button button--secondary button--lg"
-            to="/docs/erpbridge/quickstart">
-            Quickstart
-          </Link>
+        <div className={styles.heroRow}>
+          <div>
+            <Heading as="h1" className="hero__title">
+              {siteConfig.title}
+            </Heading>
+            <p className="hero__subtitle">{siteConfig.tagline}</p>
+            <div className={styles.buttons}>
+              <Link
+                className="button button--secondary button--lg"
+                to="/docs/erpbridge/intro">
+                Get Started
+              </Link>
+              <Link
+                className="button button--secondary button--lg"
+                to="/docs/erpbridge/quickstart">
+                Quickstart
+              </Link>
+            </div>
+          </div>
+          <div className={styles.heroImageWrap}>
+            <img
+              src="img/erp-bridge.svg"
+              alt="ERPBridge connecting an ERP system to AI agents over MCP"
+              className={styles.heroImage}
+            />
+          </div>
         </div>
       </div>
     </header>
