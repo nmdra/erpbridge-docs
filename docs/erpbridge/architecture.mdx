@@ -1,22 +1,49 @@
 ---
-sidebar_position: 5
+sidebar_position: 6
+title: Architecture
+description: ERPBridge V2 uses a Kubernetes-style declarative control plane — CLI declares state, the server stores and validates it, and a reconciliation controller keeps the MCP runtime in sync.
+keywords: [architecture, control plane, registry, reconciliation, version resolver]
 ---
 
 # ERPBridge V2 Architecture: Declarative Control Plane
 
 ERPBridge V2 adopts a **Declarative Control Plane** architecture, inspired by Kubernetes. This design moves away from static, file-system-bound configurations toward a live API-managed resource system for MCP tools.
 
-## 🏗 High-Level Overview
+## High-Level Overview
 
 The system is divided into three distinct layers:
 
-1.  **Management Layer (The CLI)**: Developers use `bridgectl` to declare the desired state of the system by "applying" YAML/JSON resource definitions.
-2.  **Control Plane (The Server)**: A centralized API server stores tool definitions in a persistent SQLite database, validates them against strict admission rules, and manages versioning.
-3.  **Runtime Layer (MCP Engine)**: A background reconciliation controller keeps the active MCP server aligned with the desired state in the database.
+1. **Management Layer (The CLI)**: Developers use `bridgectl` to declare the desired state of the system by "applying" YAML/JSON resource definitions.
+2. **Control Plane (The Server)**: A centralized API server stores tool definitions in a persistent SQLite database, validates them against strict admission rules, and manages versioning.
+3. **Runtime Layer (MCP Engine)**: A background reconciliation controller keeps the active MCP server aligned with the desired state in the database.
 
----
+```mermaid
+flowchart LR
+    subgraph Management["Management Layer"]
+        CLI[bridgectl CLI]
+    end
 
-## 🧩 Endpoint vs. Tool: Key Concepts
+    subgraph Control["Control Plane (erpbridge-server)"]
+        API[Registry API<br/>/apis/erpbridge.io/v1/tools]
+        DB[(SQLite<br/>Tool Registry)]
+        ADM[Admission<br/>Validation]
+    end
+
+    subgraph Runtime["Runtime Layer"]
+        REC[Reconciliation<br/>Controller]
+        MCP[MCP Engine<br/>tools/list + tools/call]
+        REDIS[(Redis<br/>Cache)]
+    end
+
+    CLI -->|tool apply / delete| API
+    API --> ADM --> DB
+    DB -->|state hash| REC
+    REC -->|register / deregister| MCP
+    MCP -->|exact-match lookup| REDIS
+    REDIS -->|response| MCP
+```
+
+## Endpoint vs. Tool: Key Concepts
 
 One of the most important concepts in ERPBridge V2 is the distinction between registering an **API Endpoint** and applying an **MCP Tool**.
 
@@ -30,24 +57,26 @@ One of the most important concepts in ERPBridge V2 is the distinction between re
 | **Command** | `bridgectl api register ...` | `bridgectl tool apply -f ...` |
 
 ### Why separate them?
+
 - **Technical vs. Semantic**: A single ERP API endpoint (e.g., `/api/v1/resource/Employee`) might be used by multiple MCP tools with different filters or versions.
 - **Safety**: Registering an API is a developer-only technical step. Applying a tool is a conscious decision to expose functionality to an AI agent.
 - **Lifecycle**: You can "discover" and test 100 API endpoints locally, but only "apply" the 5 that are safe and ready for the LLM to use.
 
----
-
-## 🛠 Core Components
+## Core Components
 
 ### 1. Tool Resource Registry (The Source of Truth)
+
 Instead of loading files from a directory, the server maintains an internal **Tool Registry** backed by **SQLite**. This registry stores multiple versions of the same tool, allowing for safe rollouts and rollbacks.
 
 Each tool includes an `IsActive` flag. When a tool is "deleted" via the CLI, it is not immediately purged from the database. Instead, it is marked as `IsActive = false`. This "soft-delete" pattern allows the system to manage visibility without breaking existing MCP sessions.
 
 ### 2. Version Resolver
+
 When an AI agent requests a tool (e.g., `list_employees`), the **Version Resolver** automatically selects the **latest stable version** (e.g., `list_employees@1.2.0`). It explicitly ignores any tools marked as inactive.
 
 ### 3. Visibility Filtering (JSON-RPC Interception)
-Because the underlying MCP runtime does not always support dynamic removal of tools from an active session, ERPBridge implements a **Visibility Filtering Layer**. 
+
+Because the underlying MCP runtime does not always support dynamic removal of tools from an active session, ERPBridge implements a **Visibility Filtering Layer**.
 
 - **The Problem**: Once a tool is registered in memory, standard libraries often provide no way to "unregister" it without a restart.
 - **The Solution**: ERPBridge wraps the MCP server's HTTP handler and intercepts the `tools/list` response. Before the JSON-RPC result reaches the client, ERPBridge parses the list and removes any tools marked as `IsActive = false` in the internal registry.
@@ -69,9 +98,7 @@ When the registry changes, the controller sends the `notifications/tools/list_ch
 
 The controller also runs immediately after a `tool apply` HTTP request. The tool is visible to agents right after apply. It does not wait for the next 10-second tick.
 
----
-
-## 🛠 Tool Generation & Templating
+## Tool Generation & Templating
 
 ERPBridge uses a "Template-Based Generation" approach. When generating tools (especially in bulk from OpenAPI):
 
@@ -81,20 +108,35 @@ ERPBridge uses a "Template-Based Generation" approach. When generating tools (es
 
 This decoupling allows you to use the same OpenAPI spec to generate tools for different environments (Dev, Staging, Prod) simply by pointing to a different registered API.
 
----
+## Lifecycle of a Tool Change
 
-## 🔄 Lifecycle of a Tool Change
+```mermaid
+sequenceDiagram
+    participant Dev as Developer
+    participant CLI as bridgectl
+    participant API as Registry API
+    participant DB as SQLite
+    participant RC as Reconciliation Controller
+    participant MCP as MCP Engine
 
-1.  **Define**: Developer creates a V2 YAML schema for a new tool.
-2.  **Validate**: Runs `bridgectl tool validate -f tool.yaml` to check for syntax and admission rules (e.g., no raw secrets).
-3.  **Apply**: Runs `bridgectl tool apply -f tool.yaml`.
-4.  **Store**: The ERPBridge API validates the payload again and saves it to the SQLite `tools` table.
-5.  **Reconcile**: The background controller detects the new DB entry and registers it with the `mcp-go` runtime.
-6.  **Execute**: AI agents now see the new tool and can invoke it immediately.
+    Dev->>CLI: create V2 YAML schema
+    CLI->>CLI: tool validate -f tool.yaml
+    CLI->>API: tool apply -f tool.yaml
+    API->>API: admission validation
+    API->>DB: save to tools table
+    DB-->>RC: new state hash detected
+    RC->>MCP: register tool with runtime
+    MCP-->>Dev: agent sees the tool now
+```
 
----
+1. **Define**: Developer creates a V2 YAML schema for a new tool.
+2. **Validate**: Runs `bridgectl tool validate -f tool.yaml` to check for syntax and admission rules (e.g., no raw secrets).
+3. **Apply**: Runs `bridgectl tool apply -f tool.yaml`.
+4. **Store**: The ERPBridge API validates the payload again and saves it to the SQLite `tools` table.
+5. **Reconcile**: The background controller detects the new DB entry and registers it with the `mcp-go` runtime.
+6. **Execute**: AI agents now see the new tool and can invoke it immediately.
 
-## 🛡 Security Design
+## Security Design
 
 - **Secret Decoupling**: Schemas never contain raw tokens or keys. They only contain a reference (`credentialRef`). The middleware resolves these references at the moment of execution using secure environment variables.
 - **Admission Controllers**: The API server rejects any tool definition that contains suspicious strings (like `token ` or `key=`) in its endpoint path.

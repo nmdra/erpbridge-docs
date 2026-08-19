@@ -1,5 +1,8 @@
 ---
-sidebar_position: 4
+sidebar_position: 9
+title: Authentication
+description: Authentication status and planned design for ERPBridge — admin token, scoped API tokens, and bearer challenges.
+keywords: [authentication, token, api token, bearer, security]
 ---
 
 # Authentication
@@ -9,7 +12,11 @@ Authentication protects the management endpoints and MCP transport from unauthor
 ## Current status
 
 - The MCP endpoint (`/mcp/`) and direct API endpoints are **open** — no authentication is enforced yet.
-- Token-based authentication is **planned** and will land in an upcoming release (see [Roadmap](../roadmap/overview.md)).
+- Token-based authentication is **planned** and will land in an upcoming release (see [Roadmap](../roadmap/overview.mdx)).
+
+:::caution Production deployment
+Until authentication lands, the server should only be exposed on trusted networks. Do not put an unauthenticated ERPBridge server directly on the public internet.
+:::
 
 ## Planned design
 

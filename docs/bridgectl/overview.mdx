@@ -1,0 +1,58 @@
+---
+title: bridgectl Overview
+description: bridgectl is the developer CLI for the ERPBridge ecosystem — manage APIs, tools, cache, logs, and contexts.
+keywords: [bridgectl, cli, command reference]
+---
+
+# bridgectl
+
+**bridgectl** is the developer CLI for the ERPBridge ecosystem. It manages environments, registers and tests ERP APIs, generates and validates MCP tool schemas, and monitors the middleware through real-time log streaming and cache analytics.
+
+The CLI interacts with the ERPBridge middleware via a REST API and supports multiple output formats including Table, JSON, and YAML.
+
+## Quick start
+
+```bash title="Build the CLI"
+make build
+```
+
+```bash title="Verify the server connection"
+./bridgectl tool get
+```
+
+## Command groups
+
+| Group | Description | Key commands |
+| :--- | :--- | :--- |
+| `bridgectl api` | Manage ERP API endpoints | [`api register`](./bridgectl_api_register.md), [`api list`](./bridgectl_api_list.md), [`api test`](./bridgectl_api_test.md) |
+| `bridgectl tool` | Manage MCP tool resources (V2 Control Plane) | [`tool apply`](./bridgectl_tool_apply.md), [`tool generate`](./bridgectl_tool_generate.md), [`tool get`](./bridgectl_tool_get.md), [`tool delete`](./bridgectl_tool_delete.md) |
+| `bridgectl cache` | Manage tool cache | [`cache stats`](./bridgectl_cache_stats.md), [`cache flush`](./bridgectl_cache_flush.md) |
+| `bridgectl log` | Manage and view logs | [`log tail`](./bridgectl_log_tail.md), [`log stats`](./bridgectl_log_stats.md) |
+| `bridgectl context` | Manage bridgectl contexts | [`context list`](./bridgectl_context_list.md), [`context set`](./bridgectl_context_set.md) |
+| `bridgectl completion` | Generate shell autocompletion | `bash`, `zsh`, `fish`, `powershell` |
+| `bridgectl doc` | Generate Markdown documentation for bridgectl | — |
+| `bridgectl version` | Print the version number of bridgectl | — |
+
+## Global options
+
+```
+  -c, --context string   Override active context
+  -h, --help             help for bridgectl
+  -o, --output string    Output format: table, json, yaml (default "table")
+  -v, --verbose          Show full HTTP request/response detail
+```
+
+## Typical workflow
+
+1. [Register your ERP API](./bridgectl_api_register.md) — `bridgectl api register --name erp --url http://localhost:8081 ...`
+2. [Generate tool schemas](./bridgectl_tool_generate.md) from an OpenAPI spec — `bridgectl tool generate --api erp --openapi mock-erp/openapi.yaml -o yaml > schemas/erp/generated.yaml`
+3. [Apply the tools](./bridgectl_tool_apply.md) to the registry — `bridgectl tool apply -f schemas/erp/`
+4. [Verify](./bridgectl_tool_get.md) — `bridgectl tool get`
+
+:::tip New to ERPBridge?
+Follow the step-by-step [Onboarding Guide](../erpbridge/onboarding.mdx) — it walks through this exact workflow against the Mock ERP.
+:::
+
+## Reference
+
+Every command has a dedicated reference page. See the [command reference sidebar](./bridgectl_api.md) for the full list, grouped by parent command.

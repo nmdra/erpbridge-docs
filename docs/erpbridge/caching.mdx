@@ -1,12 +1,15 @@
 ---
-sidebar_position: 11
+sidebar_position: 12
+title: Exact Match Caching
+description: ERPBridge's Redis-backed caching layer — SHA-256 exact-match keys, per-tool TTLs, and auto-flush invalidation.
+keywords: [cache, redis, ttl, flush, exact match]
 ---
 
 # Exact Match Caching
 
 ERPBridge has a caching layer that reduces latency and load on legacy ERP systems. It serves repetitive queries directly from Redis.
 
-## 🚀 Overview
+## Overview
 
 The caching mechanism runs as middleware in the MCP tool execution pipeline. It uses **Redis** as the backend.
 
@@ -18,13 +21,13 @@ The system gives O(1) lookups for identical requests.
 - **TTL**: Configurable per tool (default: 3600s).
 - **Benefit**: Fast response times for repetitive queries.
 
-## ⚙️ Configuration
+## Configuration
 
 Caching is opt-in. It is configured per tool in the `spec.cache` section of the tool schema.
 
 ### Example Schema Configuration
 
-```json
+```json title="spec.cache — list_employees"
 {
   "apiVersion": "erpbridge.io/v1",
   "kind": "MCPTool",
@@ -51,13 +54,13 @@ Caching is opt-in. It is configured per tool in the `spec.cache` section of the 
 | `isReadOnly` | If `true`, the cache is shared globally (`role: shared`). If `false`, entries are isolated by the MCP role of the user. |
 | `flushOn` | An array of tool names. When the current tool runs, it flushes the cache of the listed tools. |
 
-## 🧹 Cache Invalidation (Auto-Flush)
+## Cache Invalidation (Auto-Flush)
 
 ERPBridge supports automatic cache invalidation. Use it on `POST`, `PUT`, or `PATCH` tools.
 
 **Example: Invalidating "Get Invoices" when a new one is created.**
 
-```json
+```json title="Write tool flushing read caches"
 "spec": {
   "cache": {
     "enabled": false,
@@ -66,7 +69,11 @@ ERPBridge supports automatic cache invalidation. Use it on `POST`, `PUT`, or `PA
 }
 ```
 
-## 🛠 Management with `bridgectl`
+:::note
+A write tool can keep its own caching disabled while still flushing the read caches it invalidates.
+:::
+
+## Management with `bridgectl`
 
 The developer CLI provides tools to monitor and manage the cache.
 
@@ -74,7 +81,7 @@ The developer CLI provides tools to monitor and manage the cache.
 
 Shows counts of cached keys and memory usage.
 
-```bash
+```bash title="Cache stats"
 bridgectl cache stats
 ```
 
@@ -82,7 +89,7 @@ bridgectl cache stats
 
 Clears the cache for a specific tool or an entire module.
 
-```bash
+```bash title="Flush variants"
 # Flush specific tool
 bridgectl cache flush --tool list_employees
 
@@ -93,16 +100,20 @@ bridgectl cache flush --module erp
 bridgectl cache flush --all
 ```
 
-## 🔎 When Redis Is Not Configured
+:::caution
+`bridgectl cache flush --all` evicts every cached entry. Expect a burst of upstream ERP traffic immediately after.
+:::
+
+## When Redis Is Not Configured
 
 If `REDIS_URL` is not set, the server disables the cache. Tool calls still work. The cache endpoints return HTTP 503:
 
 - `GET /api/cache/stats`
 - `GET /api/cache/flush`
 
-## 🏗 System Architecture
+## System Architecture
 
 1. **ERPBridge Server**: Orchestrates the middleware and talks to Redis.
 2. **Redis**: Stores the hashes and responses for high-speed retrieval.
 
-For deployment details, see the [Docker Guide](./docker.md).
+For deployment details, see the [Docker Guide](./docker.mdx).

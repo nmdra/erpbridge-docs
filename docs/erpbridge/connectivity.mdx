@@ -1,5 +1,8 @@
 ---
-sidebar_position: 6
+sidebar_position: 4
+title: Connectivity & Transport Guide
+description: Connect ERPBridge from Postman, Claude Desktop, Cursor, scripts, and Prometheus across all supported transports.
+keywords: [transport, streamable http, stdio, postman, session, mcp]
 ---
 
 # Connectivity & Transport Guide
@@ -23,6 +26,10 @@ This transport is the MCP streamable HTTP specification. It suits stateless or w
 - **Transport Type:** Streamable HTTP
 - **URL:** `http://localhost:8080/mcp/`
 
+:::info Session lifecycle
+The first request must be `initialize`. The server replies with a `Mcp-Session-Id` header that every subsequent request must include. See the [MCP Client Guide](./mcp-client-guide.mdx) for the full sequence.
+:::
+
 ## 2. Stdio (Local Integration)
 
 Stdio is the preferred transport for local integrations. The client starts the ERPBridge server as a child process.
@@ -30,9 +37,13 @@ Stdio is the preferred transport for local integrations. The client starts the E
 - **Best For:** Claude Desktop, Cursor, and other IDE-integrated agents running locally.
 - **Usage:** Run the server with the `--stdio` flag.
 
-```bash
+```bash title="Start the stdio transport"
 erpbridge-server --stdio
 ```
+
+:::caution No session ID needed
+The stdio transport does not use `Mcp-Session-Id`. The process boundary itself is the session.
+:::
 
 ## 3. Direct API (Internal/CLI)
 
@@ -47,7 +58,7 @@ The server exposes direct HTTP endpoints for internal management, performance mo
 | `/api/logs/stream` | `GET` | Real-time structured log stream (SSE). |
 | `/api/logs/recent` | `GET` | Fetch recent log history in JSON format. |
 
-For the full endpoint reference, see the [REST API Reference](./api.md).
+For the full endpoint reference, see the [REST API Reference](./api.mdx).
 
 ## 4. Protection & Limits
 

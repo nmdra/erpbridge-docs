@@ -1,5 +1,8 @@
 ---
 sidebar_position: 13
+title: REST API Reference
+description: Direct HTTP endpoints of the ERPBridge server — tool registry control plane, invocation, cache, logs, MCP, and metrics.
+keywords: [rest api, control plane, tools, cache, logs, invoke]
 ---
 
 # REST API Reference
@@ -16,7 +19,7 @@ The registry API is Kubernetes-style. It stores tool definitions in SQLite.
 
 ### List Tools
 
-```http
+```http title="List tool definitions"
 GET /apis/erpbridge.io/v1/tools
 ```
 
@@ -24,7 +27,7 @@ Returns a JSON array of tool definitions.
 
 ### Apply a Tool
 
-```http
+```http title="Apply a tool definition"
 POST /apis/erpbridge.io/v1/tools
 Content-Type: application/json
 ```
@@ -33,7 +36,7 @@ Body: one tool definition (kind `MCPTool`). Returns `201 Created` on success.
 
 ### Delete a Tool
 
-```http
+```http title="Delete a tool"
 DELETE /apis/erpbridge.io/v1/tools?name=<name>&version=<version>&hard=true
 ```
 
@@ -56,14 +59,14 @@ The server rejects tool definitions when:
 
 ### Invoke a Tool
 
-```http
+```http title="Invoke a tool directly"
 POST /api/tools/invoke
 Content-Type: application/json
 ```
 
 Body:
 
-```json
+```json title="Request body"
 {
   "name": "list_employees",
   "arguments": {}
@@ -105,3 +108,7 @@ The call goes through the middleware chain: rate limiting, cache, and resilience
 ## Error Responses
 
 The server uses standard HTTP status codes. For cache endpoints, `503` means the cache is not enabled.
+
+:::tip Need the full lifecycle?
+See the [MCP Client Guide](./mcp-client-guide.mdx) for the JSON-RPC request/response flow over the MCP endpoints.
+:::

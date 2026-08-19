@@ -1,5 +1,8 @@
 ---
-sidebar_position: 9
+sidebar_position: 11
+title: Environment Variables Reference
+description: Every environment variable read by the ERPBridge server, the bridgectl CLI, and the mock ERP service.
+keywords: [environment variables, configuration, MCP_PORT, REDIS_URL, DATABASE_PATH]
 ---
 
 # Environment Variables Reference
@@ -26,6 +29,10 @@ The server reads these variables directly from the environment. It does not load
 | `LOG_TO_STDERR` | (unset) | `true` writes logs to stderr. The server sets this automatically in stdio mode. |
 | `ERP_PRIMARY_KEY` | (unset) | Credential referenced by `credentialRef` in tool schemas. Resolved at tool-call time. |
 
+:::caution Secrets
+Keep credential values out of your shell history and out of version control. The server resolves `credentialRef` entries from the environment at call time and redacts them from logs.
+:::
+
 ## CLI Variables (`bridgectl`)
 
 The CLI reads these variables to override the active context.
@@ -51,7 +58,9 @@ The CLI reads its defaults from `~/.bridgectl/config.yaml`. The default context 
 | `mcp-server` | `http://localhost:8080` |
 | `erp-base` | `http://localhost:8081` |
 
-> **Note:** Nothing listens on port `8082` by default. Set `BRIDGE_SERVER` or edit the config file before you use `bridgectl cache` or `bridgectl log`.
+:::warning Nothing listens on port `8082` by default
+Set `BRIDGE_SERVER` or edit the config file before you use `bridgectl cache` or `bridgectl log`.
+:::
 
 ## Mock ERP Variables
 

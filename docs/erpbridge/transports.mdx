@@ -1,5 +1,8 @@
 ---
-sidebar_position: 3
+sidebar_position: 5
+title: Transports
+description: ERPBridge speaks MCP over streamable HTTP and stdio, plus direct HTTP endpoints for tooling.
+keywords: [transport, streamable http, stdio, rest api]
 ---
 
 # Transports
@@ -20,13 +23,13 @@ The MCP streamable HTTP transport. Best for remote clients, web apps, and Postma
 
 The client starts `erpbridge-server` as a child process and communicates over standard input/output. Best for local agents (Claude Desktop, Cursor, IDE integrations).
 
-```bash
+```bash title="Start the stdio transport"
 erpbridge-server --stdio
 ```
 
 ## 3. Direct API
 
-Internal endpoints for management, monitoring, and the `bridgectl` CLI — no MCP handshake required. See the [REST API Reference](./api.md).
+Internal endpoints for management, monitoring, and the `bridgectl` CLI — no MCP handshake required. See the [REST API Reference](./api.mdx).
 
 ## Choosing a transport
 
@@ -36,4 +39,8 @@ Internal endpoints for management, monitoring, and the `bridgectl` CLI — no MC
 | Claude / Cursor | Stdio | `erpbridge-server --stdio` |
 | Scripts / CI | Direct API | `http://localhost:8080/api/` |
 
-For the full details — session management, Postman collections, and protection limits — see the [Connectivity & Transport Guide](./connectivity.md).
+:::tip Not sure which to pick?
+Start with **Streamable HTTP** — it is easier to debug since you can inspect requests in a browser or Postman. For local agent integrations, use **Stdio**.
+:::
+
+For the full details — session management, Postman collections, and protection limits — see the [Connectivity & Transport Guide](./connectivity.mdx).

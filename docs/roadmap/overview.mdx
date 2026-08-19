@@ -1,0 +1,26 @@
+---
+sidebar_position: 1
+title: Roadmap
+description: Active projects, planned work, and how to add a new project to this documentation site.
+keywords: [roadmap, projects, planning]
+---
+
+# Roadmap
+
+This documentation site hosts guides for all ERPBridge-related projects. Each product gets its own section.
+
+## Active projects
+
+- **[ERPBridge](../erpbridge/intro.mdx)** — MCP middleware for legacy ERP systems.
+- **[Bridgectl](../bridgectl/overview.mdx)** — developer CLI for the ERPBridge ecosystem.
+
+## Planned
+
+| Project | Status | Notes |
+| :--- | :--- | :--- |
+| ERPBridge authentication (token-based) | In planning | `API_AUTH_TOKEN` + scoped API tokens; see [Authentication](../erpbridge/auth.mdx) |
+| ERPBridge hardening | In planning | Cache fallback, security, correctness fixes |
+
+## Adding a new project
+
+Create a new section under `docs/<project>/` and register it in `sidebars.ts` and the navbar in `docusaurus.config.ts`.

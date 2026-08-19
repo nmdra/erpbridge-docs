@@ -27,10 +27,11 @@ const config: Config = {
 
   onBrokenLinks: 'throw',
 
-  // Treat docs as plain Markdown (not MDX) so generated shell snippets
-  // like `<(...)` or `$(...)` are not parsed as JSX.
+  // 'detect' lets hand-written .mdx pages use the full MDX feature set
+  // while keeping the generated cobra CLI reference (.md) as plain
+  // CommonMark — safe for shell snippets like `<(...)` or `$(...)`.
   markdown: {
-    format: 'md',
+    format: 'detect',
   },
 
   // Even if you don't use internationalization, you can use this field to set
@@ -58,6 +59,8 @@ const config: Config = {
       } satisfies Preset.Options,
     ],
   ],
+
+  themes: ['@docusaurus/theme-mermaid'],
 
   plugins: [
     [
@@ -97,6 +100,9 @@ const config: Config = {
       defaultMode: 'dark',
       respectPrefersColorScheme: true,
     },
+    markdown: {
+      mermaid: true,
+    },
     navbar: {
       title: 'ERPBridge Docs',
       logo: {
@@ -108,7 +114,19 @@ const config: Config = {
           type: 'docSidebar',
           sidebarId: 'erpbridgeSidebar',
           position: 'left',
-          label: 'ERPBridge',
+          label: 'Docs',
+        },
+        {
+          type: 'doc',
+          docId: 'erpbridge/intro',
+          position: 'left',
+          label: 'Server',
+        },
+        {
+          type: 'docSidebar',
+          sidebarId: 'bridgectlSidebar',
+          position: 'left',
+          label: 'Bridgectl',
         },
         {
           type: 'docSidebar',
@@ -135,8 +153,12 @@ const config: Config = {
           title: 'Docs',
           items: [
             {
-              label: 'ERPBridge',
+              label: 'ERPBridge Server',
               to: '/docs/erpbridge/intro',
+            },
+            {
+              label: 'Bridgectl CLI',
+              to: '/docs/bridgectl/overview',
             },
             {
               label: 'Roadmap',

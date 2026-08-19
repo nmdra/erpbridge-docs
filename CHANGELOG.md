@@ -8,6 +8,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- Split documentation into two product sections: **ERPBridge Server** (`docs/erpbridge/`) and **Bridgectl CLI** (`docs/bridgectl/`), each with its own sidebar
+- Navbar restructure: renamed `ERPBridge` entry to `Docs` (umbrella) and added `Server` and `Bridgectl` shortcuts
+- New Bridgectl overview landing page (`docs/bridgectl/overview.mdx`) with command-group table and typical workflow
+- Mermaid architecture diagrams (control-plane overview and tool-lifecycle sequence) via `@docusaurus/theme-mermaid`
+
+### Changed
+
+- Hand-written pages converted from Markdown to **MDX** (`.mdx`) and upgraded with Docusaurus native features: `Tabs`, admonitions, collapsible `<details>`, code block titles, and richer front matter (description, keywords)
+- `markdown.format` switched from `'md'` to `'detect'` so `.mdx` pages get full MDX while the generated cobra CLI reference stays CommonMark-safe
+- Reordered server sidebar: Introduction → Quickstart → Onboarding → Connectivity → Transports → Architecture → Tool Schema → MCP Client Guide → Auth → Docker → Environment Variables → Caching → API → FAQ
+- Bridgectl sidebar now groups commands by parent command (api, tool, cache, log, context, other)
+
+### Added
+
 - Custom ERPBridge branding: new logo, hero illustration (ERP ↔ AI bridge over MCP), and feature illustrations for the homepage
 - Blog section disabled (hidden from navbar/footer, plugin turned off)
 

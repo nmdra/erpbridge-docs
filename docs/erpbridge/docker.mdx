@@ -1,6 +1,12 @@
 ---
 sidebar_position: 10
+title: Docker Deployment Guide
+description: Deploy and manage the ERPBridge ecosystem with Docker and Docker Compose — server, mock ERP, Redis, and MCP clients.
+keywords: [docker, docker compose, deployment, claude desktop, cursor]
 ---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 # Docker Deployment Guide
 
@@ -10,7 +16,7 @@ This guide covers how to deploy and manage the ERPBridge ecosystem with Docker a
 
 Make sure that you have [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/) installed.
 
-```bash
+```bash title="Start the full stack"
 # Clone the repository
 git clone https://github.com/nmdra/ERPBridge.git
 cd ERPBridge
@@ -20,6 +26,7 @@ docker compose up -d --build
 ```
 
 The stack includes:
+
 - **ERPBridge Server** (`:8080`): The core MCP middleware.
 - **Mock ERP** (`:8081`): Simulates legacy ERP endpoints.
 - **Redis** (`:6379`): Provides the exact-match cache.
@@ -37,7 +44,7 @@ Environment variables for the server are set in the `docker-compose.yml` file.
 | `RATE_LIMIT_RPS` | Per-session requests per second. | `10` |
 | `RATE_LIMIT_BURST` | Token bucket burst size. | `20` |
 
-For the full list of server environment variables, see the [Environment Variables Reference](./environment-variables.md).
+For the full list of server environment variables, see the [Environment Variables Reference](./environment-variables.mdx).
 
 ## 3. Tool Registry
 
@@ -46,15 +53,15 @@ The server keeps tool definitions in a SQLite database (`DATABASE_PATH`). The `s
 To load tools into the registry, generate and apply the schemas from your host:
 
 1. Register the ERP API:
-   ```bash
+   ```bash title="Register the API"
    ./bridgectl api register --name erp --url http://localhost:8081 --module erp --description "Mock ERP"
    ```
 2. Generate the tool schemas:
-   ```bash
+   ```bash title="Generate schemas"
    ./bridgectl tool generate --api erp --openapi mock-erp/openapi.yaml -o yaml > schemas/erp/generated.yaml
    ```
 3. Apply the schemas to the registry:
-   ```bash
+   ```bash title="Apply schemas"
    ./bridgectl tool apply -f schemas/erp/
    ```
 
@@ -64,30 +71,28 @@ The server detects new registry entries within 10 seconds and exposes them over 
 
 You can use the local `bridgectl` binary to interact with the server running in Docker.
 
-1.  **Build bridgectl:**
-    ```bash
-    go build -o bridgectl tools/bridgectl/main.go
-    ```
-
-2.  **Verify Connection:**
-    ```bash
-    ./bridgectl tool get
-    ```
-
-3.  **Generate a new tool:**
-    ```bash
-    ./bridgectl tool generate --api mock-erp --openapi mock-erp/openapi.yaml -o yaml > schemas/mock-erp/generated.yaml
-    ```
-    The generated YAML goes to stdout. Redirect it to a file as shown, then apply it with `bridgectl tool apply -f`.
+1. **Build bridgectl:**
+   ```bash title="Build the CLI"
+   go build -o bridgectl tools/bridgectl/main.go
+   ```
+2. **Verify Connection:**
+   ```bash title="Verify connection"
+   ./bridgectl tool get
+   ```
+3. **Generate a new tool:**
+   ```bash title="Generate a tool from OpenAPI"
+   ./bridgectl tool generate --api mock-erp --openapi mock-erp/openapi.yaml -o yaml > schemas/mock-erp/generated.yaml
+   ```
+   The generated YAML goes to stdout. Redirect it to a file as shown, then apply it with `bridgectl tool apply -f`.
 
 ## 5. Logs & Monitoring
 
 - **View Container Logs:**
-  ```bash
+  ```bash title="Follow container logs"
   docker compose logs -f erpbridge-server
   ```
 - **Live Stream Logs via CLI:**
-  ```bash
+  ```bash title="Stream logs with the CLI"
   ./bridgectl log tail
   ```
 - **Metrics:**
@@ -97,61 +102,68 @@ You can use the local `bridgectl` binary to interact with the server running in 
 
 ERPBridge supports the **Stdio** and **Streamable HTTP** transports.
 
-### Claude Desktop (Stdio)
+<Tabs groupId="clients">
+  <TabItem value="claude" label="Claude Desktop (Stdio)">
 
 Claude Desktop connects to MCP servers via standard input and output. The server binary supports the `--stdio` flag.
 
-1.  **Locate Configuration:**
-    - **macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
-    - **Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
+1. **Locate Configuration:**
+   - **macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
+   - **Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
 
-2.  **Add ERPBridge Server:**
-    Add the following to the `mcpServers` section. This runs the server in stdio mode inside a container.
+2. **Add ERPBridge Server:**
+   Add the following to the `mcpServers` section. This runs the server in stdio mode inside a container.
 
-    ```json
-    {
-      "mcpServers": {
-        "erpbridge": {
-          "command": "docker",
-          "args": [
-            "run",
-            "-i",
-            "--rm",
-            "ghcr.io/nmdra/erpbridge-server:latest",
-            "--stdio"
-          ]
-        }
-      }
-    }
-    ```
+   ```json title="claude_desktop_config.json"
+   {
+     "mcpServers": {
+       "erpbridge": {
+         "command": "docker",
+         "args": [
+           "run",
+           "-i",
+           "--rm",
+           "ghcr.io/nmdra/erpbridge-server:latest",
+           "--stdio"
+         ]
+       }
+     }
+   }
+   ```
 
-    *Note: The tool registry lives in the SQLite database. Tools persist inside the container only while it runs. To keep tools across restarts, run the full `docker compose` stack and connect via Streamable HTTP instead.*
+   :::warning Tool persistence
+   The tool registry lives in the SQLite database. Tools persist inside the container only while it runs. To keep tools across restarts, run the full `docker compose` stack and connect via Streamable HTTP instead.
+   :::
 
-3.  **Restart Claude:** Fully quit and restart Claude Desktop. Look for the tool icon in the chat input.
+3. **Restart Claude:** Fully quit and restart Claude Desktop. Look for the tool icon in the chat input.
 
-### Cursor (Streamable HTTP)
+  </TabItem>
+  <TabItem value="cursor" label="Cursor (Streamable HTTP)">
 
 Cursor connects to remote MCP servers via HTTP. Use this method when the ERPBridge stack is already running via `docker compose up`.
 
-1.  **Make Sure the Server Is Running:**
-    Verify that the stack is up and the server is reachable at `http://localhost:8080`.
+1. **Make Sure the Server Is Running:**
+   Verify that the stack is up and the server is reachable at `http://localhost:8080`.
 
-2.  **Configure Cursor:**
-    - Open Cursor **Settings** (`Cmd+,` or `Ctrl+,`).
-    - Navigate to **Features** > **MCP**.
-    - Click **+ Add New MCP Server**.
-    - **Name:** `ERPBridge`
-    - **Type:** `streamable-http` (or `http`, depending on your Cursor version)
-    - **URL:** `http://localhost:8080/mcp/`
+2. **Configure Cursor:**
+   - Open Cursor **Settings** (`Cmd+,` or `Ctrl+,`).
+   - Navigate to **Features** > **MCP**.
+   - Click **+ Add New MCP Server**.
+   - **Name:** `ERPBridge`
+   - **Type:** `streamable-http` (or `http`, depending on your Cursor version)
+   - **URL:** `http://localhost:8080/mcp/`
 
-3.  **Verify:**
-    You see a green status indicator. You can now use the ERP tools in Cursor Chat or Composer.
+3. **Verify:**
+   You see a green status indicator. You can now use the ERP tools in Cursor Chat or Composer.
+
+  </TabItem>
+</Tabs>
 
 ## 7. Troubleshooting
 
 - **Connection Refused:** Make sure that `ERP_BASE_URL` in `docker-compose.yml` uses the service name `http://mock-erp:8081` instead of `localhost`.
 - **Claude Stdio Timeout:** If Claude fails to connect, build the server binary first and run it directly. This shows any startup errors.
 - **Schema Errors:** Validate the tool definition locally before you apply it:
-  ```bash
+  ```bash title="Validate a schema"
   ./bridgectl tool validate -f schemas/erp/list_employees.json
   ```

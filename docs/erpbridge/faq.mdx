@@ -1,97 +1,139 @@
 ---
-sidebar_position: 12
+sidebar_position: 14
+title: Frequently Asked Questions
+description: Common questions about ERPBridge configuration, tools & schemas, authentication, upgrades, and troubleshooting.
+keywords: [faq, configuration, cache, redis, upgrade, troubleshooting]
 ---
 
 # Frequently Asked Questions
 
 ## Configuration
 
-### How do I configure the server?
+<details>
+<summary>How do I configure the server?</summary>
 
-Set the environment variables listed in the [Environment Variables Reference](./environment-variables.md). Export them in your shell, or set them in `docker-compose.yml`.
+Set the environment variables listed in the [Environment Variables Reference](./environment-variables.mdx). Export them in your shell, or set them in `docker-compose.yml`.
 
-### How do I configure the CLI?
+</details>
+
+<details>
+<summary>How do I configure the CLI?</summary>
 
 The CLI reads `~/.bridgectl/config.yaml`. The file holds named contexts. Each context has a `server`, `mcp-server`, and `erp-base` URL.
 
 To switch contexts:
 
-```bash
+```bash title="Switch contexts"
 bridgectl context list
 bridgectl context set <name>
 ```
 
 To override the address for one command:
 
-```bash
+```bash title="One-off override"
 BRIDGE_MCP_SERVER=http://localhost:8080 bridgectl tool get
 ```
 
-### Why do `bridgectl cache` and `bridgectl log` fail with "connection refused"?
+</details>
+
+<details>
+<summary>Why do `bridgectl cache` and `bridgectl log` fail with "connection refused"?</summary>
 
 The default context points `server` at `http://localhost:8082`. Nothing listens there. Set `BRIDGE_SERVER=http://localhost:8080`, or edit the `server` value in `~/.bridgectl/config.yaml`.
 
-### How do I enable debug logging?
+</details>
+
+<details>
+<summary>How do I enable debug logging?</summary>
 
 Set `LOG_LEVEL=debug` on the server. You can also set per-component levels, for example `LOG_LEVEL_MCP=debug`.
 
-### How do I run the server in JSON log mode?
+</details>
+
+<details>
+<summary>How do I run the server in JSON log mode?</summary>
 
 Set `APP_ENV=production`.
 
-### Do I need Redis?
+</details>
+
+<details>
+<summary>Do I need Redis?</summary>
 
 No. The cache is optional. If `REDIS_URL` is empty, the server disables the cache and tool calls still work. The cache endpoints return `503`.
 
+</details>
+
 ## Tools & Schemas
 
-### Where do tool schemas come from?
+<details>
+<summary>Where do tool schemas come from?</summary>
 
 The `schemas/` directory is not tracked by git. Generate the schemas from the OpenAPI spec of your ERP:
 
-```bash
+```bash title="Generate from OpenAPI"
 bridgectl api register --name erp --url http://localhost:8081 --module erp --description "Mock ERP"
 bridgectl tool generate --api erp --openapi mock-erp/openapi.yaml -o yaml > schemas/erp/generated.yaml
 bridgectl tool apply -f schemas/erp/
 ```
 
-### How do I update a tool?
+</details>
+
+<details>
+<summary>How do I update a tool?</summary>
 
 Apply the new version with `bridgectl tool apply -f <file>`. The registry keeps multiple versions. MCP clients receive the latest stable version.
 
-### How do I hide a tool without deleting it?
+</details>
+
+<details>
+<summary>How do I hide a tool without deleting it?</summary>
 
 Soft-delete it:
 
-```bash
+```bash title="Soft delete a tool"
 bridgectl tool delete <name> <version>
 ```
 
 The tool stays in the database. It no longer appears in `tools/list`.
 
-### How do I restore a soft-deleted tool?
+</details>
+
+<details>
+<summary>How do I restore a soft-deleted tool?</summary>
 
 Apply the schema again:
 
-```bash
+```bash title="Restore by re-applying"
 bridgectl tool apply -f schemas/erp/<name>.json
 ```
 
-### How do I permanently remove a tool?
+</details>
 
-```bash
+<details>
+<summary>How do I permanently remove a tool?</summary>
+
+```bash title="Hard delete a tool"
 bridgectl tool delete <name> <version> --hard
 ```
 
-CAUTION: A hard delete removes the tool from the database. You cannot restore it.
+:::danger
+A hard delete removes the tool from the database. You cannot restore it.
+:::
 
-### How quickly does the server pick up tool changes?
+</details>
+
+<details>
+<summary>How quickly does the server pick up tool changes?</summary>
 
 Within 10 seconds. The reconciliation controller ticks every 10 seconds. A tool applied over the API is visible immediately.
 
+</details>
+
 ## Authentication
 
-### How does the server authenticate ERP calls?
+<details>
+<summary>How does the server authenticate ERP calls?</summary>
 
 Tool schemas reference a credential by name (`credentialRef`). The server resolves the reference from environment variables at call time. Schemas never contain raw secrets.
 
@@ -103,9 +145,12 @@ The mock ERP accepts:
 
 See the [Mock ERP in the repository](https://github.com/nmdra/ERPBridge/tree/main/mock-erp) for details.
 
+</details>
+
 ## Upgrades
 
-### How do I upgrade ERPBridge?
+<details>
+<summary>How do I upgrade ERPBridge?</summary>
 
 1. Pull the latest changes: `git pull`
 2. Rebuild the binaries: `make build`
@@ -113,17 +158,23 @@ See the [Mock ERP in the repository](https://github.com/nmdra/ERPBridge/tree/mai
 
 The SQLite registry keeps its data. The server runs a startup migration. Errors are logged but do not stop the server.
 
-### Where do I find release notes?
+</details>
 
-See [CHANGELOG.md](https://github.com/nmdra/ERPBridge/blob/main/CHANGELOG.md).
+<details>
+<summary>Where do I find release notes?</summary>
+
+See [CHANGELOG.md](https://github.com/nmdra/ERPBridge/blob/main/CHANGELOG.mdx).
+
+</details>
 
 ## Troubleshooting
 
-### Tool calls return `internal server error`
+<details>
+<summary>Tool calls return `internal server error`</summary>
 
 Check the server logs:
 
-```bash
+```bash title="Server logs"
 docker compose logs erpbridge-server
 ```
 
@@ -133,8 +184,13 @@ Common causes:
 - The tool endpoint path contains a secret pattern and was rejected.
 - The MCP role of the session has no cache scope.
 
-### Where do I get help?
+</details>
+
+<details>
+<summary>Where do I get help?</summary>
 
 - Report bugs and request features: [GitHub Issues](https://github.com/nmdra/ERPBridge/issues)
-- See [CONTRIBUTING.md](https://github.com/nmdra/ERPBridge/blob/main/CONTRIBUTING.md)
-- See the [Troubleshooting section of the Onboarding Guide](./onboarding.md#troubleshooting)
+- See [CONTRIBUTING.md](https://github.com/nmdra/ERPBridge/blob/main/CONTRIBUTING.mdx)
+- See the [Troubleshooting section of the Onboarding Guide](./onboarding.mdx#troubleshooting)
+
+</details>
