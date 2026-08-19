@@ -35,7 +35,7 @@ function HomepageHeader() {
           <div className={styles.heroImageWrap}>
             <img
               src="img/erp-bridge.svg"
-              alt="ERPBridge connecting an ERP system to AI agents over MCP"
+              alt="ERPBridge connecting a legacy ERP to AI-based workflows without touching the ERP code base"
               className={styles.heroImage}
             />
           </div>
@@ -50,7 +50,7 @@ export default function Home(): ReactNode {
   return (
     <Layout
       title={`${siteConfig.title}`}
-      description="Documentation for ERPBridge — connect legacy ERP systems to AI agents through the Model Context Protocol">
+      description="Documentation for ERPBridge — connect your legacy ERP to AI-based workflows without changing your code base">
       <HomepageHeader />
       <main>
         <HomepageFeatures />

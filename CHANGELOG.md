@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Changed
+
+- Site tagline updated to "Connect your legacy ERP to AI-based workflows without changing your code base" (homepage hero, meta description, `llms.txt`)
+- Homepage feature sections replaced: **Non-Invasive Integration**, **AI-Agent-First Design**, and **BYOERP — Bring Your Own ERP**, each with a new custom icon
+
 ### Fixed
 
 - Corrected the MCP handshake URL from `POST /mcp/initialize` to `POST /mcp/` with a JSON-RPC `initialize` request in the Transports and Connectivity guides (drift from server.go:465)

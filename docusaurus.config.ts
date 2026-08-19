@@ -6,7 +6,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
   title: 'ERPBridge Docs',
-  tagline: 'Connect your ERP to AI agents through the Model Context Protocol',
+  tagline: 'Connect your legacy ERP to AI-based workflows without changing your code base',
   favicon: 'img/logo.svg',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future

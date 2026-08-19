@@ -11,32 +11,35 @@ type FeatureItem = {
 
 const FeatureList: FeatureItem[] = [
   {
-    title: 'MCP Made Simple',
-    Svg: require('@site/static/img/feature-mcp.svg').default,
+    title: 'Non-Invasive Integration',
+    Svg: require('@site/static/img/feature-noninvasive.svg').default,
     description: (
       <>
-        ERPBridge exposes ERP functionality as MCP tools over streamable HTTP
-        and stdio, so AI agents can discover and call ERP APIs directly.
+        ERPBridge sits on top of your existing ERP. No code changes, no API
+        rewrites, no migrations — your legacy system keeps running exactly as
+        it does today.
       </>
     ),
   },
   {
-    title: 'Tool Registry',
-    Svg: require('@site/static/img/feature-registry.svg').default,
+    title: 'AI-Agent-First Design',
+    Svg: require('@site/static/img/feature-agent-first.svg').default,
     description: (
       <>
-        Register ERP APIs once with <code>bridgectl</code>, then generate and
-        validate MCP tool schemas automatically.
+        Tools are declared once and exposed for discovery, so agents call your
+        ERP directly. This reduces the maintenance overhead of keeping
+        integrations in sync.
       </>
     ),
   },
   {
-    title: 'Resilient by Default',
-    Svg: require('@site/static/img/feature-resilient.svg').default,
+    title: 'BYOERP — Bring Your Own ERP',
+    Svg: require('@site/static/img/feature-byoerp.svg').default,
     description: (
       <>
-        Built-in caching, rate limiting, structured logs, and Prometheus
-        metrics protect your ERP systems and keep the bridge observable.
+        Bring any ERP: on-premise racks, cloud suites, or custom REST APIs.
+        Register it, generate the tool schemas, and the bridge handles the
+        rest.
       </>
     ),
   },
