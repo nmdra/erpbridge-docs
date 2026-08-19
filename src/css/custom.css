@@ -28,3 +28,50 @@
   --ifm-color-primary-lightest: #4fddbf;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
+
+/* llms.txt link rendered next to the copy-page button */
+.llms-txt-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  margin-left: 8px;
+  margin-bottom: 16px;
+  background: var(--ifm-navbar-background-color, #1c1e21);
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 6px;
+  color: var(--ifm-navbar-link-color);
+  font-family: var(--ifm-font-family-base, inherit);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: normal;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.llms-txt-link:hover {
+  background: var(--ifm-color-emphasis-100);
+  border-color: var(--ifm-color-emphasis-400);
+  text-decoration: none;
+}
+
+[data-theme='dark'] .llms-txt-link {
+  background: var(--ifm-navbar-background-color);
+  border-color: var(--ifm-color-emphasis-300);
+}
+
+[data-theme='dark'] .llms-txt-link:hover {
+  background: var(--ifm-color-emphasis-200);
+}
+
+[data-theme='light'] .llms-txt-link {
+  background: #ffffff;
+  border-color: #d0d7de;
+  color: #24292f;
+}
+
+[data-theme='light'] .llms-txt-link:hover {
+  background: #f6f8fa;
+  border-color: #8c959f;
+}

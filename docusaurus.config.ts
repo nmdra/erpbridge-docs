@@ -99,6 +99,7 @@ const config: Config = {
           'Documentation for ERPBridge — connect legacy ERP systems to AI agents through the Model Context Protocol.',
       },
     ],
+    require.resolve('./plugins/llms-link'),
   ],
 
   themeConfig: {
