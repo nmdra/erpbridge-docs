@@ -24,6 +24,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Added
 
 - Custom ERPBridge branding: new logo, hero illustration (ERP ↔ AI bridge over MCP), and feature illustrations for the homepage
+- Hero illustration upgraded to an animated SVG: rotating gears, blinking server lights, protective "0 code changes" halo, streaming energy + traveling data packets across the MCP bridge, orbiting hub rings, pulsing neural network, twinkling sparkles, and a 24/7 automation clock
 - Blog section disabled (hidden from navbar/footer, plugin turned off)
 
 ### Added
