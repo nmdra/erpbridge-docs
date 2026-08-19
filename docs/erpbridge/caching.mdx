@@ -18,7 +18,7 @@ The caching mechanism runs as middleware in the MCP tool execution pipeline. It 
 The system gives O(1) lookups for identical requests.
 
 - **Key Generation**: A deterministic hash of the tool name, the user role scope, and the JSON-sorted arguments.
-- **TTL**: Configurable per tool (default: 3600s).
+- **TTL**: Configurable per tool. Defaults to `0` (no expiry) when `ttlSeconds` is omitted.
 - **Benefit**: Fast response times for repetitive queries.
 
 ## Configuration
@@ -50,7 +50,7 @@ Caching is opt-in. It is configured per tool in the `spec.cache` section of the 
 | Field | Description |
 | :--- | :--- |
 | `enabled` | Enables or disables the cache middleware for this tool. |
-| `ttlSeconds` | How long the entry stays in Redis. |
+| `ttlSeconds` | How long the entry stays in Redis. Defaults to `0` (no expiry) when omitted. |
 | `isReadOnly` | If `true`, the cache is shared globally (`role: shared`). If `false`, entries are isolated by the MCP role of the user. |
 | `flushOn` | An array of tool names. When the current tool runs, it flushes the cache of the listed tools. |
 
@@ -90,8 +90,8 @@ bridgectl cache stats
 Clears the cache for a specific tool or an entire module.
 
 ```bash title="Flush variants"
-# Flush specific tool
-bridgectl cache flush --tool list_employees
+# Flush specific tool (positional argument)
+bridgectl cache flush list_employees
 
 # Flush entire module
 bridgectl cache flush --module erp
