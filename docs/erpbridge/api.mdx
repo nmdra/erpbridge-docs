@@ -32,7 +32,17 @@ POST /apis/erpbridge.io/v1/tools
 Content-Type: application/json
 ```
 
-Body: one tool definition (kind `MCPTool`). Returns `201 Created` on success.
+Body: one tool definition (kind `MCPTool`). Returns `201 Created` on success:
+
+```json title="Apply response"
+{
+  "status": "applied",
+  "name": "list_employees",
+  "version": "1.0.0"
+}
+```
+
+When the admission rules reject the definition, the server returns `422 Unprocessable Entity` with an error message.
 
 ### Delete a Tool
 
@@ -75,6 +85,22 @@ Body:
 
 The call goes through the middleware chain: rate limiting, cache, and resilience.
 
+```json title="Success response"
+{
+  "result": {
+    "employees": [...]
+  }
+}
+```
+
+On failure the server returns `500 Internal Server Error` with a JSON error envelope:
+
+```json title="Error response"
+{
+  "error": "tool execution failed: ..."
+}
+```
+
 ## Cache
 
 | Endpoint | Method | Description |
@@ -83,6 +109,31 @@ The call goes through the middleware chain: rate limiting, cache, and resilience
 | `/api/cache/flush` | `GET` | Flush cache entries. Query params: `tool`, `module`, `all=true`. Returns `503` when the cache is disabled. |
 | `/api/cache/list` | `GET` | Reserved. Returns `501 Not Implemented`. |
 | `/api/cache/inspect` | `GET` | Reserved. Returns `501 Not Implemented`. |
+
+### Cache Stats Response
+
+```json title="GET /api/cache/stats"
+{
+  "apiVersion": "v1",
+  "kind": "CacheStats",
+  "status": "active",
+  "stats": {
+    "exactKeys": 42,
+    "redisMemory": "1.2 MiB"
+  }
+}
+```
+
+### Flush Response
+
+```json title="GET /api/cache/flush?tool=list_employees"
+{
+  "deleted": 3,
+  "status": "ok"
+}
+```
+
+`400 Bad Request` is returned when `tool`, `module`, and `all` are all absent.
 
 ## Logs
 
@@ -104,6 +155,28 @@ The call goes through the middleware chain: rate limiting, cache, and resilience
 | Endpoint | Method | Description |
 | :--- | :--- | :--- |
 | `/metrics` | `GET` | Prometheus-formatted metrics. |
+
+### Prometheus Metrics
+
+The server exposes the following metrics in Prometheus text format. All counters are cumulative.
+
+| Metric | Type | Labels | Description |
+| :--- | :--- | :--- | :--- |
+| `erp_requests_total` | Counter | `method`, `path`, `status` | Outbound requests from the connector to the upstream ERP. |
+| `erp_request_duration_seconds` | Histogram | `method`, `path` | Latency distribution of outbound ERP requests. |
+| `mcp_tool_invocations_total` | Counter | `tool`, `cache_status` (`SUCCESS`/`ERROR`) | MCP tool invocations. |
+| `mcp_tool_duration_seconds` | Histogram | `tool` | End-to-end duration of MCP tool calls. |
+| `cache_hits_total` | Counter | `type` (`exact`) | Cache hits. |
+| `cache_misses_total` | Counter | — | Cache misses. |
+| `mcp_server_starts_total` | Counter | — | MCP server startup events. |
+| `mcp_server_stops_total` | Counter | — | MCP server shutdown events. |
+| `mcp_sessions_started_total` | Counter | — | MCP client sessions established. |
+| `mcp_sessions_ended_total` | Counter | — | MCP client sessions terminated. |
+| `mcp_sessions_active` | Gauge | — | Currently active MCP client sessions. |
+
+```bash title="Scrape example"
+curl http://localhost:8080/metrics | grep -E "erp_requests_total|mcp_tool_invocations_total"
+```
 
 ## Error Responses
 
