@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Authentication guide: added outbound ERP authentication (`api-key`/`basic`/`bearer` header construction and `credentialRef` resolution) and the logger's data redaction rules (drift from internal/mcp/tool.go and internal/logger/mcp_handler.go)
 - Connectivity guide: documented connector resilience (15s timeout, 3-attempt retry with jitter, gobreaker circuit breaker thresholds) that was previously undocumented (internal/connector/client.go)
 - Onboarding guide: corrected the batch-apply workflow — `tool generate` writes individual `.json` files into `schemas/erp/`; the now-recommended flow applies the directory instead of the broken stdout-YAML redirect (internal/idp/generator.go)
+- Bridgectl overview: documented exit codes 0–7 and the structured `AgentActionableError` JSON payload for agents; aligned the typical-workflow snippet with the corrected generate/apply flow (internal/cli/errors.go)
 
 ### Added
 
