@@ -7,20 +7,32 @@ keywords: [sdk, mcp client, metrics, logs]
 
 # ERPBridge SDK
 
-:::info Work in progress
-
-The ERPBridge SDK is under active development. APIs and behavior may change.
-
-:::
-
 The SDK lets you integrate ERPBridge into your Agentic AI workflow applications without the hassle. It is the easiest way to embed the bridge in your own products.
 
 ## Features
 
 - **Built-in MCP client** for the ERPBridge server — connect, discover, and call tools programmatically
+- **Exact-name tool proxy** — call registered tools such as `list_employees` directly, with argument validation
 - **Log aggregation** — collect and inspect bridge logs from your application
 - **View metrics** — read Prometheus metrics from the server
-- **More to come** as the SDK matures
+- **Health and cache** — server health checks and cache statistics or flushing
+- **Tool registry and direct invoke** — manage registered tools over REST and call them without an MCP session
+
+## Quickstart
+
+```ts
+import { createClient } from '@erpbridge/sdk'
+
+const client = createClient({ baseUrl: 'http://localhost:8080' })
+
+await client.mcp.connect()
+const result = await client.tools.list_employees({ department: 'engineering' })
+console.log(result.result)
+```
+
+Errors are typed across the whole surface (`ErpbridgeError` and subclasses:
+`AuthenticationError`, `NotFoundError`, `RateLimitError`, `ServerError`,
+`ProtocolError`). See the package README for the full guide.
 
 ## Repository
 
@@ -28,4 +40,4 @@ The SDK is developed in the [erpbridge-sdk](https://github.com/nmdra/erpbridge-s
 
 ## Status
 
-The SDK is planned but not yet released. Watch this page and the [CHANGELOG](https://github.com/nmdra/ERPBridge/blob/main/CHANGELOG.md) for updates.
+v0.1.0 ships the MCP client, exact-name tool proxy, logs, metrics, health, cache, tool registry, and direct invoke. See the [CHANGELOG](https://github.com/nmdra/erpbridge-sdk/blob/main/CHANGELOG.md) for details.
