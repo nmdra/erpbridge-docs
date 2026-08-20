@@ -1,15 +1,17 @@
 ---
 sidebar_position: 1
 title: Roadmap
-description: Where ERPBridge is today, what is planned next, and how to influence the direction.
+description: Where the ERPBridge family is today, what is planned next, and how to influence the direction.
 keywords: [roadmap, projects, planning, status]
 ---
 
 # Roadmap
 
-ERPBridge connects legacy ERP systems to AI-based workflows without changing the ERP code base. This page shows what is shipped, what is in flight, and where the project is heading.
+The ERPBridge project family connects legacy ERP systems to AI-based workflows without changing the ERP code base. This page shows the current focus and future plans across the Server, Bridgectl, and the SDK.
 
-## Where we are
+## Server
+
+The ERPBridge server provides the core MCP and REST API surfaces.
 
 ### Shipped
 
@@ -21,36 +23,48 @@ ERPBridge connects legacy ERP systems to AI-based workflows without changing the
 | Caching | Optional exact-match cache (Redis), flush and stats endpoints, `flushOn` per-tool invalidation |
 | Observability | Structured logs (JSON in production), Prometheus metrics, per-component log levels |
 | Security | Credential references resolved from environment variables, secret redaction in logs, exit codes 0-7 |
-| CLI | `bridgectl` with API, tool, cache, log, context, and completion commands |
+
+### In flight (Hardening & Security)
+
+- **Token-based Authentication**: API token store, scoped bearer gates for MCP/metrics/logs, and an `API_AUTH_TOKEN` admin mode.
+- **Cache Hardening**: Memory cache fallback, full SHA-256 keys, and batch eviction.
+- **Security & Correctness**: Fail-closed credential resolution, robust log redaction, and accurate state hashing.
+
+### Future
+
+- **MCP Spec Upgrade**: Migrate to MCP 2026-07-28 specification (mcp-go v1.0.0-beta.1).
+- **Prebuilt Connectors**: Connectors for popular ERPs.
+- **Schema Distribution**: Central registry or Git-based sync.
+
+## Bridgectl
+
+The CLI tool for managing ERPBridge tools, cache, logs, and contexts.
+
+### Shipped
+
+- CLI interface with `api`, `tool`, `cache`, `log`, `context`, and completion commands.
 
 ### In flight
 
-| Work | Status | Notes |
-| :--- | :--- | :--- |
-| Token-based authentication | In planning | `API_AUTH_TOKEN` plus scoped API tokens; see [Authentication](../erpbridge/auth.mdx) |
-| Cache hardening | Planned | Auto-flush bypass when the cache is disabled; correct module flush patterns (`flush-on` variants) |
-| Cache configuration alias | Planned | Support `invalidateOn` as an alias for `flushOn` in the server config |
-| Configurable resource base URL | Planned | Honor `ERP_BASE_URL` for static resources instead of a hardcoded default |
-| CLI flag cleanup | Planned | Remove shadowed `-o/--output` flag on tool commands |
+- **CLI Hygiene**: Structured JSON log tail filtering, server-side tool filtering, and atomic registry writes.
+- **Token Management**: Commands for `token create`, `list`, and `revoke`.
+- **API Token Contexts**: Plumbing to inject `api-token` transparently into all server requests.
 
-## Phases
+## SDK
 
-### Phase 1 — Foundation (shipped)
+The `@erpbridge/sdk` is a TypeScript client library giving developers a single, ergonomic way to consume an ERPBridge server.
 
-The bridge, registry, CLI, and documentation are usable end to end. A mock ERP and Docker compose setup make evaluation a five-minute task.
+### In flight (v0.1.0)
 
-### Phase 2 — Hardening & security (current focus)
+- **Built-in MCP Client**: Wrapping `@modelcontextprotocol/client` for programmatic tool discovery and execution.
+- **REST Wrappers**: Typed interfaces for logs, metrics, health, cache stats, and tool registry.
+- **Typed Tool Proxy**: Ergonomic `client.tools.<name>(args)` invocation.
+- **Dual Build**: ESM + CJS support via `tsdown`.
 
-Authentication, cache correctness, configuration aliases, and resource URL handling. Each item lands with tests and a docs update in the same commit.
+### Future
 
-### Phase 3 — Ecosystem (candidate ideas)
-
-Ideas under discussion, not commitments:
-
-- **ERPBridge SDK** — TypeScript client library wrapping the MCP client plus typed REST wrappers (logs, metrics, health, cache, tool registry); see [SDK overview](../sdk/overview.mdx)
-- MCP 2025-11-25 feature adoption as clients support it
-- Prebuilt connectors for popular ERPs
-- Schema distribution (central registry or Git-based sync)
+- **Authentication**: Bearer token resolution, injection, and typed authorization errors (pending server auth release).
+- Python and Go SDK ports.
 
 ## How to influence the roadmap
 
