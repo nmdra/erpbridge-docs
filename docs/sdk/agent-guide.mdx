@@ -47,7 +47,7 @@ Rules for agents making changes to the SDK repository.
 - Versions and changelogs come from **release-please** (Conventional Commits drive bumps: `fix:` → patch, `feat:` → minor, `BREAKING CHANGE:` footer → major). Never hand-edit `CHANGELOG.md` version entries or bump the version field yourself — the release PR does it. Write Unreleased entries only.
 - Publishing uses **npm Trusted Publishing (OIDC)** from CI — no `NODE_AUTH_TOKEN`, provenance is automatic. `package.json` `repository.url` must exactly match the GitHub repo or provenance fails.
 - Every release ships with a documentation update: SDK user-facing changes are documented on this site (erpbridge-docs) in the same release cycle, and this page is kept in sync with the SDK repository.
-- CI and release workflows are part of the contract: `.github/workflows/{ci,release,docs}.yml` must stay green; SHA-pin any new third-party action and keep `permissions` least-privilege.
+- CI and release workflows are part of the contract: `.github/workflows/{ci,release}.yml` must stay green; SHA-pin any new third-party action and keep `permissions` least-privilege. API reference docs live on this site (`docs/sdk/api-reference.mdx`), not in a Pages workflow.
 
 ### Secrets
 
