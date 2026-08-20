@@ -24,6 +24,12 @@ Rules for agents making changes to this repository.
 - Content changes that reflect product behavior keep the upstream ERPBridge repo docs in sync (single source of truth lives there).
 - Update CHANGELOG.md (Unreleased) in the same commit as user-facing changes.
 
+### Release doc sync
+
+- The **ERPBridge SDK** repository publishes its documentation updates through this site: every SDK release updates the `docs/sdk/` pages in this repo as part of the same release cycle.
+- The SDK's own `AGENTS.md` is mirrored as `docs/sdk/agent-guide.mdx`. Keep the two in sync whenever either changes.
+- Other upstream repositories (ERPBridge server, bridgectl) keep their source-of-truth docs in their own repos; this site mirrors or links them.
+
 ### Content conventions
 
 - Hand-written pages use **MDX** (`.mdx`) and may use Docusaurus native features: `Tabs`, admonitions (`:::note`), `<details>`, code block titles, and Mermaid diagrams.
