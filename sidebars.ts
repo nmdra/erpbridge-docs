@@ -8,6 +8,12 @@ const sidebars: SidebarsConfig = {
     'bridgectl/overview',
     {
       type: 'category',
+      label: 'Skill usage',
+      collapsed: false,
+      items: ['bridgectl/skills'],
+    },
+    {
+      type: 'category',
       label: 'API commands',
       collapsed: false,
       items: [
@@ -60,12 +66,6 @@ const sidebars: SidebarsConfig = {
         'bridgectl/bridgectl_context_list',
         'bridgectl/bridgectl_context_set',
       ],
-    },
-    {
-      type: 'category',
-      label: 'Skill usage',
-      collapsed: false,
-      items: ['bridgectl/skills'],
     },
     {
       type: 'category',
