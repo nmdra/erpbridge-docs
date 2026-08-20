@@ -1,0 +1,73 @@
+---
+sidebar_position: 4
+title: MCP tools
+description: The SDK MCP client, exact-name tool proxy, and tool registry.
+keywords: [sdk, mcp, tools, registry]
+---
+
+# MCP tools
+
+The SDK wraps the official `@modelcontextprotocol/client` (D2) and adds a typed
+surface on top. Two ways to call tools, and one way to manage them:
+
+| Surface | What it is |
+| :--- | :--- |
+| `client.mcp` | The raw MCP protocol client (`connect`, `listTools`, `callTool`, `close`) |
+| `client.tools` | The exact-name tool proxy (lazy, argument-validated) |
+| `client.registry` | REST CRUD over the stored tool resources |
+
+## The MCP client
+
+```ts
+const client = createClient({ baseUrl: 'http://localhost:8080' })
+
+await client.mcp.connect()                     // handshake + negotiation
+const tools = await client.mcp.listTools()     // ToolDefinition[]
+const result = await client.mcp.callTool('system.progress_test', { steps: 1 })
+await client.close()
+```
+
+- `connect()` negotiates the protocol version with the server (the client
+  negotiates down from `2025-11-25`) and transparently **reconnects once**
+  with a fresh session before giving up with a `ProtocolError`.
+- `callTool` returns a `ToolResult` — an unknown tool surfaces as
+  `NotFoundError`; a tool that runs but reports failure returns
+  `{ isError: true }`.
+- `close()` ends the session and its transport. The client facade's `close()`
+  does the same.
+
+## The tool proxy
+
+`client.tools` is a lazy `Proxy` over the MCP `tools/list` result:
+
+```ts
+await client.mcp.connect()
+const result = await client.tools.list_employees({ department: 'engineering' })
+```
+
+Every property is a registered tool called by its **exact registered name**
+(bare names such as `list_employees`, not `erp.`-prefixed). Dotted names work
+too: `client.tools.system.progress_test({ steps: 1 })`. Arguments are validated
+against the tool's input schema before the call; an unknown property throws
+`NotFoundError` listing the tools the server actually exposes.
+
+## The tool registry
+
+`client.registry` is **REST CRUD** over the stored tool resources — do not
+confuse it with `client.mcp.listTools()` (C3):
+
+- `registry.list()` returns the full wire shape (`RegistryTool`:
+  `apiVersion` / `kind` / `metadata` / `spec`), not the flat MCP
+  `ToolDefinition`.
+- `registry.apply(def)` posts a tool definition; the server's admission
+  controller validates it and rejects violations with HTTP 422 (surfaced as a
+  typed `ServerError`).
+- `registry.delete(name, version, { hard: true })` soft- or hard-deletes a
+  tool version.
+- `client.invoke(name, args)` calls a registered tool directly over REST —
+  no MCP session needed. Built-in `system.*` tools are only reachable through
+  the MCP path; the REST invoke endpoint resolves registered (stored) tools
+  only.
+
+The registry deliberately lives outside `client.tools` so registered tool names
+such as `list`, `apply`, or `delete` never shadow the registry methods.

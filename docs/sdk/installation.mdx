@@ -1,0 +1,56 @@
+---
+sidebar_position: 2
+title: Installation
+description: Install the ERPBridge SDK with npm or pnpm.
+keywords: [sdk, install, npm, pnpm]
+---
+
+import Tabs from '@theme/Tabs'
+import TabItem from '@theme/TabItem'
+
+# Installation
+
+The SDK requires **Node.js >= 20** (built-in `fetch` and `AbortSignal`). The package ships a dual **ESM + CJS** build with type declarations for both.
+
+## Install
+
+<Tabs groupId="package-manager">
+<TabItem value="npm" label="npm">
+
+```bash
+npm install @erpbridge/sdk
+```
+
+</TabItem>
+<TabItem value="pnpm" label="pnpm">
+
+```bash
+pnpm add @erpbridge/sdk
+```
+
+</TabItem>
+</Tabs>
+
+## Subpath imports
+
+The package exposes four entry points:
+
+| Subpath | Contents |
+| :--- | :--- |
+| `@erpbridge/sdk` | Everything: the client facade, REST factories, and types |
+| `@erpbridge/sdk/client` | The `createClient` facade and `ErpbridgeClient` type |
+| `@erpbridge/sdk/rest` | The REST surface factories (`createLogsApi`, `createRegistryApi`, ...) |
+| `@erpbridge/sdk/types` | Shared types and the typed error hierarchy |
+
+```ts
+import { createClient } from '@erpbridge/sdk'
+import { createLogsApi } from '@erpbridge/sdk/rest'
+import { NotFoundError } from '@erpbridge/sdk/types'
+```
+
+## Server requirements
+
+The SDK talks to an ERPBridge server on its default port `8080` — see the
+[server quickstart](../erpbridge/quickstart.mdx) to start one. Authentication
+is not part of v1: the SDK connects anonymously and surfaces server 401s as
+`AuthenticationError`. Token-based auth will follow the server's auth release.

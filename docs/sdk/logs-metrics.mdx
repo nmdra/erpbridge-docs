@@ -1,0 +1,70 @@
+---
+sidebar_position: 5
+title: Logs & metrics
+description: Log streaming, Prometheus metrics, health, and cache through the SDK.
+keywords: [sdk, logs, metrics, sse, prometheus, health, cache]
+---
+
+# Logs & metrics
+
+The REST surface of the SDK mirrors the server's own REST endpoints, all typed
+against the same error hierarchy.
+
+## Logs
+
+`client.logs` gives access to the server's structured JSON logs.
+
+```ts
+const recent = await client.logs.recent() // LogRecord[] — the last buffered records
+```
+
+`stream()` consumes the server's SSE log stream (`data: <json>\n\n`). The
+stream reconnects automatically — including across failed connection attempts —
+until you abort it:
+
+```ts
+const controller = new AbortController()
+
+for await (const record of client.logs.stream({ signal: controller.signal })) {
+  console.log(record.level, record.msg)
+  if (enough) controller.abort() // the iterator finishes cleanly
+}
+```
+
+## Metrics
+
+`client.metrics` reads the server's Prometheus endpoint.
+
+```ts
+const text = await client.metrics.text()       // raw Prometheus text format
+const parsed = await client.metrics.parsed()   // { families, skipped }
+```
+
+`parsed()` parses counters, gauges, and histograms (including `_bucket` /
+`_sum` / `_count` series) into typed families. Families the parser does not
+consume — summaries and untyped — are reported in `skipped` instead of
+throwing.
+
+## Health
+
+```ts
+const status = await client.health() // { status: 'ok' }
+```
+
+## Cache
+
+```ts
+const stats = await client.cache.stats()        // { exactKeys, redisMemory }
+const flushed = await client.cache.flush({ all: true }) // { deleted, status }
+```
+
+`flush()` targets a tool, a module, or the whole cache. When the server runs
+without Redis, both endpoints answer HTTP 503, surfaced as a typed
+`ServerError`.
+
+## The typed error hierarchy
+
+Every REST failure is an `ErpbridgeError` subclass — `NotFoundError`,
+`RateLimitError` (with `retryAfter`), `ServerError` (with `status` and `body`),
+`ProtocolError` (with a numeric `code` for malformed server responses). See the
+[quickstart](./quickstart.mdx) for the full table.

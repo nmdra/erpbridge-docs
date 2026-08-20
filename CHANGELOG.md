@@ -13,6 +13,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **SDK Agent Guide** page (`docs/sdk/agent-guide.mdx`) mirroring the ERPBridge SDK repository's `AGENTS.md` — plan-first workflow, TDD, quality gates, release pipeline, and code conventions
 - SDK overview page now links to the SDK repository and its agent guide
 - Roadmap Phase 3 lists the ERPBridge SDK as an ecosystem item
+- **SDK docs v0.1.0**: real landing page (`docs/sdk/overview.mdx`) plus new `installation.mdx`, `quickstart.mdx` (npm/pnpm tabs), `mcp-tools.mdx`, and `logs-metrics.mdx` covering the shipped client surface
+- SDK listed in the `erpbridge/intro.mdx` components table and the SDK roadmap moved to Shipped (v0.1.0)
 
 - Docs pages now show a **version badge** ("Version: Alpha (v0.2.0-alpha.5)") matching the upstream ERPBridge release tag
 - Homepage redesigned with a modern dark theme: release badge pill, gradient title, atmospheric radial glows, and a **bridgectl terminal mockup** hero card

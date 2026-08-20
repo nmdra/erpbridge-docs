@@ -1,0 +1,81 @@
+---
+sidebar_position: 3
+title: Quickstart
+description: Call an ERPBridge tool in five lines with the SDK.
+keywords: [sdk, quickstart, mcp, tools]
+---
+
+import Tabs from '@theme/Tabs'
+import TabItem from '@theme/TabItem'
+
+# Quickstart
+
+## Install
+
+<Tabs groupId="package-manager">
+<TabItem value="npm" label="npm">
+
+```bash
+npm install @erpbridge/sdk
+```
+
+</TabItem>
+<TabItem value="pnpm" label="pnpm">
+
+```bash
+pnpm add @erpbridge/sdk
+```
+
+</TabItem>
+</Tabs>
+
+## First tool call
+
+```ts
+import { createClient } from '@erpbridge/sdk'
+
+const client = createClient({ baseUrl: 'http://localhost:8080' })
+
+await client.mcp.connect()
+const result = await client.tools.list_employees({ department: 'engineering' })
+console.log(result.result)
+```
+
+That is the whole flow: create the client, connect the MCP session, call a tool
+by its exact registered name, and read the result.
+
+- `client.tools` is a **lazy proxy** over the MCP `tools/list` result — every
+  property is a registered tool called by its exact name. Tool calls validate
+  their arguments against each tool's input schema before leaving the client.
+- Call `client.close()` when done to tear down the MCP session.
+
+## Errors are typed
+
+Every failure is an `ErpbridgeError` subclass:
+
+| Error | When |
+| :--- | :--- |
+| `AuthenticationError` | The server rejected the request as unauthenticated |
+| `NotFoundError` | Unknown tool or resource |
+| `RateLimitError` | HTTP 429, carries `retryAfter` |
+| `ServerError` | HTTP 4xx/5xx, carries `status` and `body` |
+| `ProtocolError` | Protocol or session failure, carries a numeric `code` |
+
+```ts
+import { ErpbridgeError, NotFoundError } from '@erpbridge/sdk'
+
+try {
+  await client.tools.list_employees({})
+} catch (error) {
+  if (error instanceof NotFoundError) {
+    console.error(`tool missing: ${error.message}`)
+  } else if (error instanceof ErpbridgeError) {
+    console.error(`erpbridge: ${error.message}`)
+  }
+}
+```
+
+## What is next
+
+- [MCP tools](./mcp-tools.mdx) — the MCP client and the tool proxy in detail
+- [Logs & metrics](./logs-metrics.mdx) — log streaming, metrics, health, cache
