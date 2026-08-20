@@ -1,34 +1,33 @@
 <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="b1" x1="0" y1="0" x2="1" y2="1">
+    <linearGradient id="byoGrad" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#25c2a0"/>
       <stop offset="1" stop-color="#2e8555"/>
     </linearGradient>
   </defs>
 
-  <!-- ERP 1: classic rack -->
-  <rect x="16" y="52" width="40" height="52" rx="6" fill="#cbd5e1"/>
-  <rect x="24" y="64" width="24" height="8" rx="4" fill="#ffffff"/>
-  <rect x="24" y="78" width="24" height="8" rx="4" fill="#ffffff" opacity="0.65"/>
-  <circle cx="30" cy="94" r="4" fill="#2e8555"/>
+  <!-- ERP 1: classic rack server -->
+  <rect x="14" y="48" width="42" height="54" rx="7" fill="currentColor" opacity="0.22"/>
+  <rect x="22" y="60" width="26" height="8" rx="4" fill="currentColor" opacity="0.5"/>
+  <rect x="22" y="74" width="26" height="8" rx="4" fill="currentColor" opacity="0.4"/>
+  <circle cx="28" cy="90" r="4" fill="url(#byoGrad)"/>
 
-  <!-- ERP 2: cloud ERP -->
-  <path d="M74 96 a10 10 0 0 1 0 -20 h2 a12 12 0 0 1 23 0 h2 a9 9 0 0 1 0 20 Z" fill="#cbd5e1"/>
-  <circle cx="88" cy="86" r="5" fill="#25c2a0" opacity="0.8"/>
+  <!-- ERP 2: cloud suite -->
+  <path d="M72 92 a11 11 0 0 1 0 -22 h2 a13 13 0 0 1 25 0 h2 a10 10 0 0 1 0 22 Z" fill="currentColor" opacity="0.22"/>
+  <circle cx="86" cy="82" r="5" fill="url(#byoGrad)" opacity="0.85"/>
 
-  <!-- ERP 3: database cylinders -->
-  <ellipse cx="158" cy="60" rx="20" ry="8" fill="#cbd5e1"/>
-  <path d="M138 60 v22 a20 8 0 0 0 40 0 V60" fill="none" stroke="#cbd5e1" stroke-width="3"/>
-  <ellipse cx="158" cy="70" rx="20" ry="8" fill="#ffffff" opacity="0.35"/>
-  <path d="M138 70 v12 a20 8 0 0 0 40 0 V70" fill="none" stroke="#25c2a0" stroke-width="3" opacity="0.7"/>
+  <!-- ERP 3: database cylinder -->
+  <ellipse cx="158" cy="56" rx="22" ry="9" fill="currentColor" opacity="0.22"/>
+  <path d="M136 56 v24 a22 9 0 0 0 44 0 V56" fill="none" stroke="currentColor" stroke-width="3" opacity="0.4"/>
+  <ellipse cx="158" cy="66" rx="22" ry="9" fill="none" stroke="url(#byoGrad)" stroke-width="3" opacity="0.7"/>
 
-  <!-- Hub: any ERP plugs in -->
-  <circle cx="100" cy="152" r="30" fill="url(#b1)"/>
-  <circle cx="100" cy="152" r="39" fill="none" stroke="url(#b1)" stroke-width="3" stroke-dasharray="6 5" opacity="0.6"/>
-  <path d="M100 140 L100 164 M88 152 L112 152" stroke="#ffffff" stroke-width="4.5" stroke-linecap="round"/>
+  <!-- Central hub: any ERP plugs in -->
+  <circle cx="100" cy="152" r="32" fill="url(#byoGrad)"/>
+  <circle cx="100" cy="152" r="41" fill="none" stroke="url(#byoGrad)" stroke-width="3" stroke-dasharray="6 5" opacity="0.55"/>
+  <path d="M100 139 L100 165 M87 152 L113 152" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>
 
-  <!-- Connectors -->
-  <path d="M56 82 L72 124" stroke="url(#b1)" stroke-width="5" stroke-linecap="round" opacity="0.7"/>
-  <path d="M100 80 L102 118" stroke="url(#b1)" stroke-width="5" stroke-linecap="round" opacity="0.7"/>
-  <path d="M152 80 L132 126" stroke="url(#b1)" stroke-width="5" stroke-linecap="round" opacity="0.7"/>
+  <!-- Connectors from each ERP to the hub -->
+  <path d="M56 80 L74 124" stroke="url(#byoGrad)" stroke-width="5" stroke-linecap="round" opacity="0.65"/>
+  <path d="M100 94 L100 120" stroke="url(#byoGrad)" stroke-width="5" stroke-linecap="round" opacity="0.65"/>
+  <path d="M152 80 L134 124" stroke="url(#byoGrad)" stroke-width="5" stroke-linecap="round" opacity="0.65"/>
 </svg>

@@ -254,11 +254,55 @@
 .terminalBody {
   padding: 1rem 1.1rem 1.1rem;
   line-height: 1.55;
+  overflow-x: auto;
+}
+
+@media screen and (max-width: 640px) {
+  .terminalBody {
+    font-size: 0.7rem;
+    padding: 0.8rem 0.9rem 0.9rem;
+  }
 }
 
 .terminalLine {
   white-space: pre-wrap;
   word-break: break-word;
+  opacity: 0;
+  transform: translateY(6px);
+  animation: terminalReveal 0.45s ease forwards;
+}
+
+@keyframes terminalReveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* One-shot staggered reveal for the six terminal lines (five bridgectl
+   command/output lines + the cursor line). */
+.terminalLine:nth-child(1) {
+  animation-delay: 0.05s;
+}
+
+.terminalLine:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.terminalLine:nth-child(3) {
+  animation-delay: 0.25s;
+}
+
+.terminalLine:nth-child(4) {
+  animation-delay: 0.35s;
+}
+
+.terminalLine:nth-child(5) {
+  animation-delay: 0.45s;
+}
+
+.terminalLine:nth-child(6) {
+  animation-delay: 0.55s;
 }
 
 .terminalLine + .terminalLine {
@@ -312,5 +356,10 @@
   .releaseDot,
   .terminalCursor {
     animation: none;
+  }
+  .terminalLine {
+    animation: none;
+    opacity: 1;
+    transform: none;
   }
 }

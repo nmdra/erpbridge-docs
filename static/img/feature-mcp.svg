@@ -1,22 +1,25 @@
 <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="m1" x1="0" y1="0" x2="1" y2="1">
+    <linearGradient id="mcpGrad" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#25c2a0"/>
       <stop offset="1" stop-color="#2e8555"/>
     </linearGradient>
   </defs>
 
-  <rect x="24" y="52" width="60" height="96" rx="12" fill="#cbd5e1"/>
-  <rect x="38" y="70" width="32" height="16" rx="6" fill="#ffffff"/>
-  <rect x="38" y="98" width="32" height="8" rx="4" fill="#ffffff" opacity="0.6"/>
-  <rect x="38" y="114" width="24" height="8" rx="4" fill="#ffffff" opacity="0.6"/>
-  <circle cx="54" cy="134" r="6" fill="#25c2a0"/>
+  <!-- Left: legacy ERP system -->
+  <rect x="18" y="52" width="54" height="96" rx="12" fill="currentColor" opacity="0.22"/>
+  <rect x="30" y="68" width="30" height="14" rx="5" fill="currentColor" opacity="0.55"/>
+  <rect x="30" y="90" width="30" height="8" rx="4" fill="currentColor" opacity="0.4"/>
+  <rect x="30" y="106" width="22" height="8" rx="4" fill="currentColor" opacity="0.4"/>
+  <circle cx="38" cy="128" r="5" fill="url(#mcpGrad)"/>
 
-  <rect x="116" y="52" width="60" height="96" rx="12" fill="url(#m1)"/>
-  <path d="M132 76 L146 76 L146 70 L160 80 L146 90 L146 84 L132 84 Z" fill="#ffffff"/>
-  <circle cx="160" cy="132" r="6" fill="#ffffff" opacity="0.9"/>
+  <!-- Right: AI agent -->
+  <rect x="128" y="52" width="54" height="96" rx="12" fill="url(#mcpGrad)"/>
+  <path d="M144 72 L158 72 L158 66 L172 80 L158 94 L158 88 L144 88 Z" fill="#ffffff"/>
+  <circle cx="162" cy="128" r="5" fill="#ffffff" opacity="0.9"/>
 
-  <path d="M84 100 Q100 76 116 100" fill="none" stroke="url(#m1)" stroke-width="10" stroke-linecap="round"/>
-  <circle cx="100" cy="94" r="9" fill="#ffffff" stroke="url(#m1)" stroke-width="5"/>
-  <path d="M96 94 L104 94 M100 90 L100 98" stroke="#2e8555" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Connection path (bridge) with hub at apex -->
+  <path d="M72 100 Q100 70 128 100" fill="none" stroke="url(#mcpGrad)" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="100" cy="76" r="11" fill="#ffffff" stroke="url(#mcpGrad)" stroke-width="4"/>
+  <path d="M95 76 L100 71 L105 76 L100 81 Z" fill="url(#mcpGrad)"/>
 </svg>

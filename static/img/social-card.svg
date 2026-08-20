@@ -1,0 +1,94 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1b1b1d"/>
+      <stop offset="0.5" stop-color="#1f2d26"/>
+      <stop offset="1" stop-color="#1b1b1d"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#25c2a0"/>
+      <stop offset="1" stop-color="#2e8555"/>
+    </linearGradient>
+    <radialGradient id="glow1" cx="0.2" cy="0.3" r="0.4">
+      <stop offset="0" stop-color="#25c2a0" stop-opacity="0.12"/>
+      <stop offset="1" stop-color="#25c2a0" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="0.8" cy="0.7" r="0.35">
+      <stop offset="0" stop-color="#2e8555" stop-opacity="0.1"/>
+      <stop offset="1" stop-color="#2e8555" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow1)"/>
+  <rect width="1200" height="630" fill="url(#glow2)"/>
+
+  <!-- Grid pattern (subtle) -->
+  <g opacity="0.04" stroke="#ffffff" stroke-width="1">
+    <line x1="0" y1="0" x2="0" y2="630"/>
+    <line x1="44" y1="0" x2="44" y2="630"/>
+    <line x1="88" y1="0" x2="88" y2="630"/>
+    <line x1="132" y1="0" x2="132" y2="630"/>
+    <line x1="0" y1="44" x2="1200" y2="44"/>
+    <line x1="0" y1="88" x2="1200" y2="88"/>
+    <line x1="0" y1="132" x2="1200" y2="132"/>
+    <line x1="0" y1="176" x2="1200" y2="176"/>
+  </g>
+  <g opacity="0.04" stroke="#ffffff" stroke-width="1">
+    <line x1="0" y1="454" x2="1200" y2="454"/>
+    <line x1="0" y1="498" x2="1200" y2="498"/>
+    <line x1="0" y1="542" x2="1200" y2="542"/>
+    <line x1="0" y1="586" x2="1200" y2="586"/>
+  </g>
+
+  <!-- Logo mark (left) -->
+  <g transform="translate(80, 80)">
+    <rect width="80" height="80" rx="18" fill="url(#accent)"/>
+    <!-- Bridge deck -->
+    <path d="M20 50 H60" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+    <!-- Left support (ERP) -->
+    <rect x="18" y="50" width="10" height="20" rx="2" fill="#fff" opacity="0.85"/>
+    <!-- Right support (AI) -->
+    <circle cx="60" cy="60" r="8" fill="#fff" opacity="0.85"/>
+    <circle cx="60" cy="60" r="3.5" fill="#2e8555"/>
+    <!-- Arch -->
+    <path d="M23 50 Q40 28 57 50" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" opacity="0.75"/>
+    <!-- Hub -->
+    <circle cx="40" cy="32" r="6" fill="#fff"/>
+    <path d="M40 28 L44 32 L40 36 L36 32 Z" fill="#2e8555"/>
+  </g>
+
+  <!-- Project name -->
+  <text x="180" y="118" font-family="system-ui, -apple-system, sans-serif" font-size="32" font-weight="700" fill="#ffffff" letter-spacing="-0.5">ERPBridge</text>
+  <text x="180" y="146" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="500" fill="#25c2a0">Documentation</text>
+
+  <!-- Hero text -->
+  <text x="80" y="280" font-family="system-ui, -apple-system, sans-serif" font-size="58" font-weight="700" fill="#ffffff" letter-spacing="-1.5">Connect your legacy ERP</text>
+  <text x="80" y="345" font-family="system-ui, -apple-system, sans-serif" font-size="58" font-weight="700" fill="url(#accent)" letter-spacing="-1.5">to AI workflows.</text>
+
+  <!-- Tagline -->
+  <text x="80" y="410" font-family="system-ui, -apple-system, sans-serif" font-size="22" font-weight="400" fill="#a0a0a0">No code changes. No API rewrites. No migrations.</text>
+
+  <!-- Feature pills -->
+  <g transform="translate(80, 470)">
+    <rect x="0" y="0" width="150" height="36" rx="18" fill="#ffffff" fill-opacity="0.08" stroke="#ffffff" stroke-opacity="0.15" stroke-width="1"/>
+    <text x="75" y="23" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#25c2a0" text-anchor="middle">MCP Tools</text>
+
+    <rect x="165" y="0" width="140" height="36" rx="18" fill="#ffffff" fill-opacity="0.08" stroke="#ffffff" stroke-opacity="0.15" stroke-width="1"/>
+    <text x="235" y="23" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#25c2a0" text-anchor="middle">Tool Registry</text>
+
+    <rect x="320" y="0" width="130" height="36" rx="18" fill="#ffffff" fill-opacity="0.08" stroke="#ffffff" stroke-opacity="0.15" stroke-width="1"/>
+    <text x="385" y="23" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#25c2a0" text-anchor="middle">BYOERP</text>
+
+    <rect x="465" y="0" width="155" height="36" rx="18" fill="#ffffff" fill-opacity="0.08" stroke="#ffffff" stroke-opacity="0.15" stroke-width="1"/>
+    <text x="542.5" y="23" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#25c2a0" text-anchor="middle">Non-Invasive</text>
+  </g>
+
+  <!-- Version badge (bottom-right) -->
+  <g transform="translate(960, 560)">
+    <rect x="0" y="0" width="160" height="36" rx="18" fill="url(#accent)" fill-opacity="0.15" stroke="#25c2a0" stroke-opacity="0.4" stroke-width="1"/>
+    <circle cx="18" cy="18" r="4" fill="#25c2a0"/>
+    <text x="32" y="23" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#25c2a0">Alpha v0.2.0</text>
+  </g>
+</svg>

@@ -1,14 +1,18 @@
 <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="s1" x1="0" y1="0" x2="1" y2="1">
+    <linearGradient id="resGrad" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#25c2a0"/>
       <stop offset="1" stop-color="#2e8555"/>
     </linearGradient>
   </defs>
 
-  <path d="M100 18 L172 48 V100 C172 144 142 168 100 182 C58 168 28 144 28 100 V48 Z" fill="url(#s1)"/>
-  <path d="M100 32 L158 56 V100 C158 136 134 156 100 168 C66 156 42 136 42 100 V56 Z" fill="#ffffff" opacity="0.16"/>
-  <path d="M80 100 L94 114 L122 84" fill="none" stroke="#ffffff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="100" cy="76" r="14" fill="#ffffff"/>
-  <path d="M100 70 L100 82 M94 76 L106 76" stroke="#2e8555" stroke-width="3.5" stroke-linecap="round"/>
+  <!-- Shield -->
+  <path d="M100 18 L172 48 V100 C172 144 142 168 100 182 C58 168 28 144 28 100 V48 Z" fill="url(#resGrad)"/>
+  <!-- Inner shield highlight -->
+  <path d="M100 34 L158 58 V100 C158 136 134 156 100 168 C66 156 42 136 42 100 V58 Z" fill="#ffffff" opacity="0.14"/>
+  <!-- Checkmark -->
+  <path d="M78 100 L94 116 L124 84" fill="none" stroke="#ffffff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Pulse ring (static — CSS handles any motion) -->
+  <circle cx="100" cy="78" r="14" fill="none" stroke="#ffffff" stroke-width="3" opacity="0.35"/>
+  <circle cx="100" cy="78" r="7" fill="#ffffff" opacity="0.6"/>
 </svg>

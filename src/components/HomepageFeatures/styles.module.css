@@ -31,6 +31,8 @@
   border-radius: 18px;
   border: 1px solid var(--ifm-color-emphasis-200);
   background: var(--ifm-background-surface-color);
+  color: inherit;
+  text-decoration: none;
   transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
@@ -67,6 +69,7 @@
 .featureSvg {
   width: 70px;
   height: 70px;
+  color: var(--ifm-color-emphasis-900);
 }
 
 .cardBody {
@@ -84,16 +87,15 @@
   margin: 0;
   font-size: 0.95rem;
   line-height: 1.62;
-  color: #475569;
-}
-
-[data-theme='dark'] .cardDescription {
-  color: #cbd5e1;
+  color: var(--ifm-color-emphasis-700);
 }
 
 .cardDescription code {
   font-size: 0.85em;
   padding: 0.15rem 0.35rem;
+  border-radius: 4px;
+  background: var(--ifm-color-emphasis-200);
+  border: 1px solid var(--ifm-color-emphasis-300);
 }
 
 /* Quickstart section */
@@ -154,7 +156,37 @@
   justify-content: space-between;
   font-weight: 600;
   font-size: 1.05rem;
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.quickstartHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
   margin-bottom: 0.5rem;
+}
+
+.quickstartIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: var(--ifm-color-emphasis-100);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  color: var(--ifm-color-primary);
+  flex-shrink: 0;
+}
+
+.quickstartIcon svg {
+  width: 17px;
+  height: 17px;
+}
+
+.quickstartCard:hover .quickstartIcon {
+  border-color: var(--ifm-color-primary);
 }
 
 /* Arrow chip — circular button that fills and slides on hover */

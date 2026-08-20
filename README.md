@@ -19,14 +19,17 @@ Opens a dev server with live reload at http://localhost:3000/erpbridge-docs/.
 npm run build
 ```
 
-Output goes to `build/`. The site content is plain Markdown (MDX is disabled via `markdown.format: 'md'` so generated shell snippets are not parsed as JSX).
+Output goes to `build/`. Hand-written pages use MDX (`.mdx`) via `markdown.format: 'detect'`, while the generated cobra CLI reference (`.md`) stays as plain CommonMark so shell snippets like `<(...)` or `$(...)` are not parsed as JSX.
 
 ## Structure
 
 ```
 docs/
-├── erpbridge/   # ERPBridge product docs (ported from the ERPBridge repo docs/)
-└── roadmap/     # upcoming projects and plans
+├── erpbridge/   # ERPBridge Server docs — quickstart, transports, REST API, architecture, caching, auth, env vars
+├── bridgectl/   # bridgectl CLI reference — overview plus per-command pages (generated)
+├── sdk/         # ERPBridge SDK (in progress)
+├── roadmap/     # upcoming projects, status, and phased plan
+└── faq.mdx      # global FAQ
 ```
 
 ## AI readiness

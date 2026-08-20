@@ -112,8 +112,15 @@ const config: Config = {
   ],
 
   themeConfig: {
-    // Replace with your project's social card
-    image: 'img/logo.svg',
+    image: 'img/social-card.svg',
+    announcementBar: {
+      id: 'alpha-notice',
+      content:
+        '🚧 ERPBridge is in <b>Alpha</b> — expect breaking changes between releases. <a href="/erpbridge-docs/docs/roadmap/overview">View the roadmap →</a>',
+      backgroundColor: '#1b1b1d',
+      textColor: '#e0e0e0',
+      isCloseable: true,
+    },
     colorMode: {
       defaultMode: 'dark',
       respectPrefersColorScheme: true,
@@ -204,6 +211,10 @@ title: 'ERPBridge',
             {
               label: 'GitHub',
               href: 'https://github.com/nmdra/ERPBridge',
+            },
+            {
+              label: 'Discussions',
+              href: 'https://github.com/nmdra/ERPBridge/discussions',
             },
             {
               label: 'Issues',

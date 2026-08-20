@@ -11,6 +11,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Docs pages now show a **version badge** ("Version: Alpha (v0.2.0-alpha.5)") matching the upstream ERPBridge release tag
 - Homepage redesigned with a modern dark theme: release badge pill, gradient title, atmospheric radial glows, and a **bridgectl terminal mockup** hero card
 - Homepage **Start building** section with 6 pathway cards (**Quickstart**, **Onboarding Guide**, **Bridgectl CLI**, **ERPBridge SDK**, **REST API Reference**, and **Roadmap**) with circular animated arrow-chip buttons
+- **Dedicated social card** (`static/img/social-card.svg`) for link previews on social platforms; replaces the SVG logo as the OG image
+- **Announcement bar** surfacing the Alpha status with a link to the roadmap
+- Footer **Community** section expanded with a **Discussions** link alongside GitHub and Issues
 - New **ERPBridge SDK** section (work in progress) documenting the upcoming SDK with a built-in MCP client, log aggregation, and metrics viewing
 - New global FAQ page (`/docs/faq`) answering common project-level questions, linked from the navbar and footer
 - ERPBridge FAQ expanded with sections on MCP clients & transports, caching, notifications & system tools, and errors & exit codes
@@ -18,6 +21,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- Homepage feature-card icons marked `aria-hidden` so screen readers skip the decorative image and announce only the card title
+- Homepage hero terminal: the six `bridgectl` lines now fade up in sequence on first paint instead of appearing all at once (disabled under `prefers-reduced-motion`)
+- Homepage feature-card description text now uses the `--ifm-color-emphasis-700` Infima token instead of hardcoded slate values, so it tracks the light/dark theme
+- Homepage feature cards are now **clickable links** to their respective doc pages (MCP→Transports, Tool Registry→Tool Schema, Resilient→Caching, Non-Invasive→Onboarding, AI-Agent-First→MCP Client Guide, BYOERP→Connectivity)
+- Homepage quickstart cards now include **category icons** (rocket, plug, terminal, code, globe, map) for visual differentiation
+- Inline `<code>` in feature descriptions now has a background, border, and rounded corners instead of bare text
+- Hero terminal mockup now **scrolls horizontally** on narrow screens with a reduced font size instead of wrapping awkwardly
+- **Feature icons rewritten** to use `currentColor` for neutral elements so they adapt to light/dark themes instead of hardcoded slate fills; replaced fragile `<text>` in the non-invasive icon with a no-code circle-and-slash symbol
 - Navbar: "Source" and "GitHub" text links replaced with a single **GitHub icon** linking to the main ERPBridge repo (docs repo link stays in the footer)
 - Navbar restyled with a **frosted-glass** effect (backdrop blur + translucent background)
 - Homepage feature cards modernized into a clean **3×2 grid** with large left-aligned icons, hover lift, and dark-mode border glow
