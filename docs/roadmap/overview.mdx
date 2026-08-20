@@ -1,70 +1,17 @@
 ---
 sidebar_position: 1
-title: Roadmap
+title: Roadmap Overview
 description: Where the ERPBridge family is today, what is planned next, and how to influence the direction.
 keywords: [roadmap, projects, planning, status]
 ---
 
-# Roadmap
+# Roadmap Overview
 
-The ERPBridge project family connects legacy ERP systems to AI-based workflows without changing the ERP code base. This page shows the current focus and future plans across the Server, Bridgectl, and the SDK.
+The ERPBridge project family connects legacy ERP systems to AI-based workflows without changing the ERP code base. This section outlines the current focus and future plans across the different parts of the project:
 
-## Server
-
-The ERPBridge server provides the core MCP and REST API surfaces.
-
-### Shipped
-
-| Area | What works today |
-| :--- | :--- |
-| MCP middleware | Streamable HTTP and stdio transports, tool discovery, calls, and notifications over MCP 2025-03-26 (negotiates up to 2025-11-25) |
-| Tool registry | Register ERPs, generate and validate tool schemas, soft/hard delete, versioned tools, 10-second reconciliation |
-| Resilience | 15s HTTP timeout, circuit breaker, retry with jitter on network errors and 429/5xx |
-| Caching | Optional exact-match cache (Redis), flush and stats endpoints, `flushOn` per-tool invalidation |
-| Observability | Structured logs (JSON in production), Prometheus metrics, per-component log levels |
-| Security | Credential references resolved from environment variables, secret redaction in logs, exit codes 0-7 |
-
-### In flight (Hardening & Security)
-
-- **Token-based Authentication**: API token store, scoped bearer gates for MCP/metrics/logs, and an `API_AUTH_TOKEN` admin mode.
-- **Cache Hardening**: Memory cache fallback, full SHA-256 keys, and batch eviction.
-- **Security & Correctness**: Fail-closed credential resolution, robust log redaction, and accurate state hashing.
-
-### Future
-
-- **MCP Spec Upgrade**: Migrate to MCP 2026-07-28 specification (mcp-go v1.0.0-beta.1).
-- **Prebuilt Connectors**: Connectors for popular ERPs.
-- **Schema Distribution**: Central registry or Git-based sync.
-
-## Bridgectl
-
-The CLI tool for managing ERPBridge tools, cache, logs, and contexts.
-
-### Shipped
-
-- CLI interface with `api`, `tool`, `cache`, `log`, `context`, and completion commands.
-
-### In flight
-
-- **CLI Hygiene**: Structured JSON log tail filtering, server-side tool filtering, and atomic registry writes.
-- **Token Management**: Commands for `token create`, `list`, and `revoke`.
-- **API Token Contexts**: Plumbing to inject `api-token` transparently into all server requests.
-
-## SDK
-
-The `@erpbridge/sdk` is a TypeScript client library giving developers a single, ergonomic way to consume an ERPBridge server.
-
-### In flight (v0.1.0)
-
-- **Built-in MCP Client**: Wrapping `@modelcontextprotocol/client` for programmatic tool discovery and execution.
-- **REST Wrappers**: Typed interfaces for logs, metrics, health, cache stats, and tool registry.
-- **Typed Tool Proxy**: Ergonomic `client.tools.<name>(args)` invocation.
-- **Dual Build**: ESM + CJS support via `tsdown`.
-
-### Future
-
-- **Authentication**: Bearer token resolution, injection, and typed authorization errors (pending server auth release).
-- Python and Go SDK ports.
+- [Server](server)
+- [Bridgectl](bridgectl)
+- [SDK](sdk)
 
 ## How to influence the roadmap
 

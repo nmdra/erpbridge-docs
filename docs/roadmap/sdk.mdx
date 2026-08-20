@@ -1,0 +1,21 @@
+---
+sidebar_position: 4
+title: ERPBridge SDK
+description: Roadmap for the ERPBridge SDK.
+---
+
+# SDK Roadmap
+
+The `@erpbridge/sdk` is a TypeScript client library giving developers a single, ergonomic way to consume an ERPBridge server.
+
+## In flight (v0.1.0)
+
+- **Built-in MCP Client**: Wrapping `@modelcontextprotocol/client` for programmatic tool discovery and execution.
+- **REST Wrappers**: Typed interfaces for logs, metrics, health, cache stats, and tool registry.
+- **Typed Tool Proxy**: Ergonomic `client.tools.<name>(args)` invocation.
+- **Dual Build**: ESM + CJS support via `tsdown`.
+
+## Future
+
+- **Authentication**: Bearer token resolution, injection, and typed authorization errors (pending server auth release).
+- Python and Go SDK ports.
