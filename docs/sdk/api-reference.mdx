@@ -1,0 +1,154 @@
+---
+sidebar_position: 6
+title: API reference
+description: Hand-written API reference for @erpbridge/sdk — every public export, the client facade, and the error hierarchy.
+keywords: [sdk, api, reference, types, errors, createClient]
+---
+
+# API reference
+
+This page documents the complete public surface of `@erpbridge/sdk`. It replaces the generated API docs: everything exported from the package root, the `./client`, `./rest`, and `./types` subpaths, and the typed error hierarchy.
+
+## Entry points
+
+The package exposes four entry points. All names are named exports — there is no default export.
+
+| Subpath | Exports |
+| :--- | :--- |
+| `@erpbridge/sdk` | Everything below |
+| `@erpbridge/sdk/client` | `createClient`, `ErpbridgeClient` |
+| `@erpbridge/sdk/rest` | The REST surface factories and `parsePrometheusText` plus their types |
+| `@erpbridge/sdk/types` | `ErpbridgeConfig`, the error classes, and all shared types |
+
+## Functions
+
+### `createClient(input?)`
+
+Create the client facade. `input` is a partial [`ErpbridgeConfigInput`](#configuration); it defaults to `{ baseUrl: "http://localhost:8080" }`.
+
+```ts
+createClient(input?: ErpbridgeConfigInput): ErpbridgeClient
+```
+
+```ts
+import { createClient } from '@erpbridge/sdk'
+
+const client = createClient({ baseUrl: 'http://localhost:8080' })
+await client.mcp.connect()
+const result = await client.tools.list_employees({})
+```
+
+### `resolveConfig(input?)`
+
+Normalize a partial config into a fully populated [`ErpbridgeConfig`](#configuration). Useful when you build REST surfaces manually.
+
+```ts
+resolveConfig(input?: ErpbridgeConfigInput): ErpbridgeConfig
+```
+
+### REST surface factories
+
+Each factory takes a fully resolved `ErpbridgeConfig` and returns one REST surface. Prefer `createClient`, which wires them all together.
+
+| Factory | Returns | Surface |
+| :--- | :--- | :--- |
+| `createLogsApi(config)` | `LogsApi` | `recent()`, `stream(options)` |
+| `createMetricsApi(config)` | `MetricsApi` | `raw()`, `parsed()` |
+| `createRegistryApi(config)` | `RegistryApi` | `list()`, `apply()`, `delete()`, `invoke()` |
+| `createSystemApi(config)` | `SystemApi` | `health()`, `cache.stats()`, `cache.flush()` |
+
+### `createToolsProxy(mcp)`
+
+Build the exact-name tool proxy over an existing `McpClient`. Tools are discovered lazily on first access, so every registered tool name becomes a callable property.
+
+```ts
+createToolsProxy(mcp: McpClient): Record<string, ToolFunction>
+```
+
+### `parsePrometheusText(text)`
+
+Parse Prometheus exposition text into structured families. Counter, gauge, and histogram families are parsed; summary and untyped families are reported in `skipped` instead of silently dropped.
+
+```ts
+parsePrometheusText(text: string): ParsedMetrics
+```
+
+### `McpClient`
+
+The MCP protocol wrapper (v2 streamable HTTP). Construct it directly with a resolved config, or use `client.mcp` on the facade.
+
+| Method | Signature | Behavior |
+| :--- | :--- | :--- |
+| `connect()` | `() => Promise<void>` | Opens the session; negotiates protocol versions; reconnects transparently once, then throws `ProtocolError` |
+| `listTools()` | `() => Promise<ToolDefinition[]>` | Lists server tools |
+| `callTool(name, args)` | `(name: string, args: ToolCallArguments) => Promise<ToolResult>` | Calls a tool; server-side failures come back as `ToolResult { isError: true }` |
+| `close()` | `() => Promise<void>` | Closes the session and transport |
+
+`INVALID_PARAMS_CODE` is the numeric `-32602` used for JSON-RPC invalid-parameter responses.
+
+## The client facade
+
+`ErpbridgeClient` — returned by `createClient` — exposes nine surfaces:
+
+| Member | Type | Purpose |
+| :--- | :--- | :--- |
+| `mcp` | `McpClient` | Protocol surface: connect, list, call, close |
+| `tools` | `Record<string, ToolFunction>` | Exact-name tool proxy (outside `.registry` so tool names like `list` never collide with registry methods) |
+| `registry` | `RegistryApi` | REST registry CRUD over stored tool resources |
+| `invoke` | `(name, args) => Promise<ToolResult>` | Direct REST invocation, identical to `registry.invoke` |
+| `logs` | `LogsApi` | `recent()` and `stream()` (SSE) |
+| `metrics` | `MetricsApi` | Raw and parsed Prometheus metrics |
+| `health` | `SystemApi['health']` | Server health check |
+| `cache` | `SystemApi['cache']` | Cache stats and flush |
+| `close` | `() => Promise<void>` | Close the MCP session |
+
+## Error hierarchy
+
+All errors extend `ErpbridgeError` and carry `status` and `code` where available. Never match on raw error strings — always use these classes.
+
+```
+ErpbridgeError
+├── AuthenticationError      HTTP 401
+├── NotFoundError            HTTP 404
+├── RateLimitError           HTTP 429
+├── ServerError              HTTP 5xx
+└── ProtocolError            MCP/SSE transport failures
+```
+
+`AuthenticationError` also surfaces server 401s in v1 even though the SDK itself sends no credentials — token support follows the server's auth release.
+
+## Configuration
+
+`ErpbridgeConfigInput` (all optional) and the resolved `ErpbridgeConfig`:
+
+| Field | Type | Default | Notes |
+| :--- | :--- | :--- | :--- |
+| `baseUrl` | `string` | `http://localhost:8080` | Server base URL |
+| `mcpUrl` | `string` | derived from `baseUrl` | MCP streamable HTTP endpoint |
+| `timeoutMs` | `number` | SDK default | Per-request timeout |
+| `fetch` | `typeof fetch` | `globalThis.fetch` | Injectable fetch for testing |
+| `token` | `string` | — | Inert in v1 (auth-free by design) |
+| `tokenEnv` | `string` | — | Inert in v1 |
+
+## Shared types
+
+Types used across the public surface:
+
+| Type | Description |
+| :--- | :--- |
+| `LogRecord` | A single log entry as returned by `logs.recent()` |
+| `LogStreamOptions` | Options for `logs.stream()` (follow, tail, etc.) |
+| `ToolDefinition` | Server tool metadata: name, description, input schema |
+| `ToolResult` | `{ content, isError? }` — MCP tool call result |
+| `ToolCallArguments` | `Record<string, unknown>` tool arguments |
+| `ToolFunction` | The callable tool signature used by the proxy |
+| `CacheStats` | Cache statistics from `cache.stats()` |
+| `CacheFlushOptions` / `CacheFlushResult` | `cache.flush()` options (`all?: true`) and result |
+| `HealthStatus` | Health check payload from `health()` |
+| `MetricSample` / `MetricFamily` | Parsed Prometheus samples and families |
+| `ParsedMetrics` / `SkippedFamily` | `parsePrometheusText` output, including skipped families |
+| `RegistryTool*` | Registry tool resources: `RegistryTool`, `RegistryToolMetadata`, `RegistryToolDescription`, `RegistryToolProperty`, `RegistryToolInputSchema`, `RegistryToolExecution`, `RegistryToolSecurity`, `RegistryToolRouting`, `RegistryToolLifecycle`, `RegistryToolSpec` |
+| `ToolApplyResult` | Result of `registry.apply()` |
+| `RegistryDeleteOptions` | Options for `registry.delete()` (`hard?: true`) |
+
+The tool registry types mirror the server's tool schema — see the [server API](../erpbridge/api.mdx) for the wire format.
