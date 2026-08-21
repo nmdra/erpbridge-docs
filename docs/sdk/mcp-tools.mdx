@@ -16,6 +16,26 @@ surface on top. Two ways to call tools, and one way to manage them:
 | `client.tools` | The exact-name tool proxy (lazy, argument-validated) |
 | `client.registry` | REST CRUD over the stored tool resources |
 
+## Browser MCP/tools
+
+Browser applications can use the ESM build for `client.mcp`, `client.tools`,
+and `client.close()`:
+
+```ts
+import { createClient } from '@erpbridge/sdk'
+
+const client = createClient({ baseUrl: 'https://bridge.example.com' })
+await client.mcp.connect()
+const result = await client.tools.list_employees({})
+await client.close()
+```
+
+The ERPBridge `/mcp/` endpoint must allow the frontend origin and the MCP
+protocol/session headers, and must expose `Mcp-Session-Id`. Browser support is
+limited to MCP/tools in this release. Use Node.js, a same-origin server, or an
+application proxy for `logs`, `metrics`, `health`, `cache`, `registry`, and
+direct `invoke` operations.
+
 ## The MCP client
 
 ```ts

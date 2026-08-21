@@ -10,7 +10,15 @@ import TabItem from '@theme/TabItem'
 
 # Installation
 
-The SDK requires **Node.js >= 20** (built-in `fetch` and `AbortSignal`). The package ships a dual **ESM + CJS** build with type declarations for both, and every release is published with **signed provenance** — see [@erpbridge/sdk on npm](https://www.npmjs.com/package/@erpbridge/sdk).
+The full SDK facade requires **Node.js >= 20** (built-in `fetch` and
+`AbortSignal`). The package ships a dual **ESM + CJS** build with type
+declarations for both, and every release is published with **signed
+provenance** — see [@erpbridge/sdk on npm](https://www.npmjs.com/package/@erpbridge/sdk).
+
+Browser applications can use the ESM build for the MCP client and exact-name
+tool proxy. This browser support does not cover the REST surfaces. The
+ERPBridge `/mcp/` endpoint must allow the frontend origin, the MCP protocol
+request headers, and exposure of `Mcp-Session-Id`.
 
 ## Install
 
