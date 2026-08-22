@@ -21,6 +21,12 @@ This transport is the MCP streamable HTTP specification. It suits stateless or w
     - Session management via the `Mcp-Session-Id` header.
     - Full CORS support for browser and desktop clients.
 
+Set `CORS_ALLOWED_ORIGINS` to a comma-separated list of browser origins. An
+allowed preflight is processed before bearer authentication; the following MCP
+request still requires authentication when `API_AUTH_TOKEN` is configured.
+In open mode, the server keeps wildcard CORS behavior. CORS applies to `/mcp/`
+only.
+
 ### Postman Configuration
 
 - **Transport Type:** Streamable HTTP
@@ -58,6 +64,11 @@ The server exposes direct HTTP endpoints for internal management, performance mo
 | `/api/logs/stream` | `GET` | Real-time structured log stream (SSE). |
 | `/api/logs/recent` | `GET` | Fetch recent log history in JSON format. |
 
+When authentication is enabled, the registry, direct invoke, cache, and token
+routes are admin-only. Log routes accept the `logs` scope, `/metrics` accepts
+the `metrics` scope, and `/mcp/` accepts the `mcp` scope. `/mcp/health` stays
+open.
+
 For the full endpoint reference, see the [REST API Reference](./api.mdx).
 
 ## 4. Protection & Limits
@@ -66,6 +77,9 @@ ERPBridge includes built-in protection for underlying ERP systems.
 
 - **Rate Limiting:** Request throttling is enforced per-session (token bucket).
 - **Default Limits:** 5 requests per second with a burst of 10 (configurable via environment variables).
+
+Authenticated HTTP requests use the token principal for rate limiting. Open
+HTTP requests and stdio use their session or process fallback.
 
 ## 5. Connector Resilience
 

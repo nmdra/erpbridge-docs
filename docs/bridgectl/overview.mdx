@@ -29,6 +29,7 @@ make build
 | `bridgectl cache` | Manage tool cache | [`cache stats`](./bridgectl_cache_stats.md), [`cache flush`](./bridgectl_cache_flush.md) |
 | `bridgectl log` | Manage and view logs | [`log tail`](./bridgectl_log_tail.md), [`log stats`](./bridgectl_log_stats.md) |
 | `bridgectl context` | Manage bridgectl contexts | [`context list`](./bridgectl_context_list.md), [`context set`](./bridgectl_context_set.md) |
+| `bridgectl token` | Manage ERPBridge API tokens | [`token create`](./bridgectl_token_create.md), [`token list`](./bridgectl_token_list.md), [`token revoke`](./bridgectl_token_revoke.md) |
 | `bridgectl completion` | Generate shell autocompletion | `bash`, `zsh`, `fish`, `powershell` |
 | `bridgectl doc` | Generate Markdown documentation for bridgectl | — |
 | `bridgectl version` | Print the version number of bridgectl | — |
@@ -39,6 +40,7 @@ make build
   -c, --context string   Override active context
   -h, --help             help for bridgectl
   -o, --output string    Output format: table, json, yaml (default "table")
+      --token string     API token for the ERPBridge server
   -v, --verbose          Show full HTTP request/response detail
 ```
 

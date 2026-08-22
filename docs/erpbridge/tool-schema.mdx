@@ -79,6 +79,16 @@ Authentication strategy.
 
 - **`authType`**: `api-key`, `bearer`, or `basic`.
 - **`credentialRef`**: The name of the environment variable containing the secret. **Never embed raw secrets here.**
+- **`allowedRoles`**: (Optional array) Roles that may call this tool. Values
+  must match `[a-z][a-z0-9_-]{0,63}`, be unique, and contain no more than 32
+  roles.
+
+When `allowedRoles` is present, the tool is guarded. MCP clients select a role
+with `arguments.role`; direct callers use `X-ERPBridge-Role`. The selector
+must be present in both the caller identity and the tool allow-list, and the
+MCP selector is removed before execution. A guarded tool cannot define or
+require its own `role` argument. Without `allowedRoles`, `role` remains an
+ordinary business argument.
 
 :::danger Secrets never belong in schemas
 The admission controller rejects tool definitions whose endpoint path contains secret-like patterns (e.g., `token ` or `key=`). Credentials are resolved from environment variables at call time only.
@@ -134,6 +144,7 @@ spec:
   security:
     authType: api-key
     credentialRef: ERP_FINANCE_KEY # Resolves to ENV["ERP_FINANCE_KEY"]
+    allowedRoles: [finance_reader, finance_writer]
   cache:
     enabled: false # Don't cache write operations
     flushOn: ["list_purchase_invoices"] # Flush list cache when a new one is created

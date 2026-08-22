@@ -1,0 +1,60 @@
+---
+sidebar_position: 10
+title: API Token Guide
+description: Create, use, list, and revoke ERPBridge bearer API tokens.
+keywords: [api token, bearer, authentication, scopes, roles]
+---
+
+# API Token Guide
+
+ERPBridge supports opaque bearer API tokens for MCP clients, metrics scrapers,
+and log consumers. Token management is available only to the admin credential
+configured with `API_AUTH_TOKEN`.
+
+## Enable authentication
+
+```bash
+export API_AUTH_TOKEN='change-this-admin-secret'
+export API_AUTH_ADMIN_ROLES='finance_reader,finance_admin'
+erpbridge-server
+```
+
+Use the admin credential to create a scoped token:
+
+```bash
+curl -X POST http://localhost:8080/api/auth/tokens \
+  -H 'Authorization: Bearer change-this-admin-secret' \
+  -H 'Content-Type: application/json' \
+  -d '{"name":"finance-agent","scopes":["mcp"],"roles":["finance_reader"]}'
+```
+
+The raw token starts with `erpbt_` and is returned only once. The server
+stores only its SHA-256 hash. Supported scopes are `mcp`, `metrics`, and
+`logs`; roles must match `[a-z][a-z0-9_-]{0,63}`.
+
+## List and revoke
+
+```bash
+curl -H 'Authorization: Bearer change-this-admin-secret' \
+  http://localhost:8080/api/auth/tokens
+
+curl -X DELETE \
+  -H 'Authorization: Bearer change-this-admin-secret' \
+  http://localhost:8080/api/auth/tokens/<id>
+```
+
+List responses contain metadata only. Revocation is immediate. Expired or
+revoked tokens receive `401`; valid tokens without the required scope receive
+`403`.
+
+## CLI configuration
+
+Use `bridgectl --token`, `BRIDGE_API_TOKEN`, or the active context `api-token`.
+The precedence is flag, environment, then context.
+
+```yaml
+contexts:
+  local:
+    server: http://localhost:8080
+    api-token: erpbt_...
+```

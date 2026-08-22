@@ -13,6 +13,17 @@ The ERPBridge server exposes direct HTTP endpoints. They do not require an MCP h
 
 `http://localhost:8080` (or the value of `MCP_PORT`)
 
+## Authentication
+
+HTTP authentication is enabled when `API_AUTH_TOKEN` is non-empty. Send the
+configured credential as `Authorization: Bearer <token>`.
+
+The admin credential is required for the registry, direct invoke, cache, and
+token lifecycle endpoints. API tokens use scopes: `mcp` for `/mcp/`,
+`metrics` for `/metrics`, and `logs` for the log endpoints. `/mcp/health` is
+always open. Missing or invalid credentials return `401`; insufficient scope
+or a non-admin token on an admin route returns `403`.
+
 ## Tool Registry (Control Plane)
 
 The registry API is Kubernetes-style. It stores tool definitions in SQLite.
@@ -70,6 +81,9 @@ The server rejects tool definitions when:
 
 - The tool name starts with `get-` or `post-`.
 - The endpoint path contains embedded secrets (for example `token ` or `key=`).
+- `spec.security.allowedRoles` contains invalid, duplicate, empty, or more
+  than 32 roles.
+- A guarded tool defines or requires its own `role` input.
 
 ## Tool Invocation
 
@@ -90,6 +104,10 @@ Body:
 ```
 
 The call goes through the middleware chain: rate limiting, cache, and resilience.
+
+For guarded tools, direct callers pass the verified selector in
+`X-ERPBridge-Role`. A `role` field in the JSON body is rejected. The selector
+must be present in both the caller identity and the tool `allowedRoles` list.
 
 This endpoint resolves registered tools only. MCP built-ins such as `system.progress_test` are available through MCP `tools/call`, but not through this REST endpoint.
 
@@ -150,6 +168,14 @@ On failure the server returns `500 Internal Server Error` with a JSON error enve
 | `/api/logs/recent` | `GET` | JSON array of the last 1000 log entries. |
 | `/api/logs/stream` | `GET` | Server-sent events stream of log entries. |
 
+## Token lifecycle
+
+| Endpoint | Method | Description |
+| :--- | :--- | :--- |
+| `/api/auth/tokens` | `POST` | Create a scoped API token. Admin only. |
+| `/api/auth/tokens` | `GET` | List token metadata without raw values or hashes. Admin only. |
+| `/api/auth/tokens/{id}` | `DELETE` | Revoke a token. Admin only. |
+
 ## MCP Endpoints
 
 | Endpoint | Method | Description |
@@ -157,6 +183,12 @@ On failure the server returns `500 Internal Server Error` with a JSON error enve
 | `/mcp/` | `POST` | MCP JSON-RPC requests (Streamable HTTP). |
 | `/mcp/` | `GET` | SSE notification stream for the session. |
 | `/mcp/health` | `GET` | Returns `{"status": "ok"}`. |
+
+Guarded MCP tools advertise an optional `arguments.role` selector. The server
+validates it against the authenticated identity and tool allow-list, then
+removes it before the ERP call. Open tools keep `role` as a normal business
+argument. Guarded read-only cache entries are shared; other guarded entries
+are scoped by verified role.
 
 ## Observability
 

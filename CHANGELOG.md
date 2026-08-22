@@ -9,6 +9,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Added
 
 - Documentation now covers the bounded in-memory cache fallback, generated YAML sequence and multi-document apply flow, exact tool filters, and MCP result-envelope boundaries.
+- Authentication documentation now covers hashed scoped API tokens, admin roles, bearer route policy, and one-time token disclosure.
+- REST, connectivity, schema, environment, and bridgectl pages now document per-tool roles, selector handling, CORS, and CLI token precedence.
+- Added the API Token Guide and bridgectl token command references.
 - **SDK API reference** page (`docs/sdk/api-reference.mdx`) documenting the complete public surface of `@erpbridge/sdk` — entry points, every function, the client facade, the error hierarchy, configuration, and shared types. Replaces the generated TypeDoc site.
 - **SDK overview** now links the npm package (with provenance note) and the new API reference page.
 
@@ -66,6 +69,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - MCP client guide: added the built-in system tools (`system.progress_test`, `system.sensitive_log_test`) and the `notifications/progress` + `notifications/alert` payloads; aligned protocol version (`2025-03-26`) and tool names (`list_purchase_invoices`) with current code
 - Environment variables guide: added `MOCK_ERP_LOG_LEVEL`
 - Quickstart: corrected the direct-invoke tool name from `erp.list_employees` to `list_employees`
+- Authentication guide: replaced the planned-authentication text with the current admin, scoped-token, CORS, and guarded-tool behavior
 
 ### Added
 

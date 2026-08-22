@@ -1,7 +1,7 @@
 ---
 sidebar_position: 9
 title: Authentication
-description: Authentication status and planned design for ERPBridge — admin token, scoped API tokens, and bearer challenges.
+description: ERPBridge HTTP authentication — admin credentials, scoped API tokens, bearer challenges, and role-protected tools.
 keywords: [authentication, token, api token, bearer, security]
 ---
 
@@ -9,14 +9,35 @@ keywords: [authentication, token, api token, bearer, security]
 
 Authentication protects the management endpoints and MCP transport from unauthorized access.
 
-## Current status
+## HTTP authentication
 
-- The MCP endpoint (`/mcp/`) and direct API endpoints are **open** — no authentication is enforced yet.
-- Token-based authentication is **planned** and will land in an upcoming release (see [Roadmap](../roadmap/overview.mdx)).
-- Outbound authentication to the upstream ERP **is** implemented — see [Outbound ERP authentication](#outbound-erp-authentication) below.
+HTTP authentication is enabled when `API_AUTH_TOKEN` is non-empty. Send the
+admin credential or an API token in the `Authorization` header:
+
+```http
+Authorization: Bearer <token>
+```
+
+The admin credential has access to every authenticated route. API tokens are
+scoped to `mcp`, `metrics`, or `logs`:
+
+| Route | Required credential |
+| :--- | :--- |
+| `/mcp/` | Admin credential or `mcp` scope |
+| `/metrics` | Admin credential or `metrics` scope |
+| `/api/logs/recent`, `/api/logs/stream` | Admin credential or `logs` scope |
+| Registry, direct invoke, cache, and token routes | Admin credential |
+| `/mcp/health` | Always open |
+
+When authentication is disabled, HTTP routes keep their open-mode behavior.
+Guarded tools still deny calls without a verified identity. Stdio remains
+available for open tools only; it does not provide an identity for guarded
+tools.
 
 :::caution Production deployment
-Until authentication lands, the server should only be exposed on trusted networks. Do not put an unauthenticated ERPBridge server directly on the public internet.
+Set `API_AUTH_TOKEN` before exposing the HTTP server outside a trusted network.
+Open mode is intended for local development and keeps management routes
+unauthenticated.
 :::
 
 ## Outbound ERP authentication
@@ -57,21 +78,37 @@ The logger automatically masks sensitive values before they reach console output
 - **Sensitive types:** `APIToken`, `Password`, `AuthHeader`, `SecretKey`, `PII`.
 - **Regex masking:** any `Bearer <value>` becomes `Bearer [REDACTED]`.
 
-## Planned design
+## API tokens
 
-Token-based authentication with two token classes:
+Token-based authentication has two credential classes:
 
 | Token class | Source | Scopes | Purpose |
 | :--- | :--- | :--- | :--- |
 | Admin token | `API_AUTH_TOKEN` environment variable | all (implicit) | Server administration, CLI operations |
 | API tokens | `api_tokens` store (created via the control plane) | `mcp`, `metrics`, `logs` | MCP clients, monitoring, log access |
 
-Key properties of the planned design:
+Key properties:
 
 - API token values are shown **once** at creation, prefixed `erpbt_`; only a SHA-256 hash is stored.
 - Tokens can be scoped (`mcp | metrics | logs`), expire, and be revoked individually.
-- When `API_AUTH_TOKEN` is set, protected routes return `401` with a `WWW-Authenticate: Bearer` challenge.
-- Stdio transport stays unauthenticated (local-only by design).
+- When `API_AUTH_TOKEN` is set, protected routes return `401` for missing or invalid credentials and `403` for insufficient scope.
+- `API_AUTH_ADMIN_ROLES` assigns verified roles to the admin identity.
+
+See the [API Token Guide](./tokens.mdx) for lifecycle requests and CLI usage.
+
+## Role-protected tools
+
+Tools opt into authorization with `spec.security.allowedRoles`. Roles must
+match `[a-z][a-z0-9_-]{0,63}`, be unique, and contain no more than 32 values.
+
+- MCP clients select a role with `arguments.role`. The server validates the
+  role against the token identity and tool allow-list, then removes it before
+  the ERP request.
+- Direct callers select a role with `X-ERPBridge-Role`. A role in the JSON body
+  is rejected for guarded tools.
+- Open tools do not reserve `role`, so existing business payloads remain
+  unchanged.
+- Denied calls happen before cache lookup and downstream ERP execution.
 
 ## Reporting auth issues
 

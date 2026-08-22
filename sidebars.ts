@@ -69,6 +69,17 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
+      label: 'Token commands',
+      collapsed: false,
+      items: [
+        'bridgectl/bridgectl_token',
+        'bridgectl/bridgectl_token_create',
+        'bridgectl/bridgectl_token_list',
+        'bridgectl/bridgectl_token_revoke',
+      ],
+    },
+    {
+      type: 'category',
       label: 'Other commands',
       collapsed: true,
       items: [
