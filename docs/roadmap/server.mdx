@@ -1,30 +1,33 @@
 ---
 sidebar_position: 2
 title: Server
-description: Roadmap for the ERPBridge server.
+description: Shipped and planned capabilities for the ERPBridge MCP and REST server.
+keywords: [roadmap, server, mcp, rest, registry, security]
 ---
 
-# Server Roadmap
+# Server roadmap
 
-The ERPBridge server provides the core MCP and REST API surfaces.
+The ERPBridge server is the runtime boundary between ERP APIs and MCP clients. This page tracks the server capabilities available in the current release and the areas under active development.
 
-## Shipped
+## Shipped in v0.3.0-alpha.1
 
-| Area | What works today |
-| :--- | :--- |
-| MCP middleware | Streamable HTTP and stdio transports, tool discovery, calls, and notifications over MCP 2025-03-26 (negotiates up to 2025-11-25) |
-| Tool registry | Register ERPs, generate and validate tool schemas, soft/hard delete, versioned tools, 10-second reconciliation |
-| Resilience | 15s HTTP timeout, circuit breaker, retry with jitter on network errors and 429/5xx |
-| Caching | Optional exact-match cache with Redis or bounded in-memory storage, flush and stats endpoints, `flushOn` per-tool invalidation |
-| Observability | Structured logs (JSON in production), Prometheus metrics, per-component log levels |
-| Security | Credential references resolved from environment variables, secret redaction in logs, exit codes 0-7 |
+| Area | Current capability | Technical reference |
+| :--- | :--- | :--- |
+| MCP middleware | Streamable HTTP and stdio transports, tool discovery, calls, and notifications over MCP 2025-03-26; the server negotiates up to 2025-11-25. | [Transports](../erpbridge/transports.mdx) · [MCP Client Guide](../erpbridge/mcp-client-guide.mdx) |
+| Tool registry | ERP registration, schema generation and validation, soft/hard delete, versioned tools, and 10-second reconciliation. | [Architecture](../erpbridge/architecture.mdx) · [Tool Schema](../erpbridge/tool-schema.mdx) |
+| Resilience | 15-second HTTP timeout, circuit breaker, and retry with jitter for network errors and 429/5xx responses. | [Connectivity](../erpbridge/connectivity.mdx) |
+| Caching | Optional exact-match cache with Redis or bounded in-memory storage, flush and stats endpoints, and per-tool `flushOn` invalidation. | [Caching](../erpbridge/caching.mdx) |
+| Observability | Structured logs, JSON output in production, Prometheus metrics, health checks, and per-component log levels. | [REST API](../erpbridge/api.mdx) · [Environment Variables](../erpbridge/environment-variables.mdx) |
+| Security | Credential references resolved from environment variables, secret redaction in logs, scoped API tokens, and role-protected routes. | [Authentication](../erpbridge/auth.mdx) · [API Tokens](../erpbridge/tokens.mdx) |
 
-## In flight (Hardening & Security)
+## In flight
 
-- **Security & Correctness**: Continue hardening protocol boundaries, credential handling, log redaction, and state hashing.
+### Security and correctness hardening
 
-## Future
+Work continues on protocol boundaries, credential handling, log redaction, and state hashing. These changes are intended to improve correctness and safety without changing the documented integration workflow.
 
-- **MCP Spec Upgrade**: Migrate to MCP 2026-07-28 specification (mcp-go v1.0.0-beta.1).
-- **Prebuilt Connectors**: Connectors for popular ERPs.
-- **Schema Distribution**: Central registry or Git-based sync.
+## Future direction
+
+- **MCP specification upgrade:** migrate to MCP 2026-07-28 with mcp-go v1.0.0-beta.1.
+- **Prebuilt connectors:** provide connectors for commonly used ERP systems.
+- **Schema distribution:** support a central registry or Git-based schema synchronization.

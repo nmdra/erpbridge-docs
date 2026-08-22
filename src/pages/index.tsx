@@ -9,10 +9,17 @@ import styles from './index.module.css';
 
 function ReleaseBadge() {
   return (
-    <Link to="/docs/roadmap/overview" className={styles.releaseBadge}>
-      <span className={styles.releaseDot} />
-      Alpha (v0.2.0-alpha.5)
-    </Link>
+    <div className={styles.releaseBadges} aria-label="Current ERPBridge releases">
+      <Link to="/docs/roadmap/overview" className={styles.releaseBadge}>
+        <span className={styles.releaseDot} aria-hidden="true" />
+        ERPBridge · v0.3.0-alpha.1
+      </Link>
+      <Link
+        to="/docs/sdk/overview"
+        className={`${styles.releaseBadge} ${styles.releaseBadgeSdk}`}>
+        SDK · v0.1.1
+      </Link>
+    </div>
   );
 }
 
@@ -36,11 +43,11 @@ function TerminalLine({
 
 function TerminalMockup() {
   return (
-    <div className={styles.terminalCard}>
+    <div className={styles.terminalCard} aria-label="ERPBridge onboarding workflow preview">
       <div className={styles.terminalBar}>
-        <span className={styles.terminalDot} />
-        <span className={styles.terminalDot} />
-        <span className={styles.terminalDot} />
+        <span className={styles.terminalDot} aria-hidden="true" />
+        <span className={styles.terminalDot} aria-hidden="true" />
+        <span className={styles.terminalDot} aria-hidden="true" />
         <span className={styles.terminalTitle}>bridgectl — erpbridge shell</span>
       </div>
       <div className={styles.terminalBody}>
@@ -57,7 +64,7 @@ function TerminalMockup() {
         <TerminalLine
           prompt="$"
           command="bridgectl tool apply schemas/erp/"
-          output={<span className={styles.outputOk}>✓ applied 3 tools in 42ms — reconciled</span>}
+          output={<span className={styles.outputOk}>✓ applied 3 tools — reconciled</span>}
         />
         <TerminalLine
           prompt="$"
@@ -82,7 +89,7 @@ function TerminalMockup() {
         />
         <div className={styles.terminalLine}>
           <span className={styles.terminalPrompt}>$</span>
-          <span className={styles.terminalCursor} />
+          <span className={styles.terminalCursor} aria-hidden="true" />
         </div>
       </div>
     </div>
@@ -90,7 +97,6 @@ function TerminalMockup() {
 }
 
 function HomepageHeader() {
-  const {siteConfig} = useDocusaurusContext();
   return (
     <header className={styles.heroBanner}>
       <div className={styles.heroGlow} aria-hidden="true" />
@@ -100,16 +106,23 @@ function HomepageHeader() {
           <div className={styles.heroText}>
             <ReleaseBadge />
             <Heading as="h1" className={styles.heroTitle}>
-              {siteConfig.title}
+              ERPBridge
             </Heading>
-            <p className={styles.heroSubtitle}>{siteConfig.tagline}</p>
+            <p className={styles.heroSubtitle}>
+              Connect your legacy ERP to AI-based workflows without changing your code base.
+            </p>
             <div className={styles.buttons}>
-              <Link className={styles.primaryButton} to="/docs/erpbridge/intro">
-                Try ERPBridge
+              <Link className={styles.primaryButton} to="/docs/erpbridge/quickstart">
+                Start with the quickstart
               </Link>
-              <Link className={styles.secondaryButton} to="/docs/erpbridge/quickstart">
-                Quickstart
+              <Link className={styles.secondaryButton} to="/docs/sdk/overview">
+                Explore the SDK
               </Link>
+            </div>
+            <div className={styles.heroProof} aria-label="ERPBridge highlights">
+              <span>MCP over HTTP + stdio</span>
+              <span>No ERP code changes</span>
+              <span>Built-in observability and security</span>
             </div>
           </div>
           <div className={styles.heroVisual}>
@@ -126,7 +139,8 @@ export default function Home(): ReactNode {
   return (
     <Layout
       title={`${siteConfig.title}`}
-      description="Documentation for ERPBridge — connect your legacy ERP to AI-based workflows without changing your code base">
+      description="Connect existing ERP APIs to AI agents with ERPBridge — MCP middleware, bridgectl, and a typed SDK for production workflows."
+    >
       <HomepageHeader />
       <main>
         <HomepageFeatures />

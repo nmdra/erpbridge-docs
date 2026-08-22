@@ -59,12 +59,13 @@ const config: Config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl: 'https://github.com/nmdra/erpbridge-docs/tree/main/',
-          // Pretend-cut versioning: single "current" version labeled with the
-          // upstream ERPBridge release tag, so docs pages show a version badge.
+          // The shared docs badge tracks the ERPBridge Server + bridgectl
+          // release line. The custom DocVersionBadge swaps in the SDK's
+          // independent package version for SDK pages.
           lastVersion: 'current',
           versions: {
             current: {
-              label: 'Alpha (v0.2.0-alpha.5)',
+              label: 'ERPBridge + bridgectl · v0.3.0-alpha.1',
               path: '',
               badge: true,
             },
@@ -116,7 +117,7 @@ const config: Config = {
     announcementBar: {
       id: 'alpha-notice',
       content:
-        '🚧 ERPBridge is in <b>Alpha</b> — expect breaking changes between releases. <a href="/erpbridge-docs/docs/roadmap/overview">View the roadmap →</a>',
+        '🚧 ERPBridge Server and bridgectl are in <b>Alpha (v0.3.0-alpha.1)</b>; the SDK follows its own release line (<b>v0.1.1</b>). <a href="/erpbridge-docs/docs/roadmap/overview">View release status →</a>',
       backgroundColor: '#1b1b1d',
       textColor: '#e0e0e0',
       isCloseable: true,
@@ -167,6 +168,10 @@ title: 'ERPBridge',
           docId: 'faq',
           position: 'left',
           label: 'FAQ',
+        },
+        {
+          type: 'search',
+          position: 'right',
         },
         {
           href: 'https://github.com/nmdra/ERPBridge',

@@ -1,21 +1,27 @@
 ---
 sidebar_position: 4
 title: ERPBridge SDK
-description: Roadmap for the ERPBridge SDK.
+description: Shipped and planned capabilities for the @erpbridge/sdk TypeScript client.
+keywords: [roadmap, sdk, typescript, mcp, browser]
 ---
 
-# SDK Roadmap
+# SDK roadmap
 
-The `@erpbridge/sdk` is a TypeScript client library giving developers a single, ergonomic way to consume an ERPBridge server.
+The `@erpbridge/sdk` is a TypeScript client for consuming ERPBridge from applications and agent workflows. The current release focuses on typed MCP and operational access; authentication and additional language ports remain future work.
 
-## Shipped (v0.1.0)
+## Shipped in v0.1.1
 
-- **Built-in MCP Client**: Wrapping `@modelcontextprotocol/client` for programmatic tool discovery and execution.
-- **REST Wrappers**: Typed interfaces for logs, metrics, health, cache stats, and tool registry.
-- **Typed Tool Proxy**: Ergonomic `client.tools.<name>(args)` invocation.
-- **Dual Build**: ESM + CJS support via `tsdown`.
+| Area | Current capability | Technical reference |
+| :--- | :--- | :--- |
+| MCP client | Programmatic tool discovery and execution through the built-in MCP client. | [MCP Tools](../sdk/mcp-tools.mdx) |
+| Tool proxy | Exact-name `client.tools.<name>(args)` calls with input-schema validation. | [MCP Tools](../sdk/mcp-tools.mdx) |
+| REST access | Typed wrappers for direct invocation, tool registry, logs, metrics, health, and cache operations. | [API Reference](../sdk/api-reference.mdx) · [Logs & Metrics](../sdk/logs-metrics.mdx) |
+| Browser support | ESM MCP client and exact-name tool proxy for browser bundles when the server CORS policy exposes `/mcp/`. | [Installation](../sdk/installation.mdx) |
+| Packaging | ESM and CommonJS builds with TypeScript declarations for Node.js 20 or newer. | [Installation](../sdk/installation.mdx) |
 
-## Future
+## Future direction
 
-- **Authentication**: Bearer token resolution, injection, and typed authorization errors (pending server auth release).
-- Python and Go SDK ports.
+- **Authentication:** bearer-token resolution, injection, and typed authorization errors after the server authentication release is complete.
+- **Language ports:** Python and Go SDKs.
+
+See the [SDK overview](../sdk/overview.mdx) for the supported surface and the [API reference](../sdk/api-reference.mdx) for exported types and functions.

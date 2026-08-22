@@ -1,240 +1,337 @@
-/* Features grid (3x2 uniform grid) */
-.features {
-  padding: 3.5rem 0 1rem;
+.workflowSection,
+.productSection,
+.capabilitySection,
+.startSection {
+  padding: 5.5rem 0;
 }
 
-.featureGrid {
+.workflowSection {
+  background: var(--ifm-background-surface-color);
+}
+
+.productSection {
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  background: var(--ifm-background-color);
+}
+
+.capabilitySection {
+  background: var(--ifm-background-surface-color);
+}
+
+.startSection {
+  background: var(--ifm-background-color);
+}
+
+.sectionIntro {
+  max-width: 48rem;
+  margin-bottom: 2.25rem;
+}
+
+.sectionEyebrow,
+.productEyebrow,
+.startTag {
+  margin: 0 0 0.65rem;
+  color: var(--ifm-color-primary);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  letter-spacing: -0.035em;
+  line-height: 1.1;
+}
+
+.sectionLead {
+  max-width: 42rem;
+  margin: 1rem 0 0;
+  color: var(--ifm-color-emphasis-700);
+  font-size: 1.08rem;
+  line-height: 1.65;
+}
+
+.workflowGrid,
+.productGrid,
+.capabilityGrid,
+.startGrid {
   display: grid;
+  gap: 1.1rem;
+}
+
+.workflowGrid,
+.productGrid {
   grid-template-columns: repeat(3, 1fr);
-  gap: 1.25rem;
 }
 
-@media screen and (min-width: 641px) and (max-width: 996px) {
-  .featureGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+.capabilityGrid,
+.startGrid {
+  grid-template-columns: repeat(2, 1fr);
 }
 
-@media screen and (max-width: 640px) {
-  .featureGrid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.card {
+.workflowCard,
+.productCard,
+.capabilityCard,
+.startCard {
+  position: relative;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  text-align: left;
-  gap: 1.35rem;
-  padding: 2rem 2rem 2.2rem;
-  border-radius: 18px;
   border: 1px solid var(--ifm-color-emphasis-200);
-  background: var(--ifm-background-surface-color);
+  border-radius: 18px;
+  background: var(--ifm-background-color);
   color: inherit;
   text-decoration: none;
   transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
-.card:hover {
-  transform: translateY(-3px);
+.workflowCard:hover,
+.productCard:hover,
+.capabilityCard:hover,
+.startCard:hover {
   border-color: var(--ifm-color-primary);
-  box-shadow: 0 12px 32px -12px rgba(0, 0, 0, 0.25);
+  color: inherit;
+  text-decoration: none;
+  transform: translateY(-4px);
+  box-shadow: 0 18px 36px -18px rgba(0, 0, 0, 0.35);
 }
 
-[data-theme='dark'] .card:hover {
-  border-color: rgba(37, 194, 160, 0.5);
-  box-shadow: 0 12px 36px -12px rgba(0, 0, 0, 0.65), 0 0 24px -8px rgba(37, 194, 160, 0.2);
+[data-theme='dark'] .workflowCard:hover,
+[data-theme='dark'] .productCard:hover,
+[data-theme='dark'] .capabilityCard:hover,
+[data-theme='dark'] .startCard:hover {
+  box-shadow: 0 18px 38px -18px rgba(0, 0, 0, 0.8), 0 0 26px -12px rgba(37, 194, 160, 0.28);
 }
 
-.cardIcon {
-  flex-shrink: 0;
-  display: flex;
+.workflowCard {
+  min-height: 16rem;
+  padding: 1.65rem;
+}
+
+.stepNumber {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 92px;
-  height: 92px;
-  border-radius: 18px;
-  border: 1px solid var(--ifm-color-emphasis-200);
-  background: var(--ifm-color-emphasis-100);
-  align-self: flex-start;
-  transition: transform 0.18s ease, border-color 0.18s ease;
-}
-
-.card:hover .cardIcon {
-  border-color: rgba(37, 194, 160, 0.4);
-  transform: scale(1.04);
-}
-
-.featureSvg {
-  width: 70px;
-  height: 70px;
-  color: var(--ifm-color-emphasis-900);
-}
-
-.cardBody {
-  width: 100%;
-}
-
-.cardTitle {
-  font-size: 1.2rem;
-  margin-bottom: 0.45rem;
-  letter-spacing: -0.01em;
+  width: 2.25rem;
+  height: 2.25rem;
+  margin-bottom: 2.5rem;
+  border: 1px solid var(--ifm-color-primary);
+  border-radius: 50%;
+  color: var(--ifm-color-primary);
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.75rem;
   font-weight: 700;
 }
 
+.cardTitle {
+  margin: 0 0 0.55rem;
+  font-size: 1.16rem;
+  font-weight: 750;
+  letter-spacing: -0.015em;
+}
+
 .cardDescription {
-  margin: 0;
-  font-size: 0.95rem;
-  line-height: 1.62;
+  margin: 0 0 1.1rem;
   color: var(--ifm-color-emphasis-700);
+  font-size: 0.93rem;
+  line-height: 1.62;
 }
 
-.cardDescription code {
-  font-size: 0.85em;
-  padding: 0.15rem 0.35rem;
-  border-radius: 4px;
-  background: var(--ifm-color-emphasis-200);
-  border: 1px solid var(--ifm-color-emphasis-300);
-}
-
-/* Quickstart section */
-.quickstartSection {
-  padding: 2.5rem 0 4rem;
-}
-
-.sectionTitle {
-  font-size: 1.6rem;
-  letter-spacing: -0.01em;
-  margin-bottom: 1.25rem;
-}
-
-.quickstartRow {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.25rem;
-}
-
-@media screen and (min-width: 641px) and (max-width: 996px) {
-  .quickstartRow {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media screen and (max-width: 640px) {
-  .quickstartRow {
-    grid-template-columns: 1fr;
-  }
-}
-
-.quickstartCard {
-  padding: 1.4rem 1.5rem;
-  border-radius: 14px;
-  border: 1px solid var(--ifm-color-emphasis-200);
-  background: var(--ifm-background-surface-color);
-  color: var(--ifm-font-color-base);
-  text-decoration: none;
-  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
-}
-
-.quickstartCard:hover {
-  text-decoration: none;
-  color: var(--ifm-font-color-base);
-  transform: translateY(-3px);
-  border-color: var(--ifm-color-primary);
-  box-shadow: 0 12px 32px -12px rgba(0, 0, 0, 0.25);
-}
-
-[data-theme='dark'] .quickstartCard:hover {
-  border-color: rgba(37, 194, 160, 0.5);
-  box-shadow: 0 12px 36px -12px rgba(0, 0, 0, 0.65), 0 0 24px -8px rgba(37, 194, 160, 0.2);
-}
-
-.quickstartTitle {
-  display: flex;
+.arrowLink {
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between;
-  font-weight: 600;
-  font-size: 1.05rem;
-  flex: 1;
-  margin-bottom: 0;
-}
-
-.quickstartHeader {
-  display: flex;
-  align-items: center;
-  gap: 0.65rem;
-  margin-bottom: 0.5rem;
-}
-
-.quickstartIcon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 9px;
-  background: var(--ifm-color-emphasis-100);
-  border: 1px solid var(--ifm-color-emphasis-200);
+  gap: 0.55rem;
+  margin-top: auto;
   color: var(--ifm-color-primary);
-  flex-shrink: 0;
+  font-size: 0.82rem;
+  font-weight: 750;
 }
 
-.quickstartIcon svg {
-  width: 17px;
-  height: 17px;
-}
-
-.quickstartCard:hover .quickstartIcon {
-  border-color: var(--ifm-color-primary);
-}
-
-/* Arrow chip — circular button that fills and slides on hover */
 .arrowChip {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: 1.8rem;
+  height: 1.8rem;
+  border: 1px solid currentColor;
   border-radius: 50%;
-  border: 1px solid var(--ifm-color-emphasis-300);
-  color: var(--ifm-color-primary);
-  flex-shrink: 0;
-  transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease,
-    transform 0.18s ease;
+  transition: background-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
 }
 
 .arrowChip svg {
   transition: transform 0.18s ease;
 }
 
-.quickstartCard:hover .arrowChip {
+.workflowCard:hover .arrowChip,
+.productCard:hover .arrowChip,
+.capabilityCard:hover .arrowChip {
   background: var(--ifm-color-primary);
-  border-color: var(--ifm-color-primary);
-  color: #fff;
+  color: var(--ifm-background-color);
   transform: translateX(2px);
 }
 
-.quickstartCard:hover .arrowChip svg {
+.workflowCard:hover .arrowChip svg,
+.productCard:hover .arrowChip svg,
+.capabilityCard:hover .arrowChip svg {
   transform: translateX(2px);
 }
 
-[data-theme='dark'] .quickstartCard:hover .arrowChip {
-  color: #06281a;
+.productCard {
+  min-height: 17rem;
+  padding: 1.7rem;
+  overflow: hidden;
 }
 
-.quickstartDescription {
+.productCard::after {
+  position: absolute;
+  right: -2.5rem;
+  bottom: -3.5rem;
+  width: 9rem;
+  height: 9rem;
+  border-radius: 50%;
+  background: var(--ifm-color-primary);
+  opacity: 0.08;
+  content: '';
+}
+
+.productEyebrow {
+  margin-bottom: 2.5rem;
+  font-family: var(--ifm-font-family-monospace);
+  letter-spacing: 0.04em;
+  text-transform: none;
+}
+
+.productTitle {
+  margin: 0 0 0.65rem;
+  font-size: 1.45rem;
+  letter-spacing: -0.025em;
+}
+
+.server { --product-accent: #4aaf73; }
+.cli { --product-accent: #d9a441; }
+.sdk { --product-accent: #4d9de0; }
+.productCard .productEyebrow { color: var(--product-accent); }
+
+.capabilityCard {
+  display: grid;
+  grid-template-columns: 4.4rem 1fr;
+  gap: 1.15rem;
+  padding: 1.5rem;
+}
+
+.cardIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4.4rem;
+  height: 4.4rem;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 15px;
+  background: var(--ifm-color-emphasis-100);
+}
+
+.featureSvg {
+  width: 3.2rem;
+  height: 3.2rem;
+  color: var(--ifm-color-emphasis-900);
+}
+
+.cardBody {
+  min-width: 0;
+}
+
+.startHeader {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.startHeader .sectionEyebrow { margin-bottom: 0.55rem; }
+
+.textLink {
+  flex-shrink: 0;
+  color: var(--ifm-color-primary);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.textLink:hover {
+  color: var(--ifm-color-primary-dark);
+}
+
+.startCard {
+  min-height: 9.5rem;
+  padding: 1.35rem 1.5rem;
+}
+
+.startTag {
+  margin-bottom: 0.8rem;
+  font-size: 0.68rem;
+}
+
+.startTitle {
+  margin: 0 0 0.35rem;
+  font-size: 1.08rem;
+  letter-spacing: -0.01em;
+}
+
+.startDescription {
+  max-width: 28rem;
   margin: 0;
-  font-size: 0.9rem;
-  line-height: 1.55;
   color: var(--ifm-color-emphasis-700);
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+.startArrow {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.35rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ifm-color-primary);
+}
+
+.startArrow svg {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+@media screen and (min-width: 641px) and (max-width: 996px) {
+  .workflowGrid,
+  .productGrid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media screen and (max-width: 996px) {
+  .workflowSection,
+  .productSection,
+  .capabilitySection,
+  .startSection { padding: 4rem 0; }
+}
+
+@media screen and (max-width: 640px) {
+  .workflowGrid,
+  .productGrid,
+  .capabilityGrid,
+  .startGrid { grid-template-columns: 1fr; }
+
+  .capabilityCard { grid-template-columns: 3.5rem 1fr; }
+  .cardIcon { width: 3.5rem; height: 3.5rem; }
+  .featureSvg { width: 2.5rem; height: 2.5rem; }
+  .startHeader { display: block; }
+  .textLink { display: inline-block; margin-top: 1rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .card,
-  .quickstartCard,
+  .workflowCard,
+  .productCard,
+  .capabilityCard,
+  .startCard,
   .arrowChip,
-  .arrowChip svg {
-    transition: none;
-  }
+  .arrowChip svg { transition: none; }
 }

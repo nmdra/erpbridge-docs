@@ -1,68 +1,121 @@
 ---
 sidebar_position: 1
 title: FAQ
-description: Quick answers to the most common questions about ERPBridge and Bridgectl.
-keywords: [faq, overview, quick answers]
+description: Technical answers about ERPBridge architecture, supported clients, setup, security, and operations.
+keywords: [faq, overview, mcp, sdk, bridgectl, troubleshooting]
 ---
 
-# FAQ
+# Frequently asked questions
 
-Quick answers to the most common questions about the ERPBridge project.
+Use this page for orientation. Each answer links to the technical guide that owns the detailed configuration, protocol, or operational behavior.
 
-<details>
+## Understand ERPBridge
+
+<details className="faq-item">
 <summary>What is ERPBridge?</summary>
 
-ERPBridge is MCP middleware that connects legacy ERP systems to AI agents over the Model Context Protocol — without changing the ERP code base.
+ERPBridge is MCP middleware that connects legacy ERP systems to AI agents over the Model Context Protocol without changing the ERP code base. It exposes existing ERP API operations as discoverable MCP tools.
 
 </details>
 
-<details>
-<summary>How does it work?</summary>
+<details className="faq-item">
+<summary>How does the integration work?</summary>
 
-You register your ERP's APIs once with `bridgectl`. ERPBridge generates MCP tool schemas and exposes them over streamable HTTP or stdio, so AI agents can discover and call ERP functions directly.
+Register an ERP API with `bridgectl`, generate and validate MCP tool schemas, and apply those schemas to the server registry. The server exposes the active tools over streamable HTTP or stdio so MCP clients can discover and call them. See the [Onboarding Guide](./erpbridge/onboarding.mdx).
 
 </details>
 
-<details>
+<details className="faq-item">
 <summary>Do I have to modify my ERP?</summary>
 
-No. ERPBridge is non-invasive. It sits on top of your ERP and works with the APIs you already have.
+No. ERPBridge sits at the API boundary and uses the REST APIs you already operate. It does not require ERP code changes, API rewrites, or database migrations. See [Connectivity](./erpbridge/connectivity.mdx) for upstream requirements.
 
 </details>
 
-<details>
+<details className="faq-item">
 <summary>What ERP systems can I connect?</summary>
 
-Any ERP that exposes a REST API. Bring your own ERP: on-premise racks, cloud suites, or custom services.
+Any ERP or service that exposes a REST API can be registered. On-premises systems, cloud suites, and custom services are supported as long as the server can reach the API and the required authentication can be configured. See [Authentication](./erpbridge/auth.mdx).
 
 </details>
 
-<details>
-<summary>Which AI agents work with ERPBridge?</summary>
+<details className="faq-item">
+<summary>Which clients work with ERPBridge?</summary>
 
-Any MCP-capable client: Claude, Cursor, and other local agents via stdio; Postman and remote clients via streamable HTTP.
-
-</details>
-
-<details>
-<summary>What is Bridgectl?</summary>
-
-Bridgectl is the developer CLI for the ERPBridge ecosystem. It manages API registrations, tool schemas, cache, logs, and contexts.
+Any MCP-capable client can connect. Use stdio for local integrations, or streamable HTTP for remote and browser-capable clients. Claude, Cursor, Postman, and custom MCP clients are examples. See [Transports](./erpbridge/transports.mdx).
 
 </details>
 
-<details>
-<summary>Where do I start?</summary>
+## Products and getting started
 
-Follow the [Quickstart](./erpbridge/quickstart.mdx). A mock ERP and Docker compose setup let you evaluate the bridge in minutes.
+<details className="faq-item">
+<summary>What is bridgectl?</summary>
+
+`bridgectl` is the ERPBridge developer CLI. It manages API registrations, tool schemas, registry changes, cache, logs, contexts, API tokens, and shell completion. Start with the [bridgectl overview](./bridgectl/overview.mdx).
 
 </details>
 
-<details>
-<summary>Where can I get help?</summary>
+<details className="faq-item">
+<summary>Does bridgectl include an agent skill?</summary>
 
-- Report bugs and request features in [GitHub Issues](https://github.com/nmdra/ERPBridge/issues)
-- Read the [ERPBridge FAQ](./erpbridge/faq.mdx) for configuration and troubleshooting
-- See [CHANGELOG.md](https://github.com/nmdra/ERPBridge/blob/main/CHANGELOG.md) for release notes
+Yes. ERPBridge ships the `bridgectl-ops` agent skill for onboarding, maintenance, authentication, observability, troubleshooting, and sanitized bug reports. Read [Skill Usage](./bridgectl/skills.mdx) for its workflow and safety boundaries.
+
+</details>
+
+<details className="faq-item">
+<summary>What does the ERPBridge SDK provide?</summary>
+
+The `@erpbridge/sdk` package provides a typed MCP client, exact-name tool proxy, tool registry and direct-invoke wrappers, log and metrics access, health checks, and cache operations. See the [SDK overview](./sdk/overview.mdx) and [API reference](./sdk/api-reference.mdx).
+
+</details>
+
+<details className="faq-item">
+<summary>Where should I start?</summary>
+
+Follow the [Server Quickstart](./erpbridge/quickstart.mdx) to run the server and make a first MCP tool call. Use the [Onboarding Guide](./erpbridge/onboarding.mdx) when connecting your own ERP, or the [SDK Quickstart](./sdk/quickstart.mdx) when embedding the client in a TypeScript application.
+
+</details>
+
+<details className="faq-item">
+<summary>Can I try ERPBridge without a live ERP?</summary>
+
+Yes. The repository includes a FastAPI `mock-erp` service and Docker Compose setup for local evaluation. The [Quickstart](./erpbridge/quickstart.mdx) and [Docker Deployment Guide](./erpbridge/docker.mdx) use that environment.
+
+</details>
+
+## Security and operations
+
+<details className="faq-item">
+<summary>How is access secured?</summary>
+
+Authenticated routes accept the admin credential or a scoped API token. Tokens can be limited to `mcp`, `metrics`, or `logs`, and token values are shown only once at creation. See [Authentication](./erpbridge/auth.mdx) and the [API Token Guide](./erpbridge/tokens.mdx).
+
+</details>
+
+<details className="faq-item">
+<summary>What observability is available?</summary>
+
+The server exposes structured logs, recent-log and streaming endpoints, a health endpoint, and Prometheus metrics. The SDK and `bridgectl` provide typed or command-line access to those surfaces. See [REST API](./erpbridge/api.mdx) and [SDK Logs & Metrics](./sdk/logs-metrics.mdx).
+
+</details>
+
+<details className="faq-item">
+<summary>How does caching work?</summary>
+
+Caching is opt-in per tool and supports Redis or a bounded in-memory fallback. Tool schemas can define TTL and `flushOn` invalidation rules. See [Exact Match Caching](./erpbridge/caching.mdx).
+
+</details>
+
+<details className="faq-item">
+<summary>Where can I see what is shipped and planned?</summary>
+
+Use the [Roadmap](./roadmap/overview.mdx) for the current status of the Server, bridgectl, and SDK. Shipped, in-flight, and future work are labeled separately.
+
+</details>
+
+<details className="faq-item">
+<summary>Where can I report a problem or request a feature?</summary>
+
+Open an issue in the [ERPBridge GitHub repository](https://github.com/nmdra/ERPBridge/issues). Include the component, version, reproduction steps, relevant command or endpoint, and sanitized logs. For operational diagnosis, see [Skill Usage](./bridgectl/skills.mdx).
 
 </details>

@@ -1,19 +1,31 @@
 ---
 sidebar_position: 3
 title: Bridgectl
-description: Roadmap for the Bridgectl CLI.
+description: Shipped and planned capabilities for the ERPBridge developer CLI and agent skill.
+keywords: [roadmap, bridgectl, cli, agent skill, operations]
 ---
 
-# Bridgectl Roadmap
+# Bridgectl roadmap
 
-The CLI tool for managing ERPBridge tools, cache, logs, and contexts.
+`bridgectl` is the developer toolchain for registering ERP APIs, managing MCP tool resources, and operating an ERPBridge deployment. The CLI is shipped alongside the `bridgectl-ops` agent skill for repeatable AI-assisted workflows.
 
 ## Shipped
 
-- CLI interface with `api`, `tool`, `cache`, `log`, `context`, `token`, and completion commands.
-- Token management with `token create`, `token list`, and `token revoke`.
-- API token context support with precedence across `--token`, `BRIDGE_API_TOKEN`, and the active context.
+| Area | Current capability | Technical reference |
+| :--- | :--- | :--- |
+| API and tools | `api`, `tool`, schema generation, validation, declarative apply, version inspection, and deletion. | [Command overview](../bridgectl/overview.mdx) · [Tool commands](../bridgectl/bridgectl_tool.md) |
+| Operations | Cache statistics/flush, log tail/stats, contexts, shell completion, and version output. | [Cache commands](../bridgectl/bridgectl_cache.md) · [Log commands](../bridgectl/bridgectl_log.md) |
+| Authentication | `token create`, `token list`, and `token revoke`, with token precedence across `--token`, `BRIDGE_API_TOKEN`, and the active context. | [Token commands](../bridgectl/bridgectl_token.md) · [API Token Guide](../erpbridge/tokens.mdx) |
+| Agent workflow | The shipped `bridgectl-ops` skill covers onboarding, maintenance, authentication, observability, troubleshooting, and sanitized bug reports. | [Skill Usage](../bridgectl/skills.mdx) |
 
 ## In flight
 
-- **CLI Hygiene**: Structured JSON log tail filtering, server-side tool filtering, and atomic registry writes.
+### CLI hygiene
+
+Planned CLI work includes structured JSON log-tail filtering, server-side tool filtering, and atomic registry writes.
+
+## Related documentation
+
+- [bridgectl overview](../bridgectl/overview.mdx) for the typical register → generate → apply workflow.
+- [Complete command reference](../bridgectl/bridgectl_api.md) for generated flags and usage.
+- [Skill Usage](../bridgectl/skills.mdx) for the AI-agent operating procedure.

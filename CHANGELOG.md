@@ -20,10 +20,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **SDK Agent Guide** page (`docs/sdk/agent-guide.mdx`) mirroring the ERPBridge SDK repository's `AGENTS.md` — plan-first workflow, TDD, quality gates, release pipeline, and code conventions
 - SDK overview page now links to the SDK repository and its agent guide
 - Roadmap Phase 3 lists the ERPBridge SDK as an ecosystem item
-- **SDK docs v0.1.0**: real landing page (`docs/sdk/overview.mdx`) plus new `installation.mdx`, `quickstart.mdx` (npm/pnpm tabs), `mcp-tools.mdx`, and `logs-metrics.mdx` covering the shipped client surface
-- SDK listed in the `erpbridge/intro.mdx` components table and the SDK roadmap moved to Shipped (v0.1.0)
+- **SDK docs**: real landing page (`docs/sdk/overview.mdx`) plus new `installation.mdx`, `quickstart.mdx` (npm/pnpm tabs), `mcp-tools.mdx`, and `logs-metrics.mdx` covering the shipped client surface
+- SDK listed in the `erpbridge/intro.mdx` components table and the SDK roadmap moved to Shipped (v0.1.1)
 
-- Docs pages now show a **version badge** ("Version: Alpha (v0.2.0-alpha.5)") matching the upstream ERPBridge release tag
+- Docs now distinguish the independently released products: ERPBridge Server and `bridgectl` at **v0.3.0-alpha.1**, and `@erpbridge/sdk` at **v0.1.1**
 - Homepage redesigned with a modern dark theme: release badge pill, gradient title, atmospheric radial glows, and a **bridgectl terminal mockup** hero card
 - Homepage **Start building** section with 6 pathway cards (**Quickstart**, **Onboarding Guide**, **Bridgectl CLI**, **ERPBridge SDK**, **REST API Reference**, and **Roadmap**) with circular animated arrow-chip buttons
 - **Dedicated social card** (`static/img/social-card.svg`) for link previews on social platforms; replaces the SVG logo as the OG image
@@ -36,6 +36,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- ERPBridge now uses a clearer, scalable bridge-and-connection mark in the site logo and social card.
+- SDK documentation now replaces the shared docs badge with `SDK · v0.1.1`; Server and `bridgectl` pages retain the ERPBridge release badge.
+- Homepage and docs now show separate, current version lines for ERPBridge Server/`bridgectl` and `@erpbridge/sdk`.
+- Roadmap pages now separate shipped, in-flight, and future work with product status cards and technical references.
+- The global FAQ is organized by product, onboarding, security, and operations with links to the owning technical guides.
+- Homepage refreshed with marketing-led onboarding copy, an ERP-to-agent workflow, Server/bridgectl/SDK entry points, shipped capability highlights, and focused start routes; product introduction pages retain technical-first language.
+- Homepage product chooser now distinguishes the Server’s control-plane/runtime role from bridgectl’s developer tools and calls out the shipped `bridgectl-ops` agent skill.
+- Homepage hero subtitle now uses the product tagline: “Connect your legacy ERP to AI-based workflows without changing your code base.”
+- Navbar now exposes local search directly, with stronger keyboard focus treatment and responsive reduced-motion safeguards shared across the site.
 - Homepage feature-card icons marked `aria-hidden` so screen readers skip the decorative image and announce only the card title
 - Homepage hero terminal: the six `bridgectl` lines now fade up in sequence on first paint instead of appearing all at once (disabled under `prefers-reduced-motion`)
 - Homepage feature-card description text now uses the `--ifm-color-emphasis-700` Infima token instead of hardcoded slate values, so it tracks the light/dark theme

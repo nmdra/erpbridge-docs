@@ -1,20 +1,8 @@
-/**
- * CSS files with the .module.css suffix will be treated as CSS modules
- * and scoped locally.
- */
-
 .heroBanner {
-  padding: 5rem 0 4.5rem;
-  text-align: left;
   position: relative;
   overflow: hidden;
+  padding: 5.5rem 0 5rem;
   background: var(--ifm-background-color);
-}
-
-@media screen and (max-width: 996px) {
-  .heroBanner {
-    padding: 2.5rem 0 2rem;
-  }
 }
 
 .heroGlow {
@@ -38,11 +26,7 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background-image: linear-gradient(
-      to right,
-      var(--ifm-color-emphasis-200) 1px,
-      transparent 1px
-    ),
+  background-image: linear-gradient(to right, var(--ifm-color-emphasis-200) 1px, transparent 1px),
     linear-gradient(to bottom, var(--ifm-color-emphasis-200) 1px, transparent 1px);
   background-size: 44px 44px;
   opacity: 0.35;
@@ -59,47 +43,54 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 3rem;
-}
-
-@media screen and (max-width: 996px) {
-  .heroRow {
-    flex-direction: column;
-    gap: 2.5rem;
-  }
+  gap: 4rem;
 }
 
 .heroText {
-  flex: 1 1 46%;
+  flex: 1 1 48%;
   min-width: 0;
 }
 
 .heroVisual {
-  flex: 1 1 54%;
+  flex: 1 1 52%;
   min-width: 0;
 }
 
-/* Release badge */
 .releaseBadge {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
   padding: 0.3rem 0.85rem;
-  margin-bottom: 1.25rem;
-  border-radius: 9999px;
+  margin-bottom: 1.35rem;
   border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 9999px;
   background: var(--ifm-background-surface-color);
   color: var(--ifm-font-color-base);
   font-size: 0.8rem;
-  font-weight: 500;
-  letter-spacing: 0.01em;
+  font-weight: 600;
   text-decoration: none;
   transition: border-color 0.2s ease, transform 0.2s ease;
 }
 
+.releaseBadges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-bottom: 1.35rem;
+}
+
+.releaseBadges .releaseBadge {
+  margin-bottom: 0;
+}
+
+.releaseBadgeSdk {
+  border-color: color-mix(in srgb, var(--ifm-color-primary) 55%, var(--ifm-color-emphasis-300));
+  background: color-mix(in srgb, var(--ifm-color-primary) 8%, var(--ifm-background-surface-color));
+}
+
 .releaseBadge:hover {
-  text-decoration: none;
   border-color: var(--ifm-color-primary);
+  text-decoration: none;
   transform: translateY(-1px);
 }
 
@@ -114,101 +105,118 @@
 
 @keyframes pulse {
   0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.45;
-  }
+  100% { opacity: 1; }
+  50% { opacity: 0.45; }
 }
 
-/* Hero title with gradient accent */
-.heroTitle {
-  font-size: 3rem;
+.heroEyebrow {
+  margin: 0 0 0.8rem;
+  color: var(--ifm-color-primary);
+  font-size: 0.8rem;
   font-weight: 700;
-  letter-spacing: -0.02em;
-  margin-bottom: 0.75rem;
-  background: linear-gradient(120deg, var(--ifm-font-color-base) 40%, var(--ifm-color-primary) 100%);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.heroTitle {
+  max-width: 40rem;
+  margin-bottom: 1rem;
+  font-size: clamp(3.4rem, 8vw, 6.4rem);
+  font-weight: 750;
+  letter-spacing: -0.055em;
+  line-height: 1.1;
+  padding-bottom: 0.08em;
+  background: linear-gradient(120deg, var(--ifm-font-color-base) 38%, var(--ifm-color-primary) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-@media screen and (max-width: 996px) {
-  .heroTitle {
-    font-size: 2.25rem;
-  }
-}
-
 .heroSubtitle {
-  font-size: 1.15rem;
-  line-height: 1.6;
-  color: var(--ifm-color-emphasis-700);
-  max-width: 34rem;
+  max-width: 38rem;
   margin-bottom: 2rem;
+  color: var(--ifm-color-emphasis-700);
+  font-size: 1.18rem;
+  line-height: 1.65;
 }
 
 .buttons {
   display: flex;
-  align-items: center;
-  gap: 1rem;
   flex-wrap: wrap;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.primaryButton,
+.secondaryButton {
+  display: inline-flex;
+  align-items: center;
+  min-height: 3rem;
+  padding: 0.7rem 1.35rem;
+  border-radius: 9999px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
 }
 
 .primaryButton {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.7rem 1.6rem;
-  border-radius: 9999px;
   background: var(--ifm-color-primary);
   color: #fff;
-  font-weight: 600;
-  font-size: 0.95rem;
-  text-decoration: none;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.18);
-  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
 }
 
 .primaryButton:hover {
-  text-decoration: none;
   color: #fff;
-  transform: translateY(-1px);
   filter: brightness(1.08);
-  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.22);
+  text-decoration: none;
+  transform: translateY(-2px);
 }
 
 [data-theme='dark'] .primaryButton {
   color: #06281a;
 }
 
+[data-theme='dark'] .primaryButton:hover {
+  color: #06281a;
+}
+
 .secondaryButton {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.7rem 1.6rem;
-  border-radius: 9999px;
   border: 1px solid var(--ifm-color-emphasis-300);
   background: transparent;
   color: var(--ifm-font-color-base);
-  font-weight: 600;
-  font-size: 0.95rem;
-  text-decoration: none;
-  transition: border-color 0.15s ease, background-color 0.15s ease, transform 0.15s ease;
 }
 
 .secondaryButton:hover {
-  text-decoration: none;
   border-color: var(--ifm-color-primary);
   background: var(--ifm-color-emphasis-100);
-  transform: translateY(-1px);
+  color: var(--ifm-font-color-base);
+  text-decoration: none;
+  transform: translateY(-2px);
 }
 
-/* Terminal mockup */
+.heroProof {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem 1rem;
+  margin-top: 1.4rem;
+  color: var(--ifm-color-emphasis-600);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.heroProof span::before {
+  margin-right: 0.4rem;
+  color: var(--ifm-color-primary);
+  content: '✓';
+}
+
 .terminalCard {
-  border-radius: 14px;
+  overflow: hidden;
   border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 16px;
   background: var(--ifm-background-surface-color);
   box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.45);
-  overflow: hidden;
   font-family: var(--ifm-font-family-monospace);
   font-size: 0.8rem;
 }
@@ -221,7 +229,7 @@
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  padding: 0.6rem 0.9rem;
+  padding: 0.65rem 0.9rem;
   border-bottom: 1px solid var(--ifm-color-emphasis-200);
   background: var(--ifm-color-emphasis-100);
 }
@@ -233,35 +241,20 @@
   background: var(--ifm-color-emphasis-400);
 }
 
-.terminalDot:nth-child(1) {
-  background: #ff5f57;
-}
-
-.terminalDot:nth-child(2) {
-  background: #febc2e;
-}
-
-.terminalDot:nth-child(3) {
-  background: #28c840;
-}
+.terminalDot:nth-child(1) { background: #ff5f57; }
+.terminalDot:nth-child(2) { background: #febc2e; }
+.terminalDot:nth-child(3) { background: #28c840; }
 
 .terminalTitle {
   margin-left: 0.5rem;
-  font-size: 0.72rem;
   color: var(--ifm-color-emphasis-600);
+  font-size: 0.72rem;
 }
 
 .terminalBody {
+  overflow-x: auto;
   padding: 1rem 1.1rem 1.1rem;
   line-height: 1.55;
-  overflow-x: auto;
-}
-
-@media screen and (max-width: 640px) {
-  .terminalBody {
-    font-size: 0.7rem;
-    padding: 0.8rem 0.9rem 0.9rem;
-  }
 }
 
 .terminalLine {
@@ -273,69 +266,34 @@
 }
 
 @keyframes terminalReveal {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* One-shot staggered reveal for the six terminal lines (five bridgectl
-   command/output lines + the cursor line). */
-.terminalLine:nth-child(1) {
-  animation-delay: 0.05s;
-}
-
-.terminalLine:nth-child(2) {
-  animation-delay: 0.15s;
-}
-
-.terminalLine:nth-child(3) {
-  animation-delay: 0.25s;
-}
-
-.terminalLine:nth-child(4) {
-  animation-delay: 0.35s;
-}
-
-.terminalLine:nth-child(5) {
-  animation-delay: 0.45s;
-}
-
-.terminalLine:nth-child(6) {
-  animation-delay: 0.55s;
-}
-
-.terminalLine + .terminalLine {
-  margin-top: 0.55rem;
-}
+.terminalLine:nth-child(1) { animation-delay: 0.05s; }
+.terminalLine:nth-child(2) { animation-delay: 0.15s; }
+.terminalLine:nth-child(3) { animation-delay: 0.25s; }
+.terminalLine:nth-child(4) { animation-delay: 0.35s; }
+.terminalLine:nth-child(5) { animation-delay: 0.45s; }
+.terminalLine:nth-child(6) { animation-delay: 0.55s; }
+.terminalLine + .terminalLine { margin-top: 0.55rem; }
 
 .terminalPrompt {
+  margin-right: 0.5rem;
   color: var(--ifm-color-primary);
   font-weight: 700;
-  margin-right: 0.5rem;
   user-select: none;
 }
 
-.terminalCommand {
-  color: var(--ifm-font-color-base);
-}
+.terminalCommand { color: var(--ifm-font-color-base); }
 
 .terminalOutput {
-  padding-left: 1.15rem;
   margin-top: 0.2rem;
+  padding-left: 1.15rem;
 }
 
-.outputOk {
-  color: #28c840;
-}
-
-.outputMuted {
-  color: var(--ifm-color-emphasis-600);
-}
-
-.outputDim {
-  color: var(--ifm-color-emphasis-500);
-}
+.outputOk { color: #28c840; }
+.outputMuted { color: var(--ifm-color-emphasis-600); }
+.outputDim { color: var(--ifm-color-emphasis-500); }
 
 .terminalCursor {
   display: inline-block;
@@ -347,18 +305,32 @@
 }
 
 @keyframes blink {
-  to {
-    visibility: hidden;
-  }
+  to { visibility: hidden; }
+}
+
+@media screen and (max-width: 996px) {
+  .heroBanner { padding: 3.5rem 0 3rem; }
+  .heroRow { flex-direction: column; gap: 2.5rem; }
+  .heroText, .heroVisual { width: 100%; }
+  .heroVisual { max-width: 48rem; }
+}
+
+@media screen and (max-width: 640px) {
+  .heroBanner { padding: 2.5rem 0 2rem; }
+  .heroTitle { font-size: clamp(2.35rem, 12vw, 3.3rem); }
+  .heroSubtitle { font-size: 1.05rem; }
+  .terminalBody { padding: 0.8rem 0.9rem 0.9rem; font-size: 0.7rem; }
+  .primaryButton, .secondaryButton { width: 100%; justify-content: center; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .releaseDot,
-  .terminalCursor {
-    animation: none;
-  }
+  .terminalCursor,
   .terminalLine {
     animation: none;
+  }
+
+  .terminalLine {
     opacity: 1;
     transform: none;
   }

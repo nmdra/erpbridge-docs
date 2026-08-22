@@ -1,24 +1,63 @@
 ---
 sidebar_position: 1
 title: Roadmap Overview
-description: Where the ERPBridge family is today, what is planned next, and how to influence the direction.
+description: Current shipped capabilities, active work, and future direction for the ERPBridge family.
 keywords: [roadmap, projects, planning, status]
 ---
 
-# Roadmap Overview
+# Roadmap
 
-The ERPBridge project family connects legacy ERP systems to AI-based workflows without changing the ERP code base. This section outlines the current focus and future plans across the different parts of the project:
+This page is the status index for the ERPBridge family. Use it to distinguish capabilities that are shipped today from work that is actively being hardened and ideas that are still future direction.
 
-- [Server](server)
-- [Bridgectl](bridgectl)
-- [SDK](sdk)
+:::note Status labels
 
-## How to influence the roadmap
+- **Shipped** means the capability is available in the current documentation release.
+- **In flight** means work is active but may change before release.
+- **Future** means the direction is recorded, not a delivery commitment.
 
-- Report bugs and request features in [GitHub Issues](https://github.com/nmdra/ERPBridge/issues)
-- Check [CHANGELOG.md](https://github.com/nmdra/ERPBridge/blob/main/CHANGELOG.md) for the latest release notes
-- The milestone list on GitHub tracks what lands next
+:::
 
-## Adding a new project
+## At a glance
 
-Create a new section under `docs/<project>/` and register it in `sidebars.ts` and the navbar in `docusaurus.config.ts`.
+<div className="roadmap-summary-grid">
+  <a className="roadmap-summary-card" href="./server">
+    <span className="roadmap-summary-status roadmap-status-shipped">Shipped core</span>
+    <strong>ERPBridge Server</strong>
+    <span>MCP and REST middleware, registry, resilience, caching, observability, and security.</span>
+    <span className="roadmap-summary-link">View server roadmap →</span>
+  </a>
+  <a className="roadmap-summary-card" href="./bridgectl">
+    <span className="roadmap-summary-status roadmap-status-shipped">Shipped CLI</span>
+    <strong>bridgectl</strong>
+    <span>API, tool, cache, log, context, token, completion, and agent-skill workflows.</span>
+    <span className="roadmap-summary-link">View bridgectl roadmap →</span>
+  </a>
+  <a className="roadmap-summary-card" href="./sdk">
+    <span className="roadmap-summary-status roadmap-status-shipped">SDK v0.1.1 shipped</span>
+    <strong>ERPBridge SDK</strong>
+    <span>Typed MCP client, exact-name tool proxy, REST wrappers, and operational APIs.</span>
+    <span className="roadmap-summary-link">View SDK roadmap →</span>
+  </a>
+</div>
+
+## Release lines
+
+ERPBridge Server and `bridgectl` are released together. The SDK uses its own package version so client updates can ship independently.
+
+| Product | Current release | Release source |
+| :--- | :--- | :--- |
+| ERPBridge Server + `bridgectl` | **v0.3.0-alpha.1** | [ERPBridge releases](https://github.com/nmdra/ERPBridge/releases) |
+| `@erpbridge/sdk` | **v0.1.1** | [SDK releases](https://github.com/nmdra/erpbridge-sdk/releases) · [npm package](https://www.npmjs.com/package/@erpbridge/sdk) |
+
+## Where to start
+
+- **Evaluating ERPBridge:** run the [Server Quickstart](../erpbridge/quickstart.mdx).
+- **Connecting an ERP:** follow the [Onboarding Guide](../erpbridge/onboarding.mdx).
+- **Automating operations:** read [bridgectl Skill Usage](../bridgectl/skills.mdx).
+- **Embedding it in an application:** use the [SDK Quickstart](../sdk/quickstart.mdx).
+
+## Influence the roadmap
+
+- Report bugs and request features in [GitHub Issues](https://github.com/nmdra/ERPBridge/issues).
+- Review release changes in the [ERPBridge changelog](https://github.com/nmdra/ERPBridge/blob/main/CHANGELOG.md).
+- Use the project milestone list on GitHub to see planned sequencing.
