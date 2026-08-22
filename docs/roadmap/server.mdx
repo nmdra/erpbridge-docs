@@ -15,15 +15,13 @@ The ERPBridge server provides the core MCP and REST API surfaces.
 | MCP middleware | Streamable HTTP and stdio transports, tool discovery, calls, and notifications over MCP 2025-03-26 (negotiates up to 2025-11-25) |
 | Tool registry | Register ERPs, generate and validate tool schemas, soft/hard delete, versioned tools, 10-second reconciliation |
 | Resilience | 15s HTTP timeout, circuit breaker, retry with jitter on network errors and 429/5xx |
-| Caching | Optional exact-match cache (Redis), flush and stats endpoints, `flushOn` per-tool invalidation |
+| Caching | Optional exact-match cache with Redis or bounded in-memory storage, flush and stats endpoints, `flushOn` per-tool invalidation |
 | Observability | Structured logs (JSON in production), Prometheus metrics, per-component log levels |
 | Security | Credential references resolved from environment variables, secret redaction in logs, exit codes 0-7 |
 
 ## In flight (Hardening & Security)
 
-- **Token-based Authentication**: API token store, scoped bearer gates for MCP/metrics/logs, and an `API_AUTH_TOKEN` admin mode.
-- **Cache Hardening**: Memory cache fallback, full SHA-256 keys, and batch eviction.
-- **Security & Correctness**: Fail-closed credential resolution, robust log redaction, and accurate state hashing.
+- **Security & Correctness**: Continue hardening protocol boundaries, credential handling, log redaction, and state hashing.
 
 ## Future
 

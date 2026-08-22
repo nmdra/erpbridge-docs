@@ -50,7 +50,7 @@ When a tool executes, the connector authenticates to the upstream ERP using the 
 | `basic` | `Authorization: Basic <base64(key)>` | Basic HTTP auth. |
 | `bearer` | `Authorization: Bearer <key>` | OAuth2 / bearer tokens. |
 
-**Credential resolution** — `credentialRef` names an environment variable on the server. The connector reads `os.Getenv(credentialRef)` and uses that value as the key. If the variable is unset, the literal `credentialRef` string is used as a fallback so local testing works without server-side configuration.
+**Credential resolution** — `credentialRef` names an environment variable on the server. The connector reads `os.Getenv(credentialRef)` and uses that value as the key. If a non-empty reference is unset, the tool call fails closed. An empty reference means that the tool sends no outbound authentication.
 
 ```json title="Tool schema — outbound auth"
 "spec": {

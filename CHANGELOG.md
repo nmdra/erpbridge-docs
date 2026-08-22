@@ -16,7 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **SDK overview** now links the npm package (with provenance note) and the new API reference page.
 
 - **Roadmap** split into Server, Bridgectl, and SDK sections and updated with current active plans.
-- **Bridgectl Skill Usage** page (`docs/bridgectl/skills.mdx`) documenting the `bridgectl-add-api` AI agent skill — workflow overview, quick example, troubleshooting tables, and Mermaid diagram
+- **Bridgectl Skill Usage** page (`docs/bridgectl/skills.mdx`) documenting the `bridgectl-ops` AI agent skill — onboarding, maintenance, authentication, operations, troubleshooting, and sanitized bug-report workflows
 - **SDK Agent Guide** page (`docs/sdk/agent-guide.mdx`) mirroring the ERPBridge SDK repository's `AGENTS.md` — plan-first workflow, TDD, quality gates, release pipeline, and code conventions
 - SDK overview page now links to the SDK repository and its agent guide
 - Roadmap Phase 3 lists the ERPBridge SDK as an ecosystem item

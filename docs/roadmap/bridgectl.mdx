@@ -10,10 +10,10 @@ The CLI tool for managing ERPBridge tools, cache, logs, and contexts.
 
 ## Shipped
 
-- CLI interface with `api`, `tool`, `cache`, `log`, `context`, and completion commands.
+- CLI interface with `api`, `tool`, `cache`, `log`, `context`, `token`, and completion commands.
+- Token management with `token create`, `token list`, and `token revoke`.
+- API token context support with precedence across `--token`, `BRIDGE_API_TOKEN`, and the active context.
 
 ## In flight
 
 - **CLI Hygiene**: Structured JSON log tail filtering, server-side tool filtering, and atomic registry writes.
-- **Token Management**: Commands for `token create`, `list`, and `revoke`.
-- **API Token Contexts**: Plumbing to inject `api-token` transparently into all server requests.
