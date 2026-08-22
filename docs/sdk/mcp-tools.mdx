@@ -50,9 +50,10 @@ await client.close()
 - `connect()` negotiates the protocol version with the server (the client
   negotiates down from `2025-11-25`) and transparently **reconnects once**
   with a fresh session before giving up with a `ProtocolError`.
-- `callTool` returns a `ToolResult` — an unknown tool surfaces as
-  `NotFoundError`; a tool that runs but reports failure returns
-  `{ isError: true }`.
+- `callTool` returns the complete MCP `McpToolResult` envelope. Inspect its
+  `content` blocks and optional `structuredContent`; an unknown tool surfaces
+  as `NotFoundError`, and a tool that runs but reports failure returns
+  `{ isError: true }` in the envelope.
 - `close()` ends the session and its transport. The client facade's `close()`
   does the same.
 
@@ -76,15 +77,18 @@ against the tool's input schema before the call; an unknown property throws
 `client.registry` is **REST CRUD** over the stored tool resources — do not
 confuse it with `client.mcp.listTools()` (C3):
 
-- `registry.list()` returns the full wire shape (`RegistryTool`:
-  `apiVersion` / `kind` / `metadata` / `spec`), not the flat MCP
+- `registry.list({ name, version })` returns exact-filtered resources in the full
+  wire shape (`RegistryTool`: `apiVersion: "erpbridge.io/v1"` /
+  `kind: "MCPTool"` / `metadata` / `spec`), not the flat MCP
   `ToolDefinition`.
 - `registry.apply(def)` posts a tool definition; the server's admission
   controller validates it and rejects violations with HTTP 422 (surfaced as a
-  typed `ServerError`).
+  typed `ClientError`).
 - `registry.delete(name, version, { hard: true })` soft- or hard-deletes a
   tool version.
-- `client.invoke(name, args)` calls a registered tool directly over REST —
+- `client.invoke(name, args, { role })` calls a registered tool directly over REST;
+  the optional role is sent as `X-ERPBridge-Role` and is not added to the JSON
+  arguments —
   no MCP session needed. Built-in `system.*` tools are only reachable through
   the MCP path; the REST invoke endpoint resolves registered (stored) tools
   only.

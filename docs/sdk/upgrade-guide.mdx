@@ -1,0 +1,42 @@
+---
+sidebar_position: 7
+title: Upgrade guide
+description: Migrate an SDK consumer to the ERPBridge v0.3 compatibility contract.
+keywords: [sdk, upgrade, migration, MCP, authentication]
+---
+
+# Upgrade guide
+
+The ERPBridge v0.3.0-alpha.1 compatibility work is a pre-1.0 minor migration
+for SDK consumers.
+
+## MCP results are no longer flattened
+
+`client.mcp.callTool()` and `client.tools.<name>()` now return `McpToolResult`,
+the official MCP `CallToolResult` envelope. Text is not parsed as JSON and
+content blocks are not moved into a REST-shaped `result` field.
+
+Before:
+
+```ts
+const result = await client.tools.list_employees({})
+console.log(result.result)
+```
+
+After:
+
+```ts
+const result = await client.tools.list_employees({})
+console.log(result.content)
+console.log(result.structuredContent)
+```
+
+`client.invoke()` and `client.registry.invoke()` remain REST operations and
+continue to return `ToolResult` with a `result` field.
+
+## Credentials are now active
+
+The existing `token` and `tokenEnv` configuration fields now send bearer
+credentials when set. Applications that passed these fields while they were
+inert must account for the change. See [Authentication](./authentication.mdx)
+for precedence, surface overrides, and the consume-only token lifecycle.

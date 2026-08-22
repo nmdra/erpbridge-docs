@@ -59,6 +59,7 @@ import { NotFoundError } from '@erpbridge/sdk/types'
 ## Server requirements
 
 The SDK talks to an ERPBridge server on its default port `8080` — see the
-[server quickstart](../erpbridge/quickstart.mdx) to start one. Authentication
-is not part of v1: the SDK connects anonymously and surfaces server 401s as
-`AuthenticationError`. Token-based auth will follow the server's auth release.
+[server quickstart](../erpbridge/quickstart.mdx) to start one. The server may
+run in open mode, in which case the SDK connects anonymously, or in authenticated
+mode, in which case configure a token as described in
+[Authentication](./authentication.mdx).

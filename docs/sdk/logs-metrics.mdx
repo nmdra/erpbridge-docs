@@ -59,9 +59,10 @@ const flushed = await client.cache.flush({ all: true }) // { deleted, status }
 ```
 
 `flush()` targets a tool, a module, or the whole cache. The endpoints work with
-both the configured Redis backend and the bounded in-memory backend. A
-configured but unreachable Redis backend remains selected and surfaces a typed
-`ServerError` rather than silently switching to memory.
+both the configured Redis backend and the bounded in-memory backend. In memory
+mode, `redisMemory` is an empty string. A configured but unreachable Redis
+backend remains selected and surfaces a typed `ServerError` rather than
+silently switching to memory.
 
 ## The typed error hierarchy
 

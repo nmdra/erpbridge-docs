@@ -18,6 +18,7 @@ The `@erpbridge/sdk` TypeScript client library lets you integrate ERPBridge into
 - **Health and cache** — server health checks and cache statistics or flushing
 - **Tool registry and direct invoke** — manage registered tools over REST and call them without an MCP session
 - **Typed errors** — a single `ErpbridgeError` hierarchy across the whole surface
+- **Consume-only authentication** — send administrator-provisioned bearer tokens with per-surface routing
 - **Dual build** — ESM + CJS, Node.js >= 20, dependency-light
 - **Browser MCP/tools** — use the ESM MCP client and exact-name tool proxy in
   browser bundles when the server's `/mcp/` CORS policy is configured
@@ -30,6 +31,8 @@ The `@erpbridge/sdk` TypeScript client library lets you integrate ERPBridge into
 | [Quickstart](./quickstart.mdx) | First tool call in five lines |
 | [MCP tools](./mcp-tools.mdx) | The MCP client, the tool proxy, and the registry |
 | [Logs & metrics](./logs-metrics.mdx) | Log streaming, metrics, health, and cache |
+| [Authentication](./authentication.mdx) | Bearer credentials, scopes, and auth errors |
+| [Upgrade guide](./upgrade-guide.mdx) | Migrate MCP result handling and active credentials |
 | [API reference](./api-reference.mdx) | Every public export, the client facade, and the error hierarchy |
 
 ## Status

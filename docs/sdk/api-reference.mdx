@@ -54,7 +54,7 @@ Each factory takes a fully resolved `ErpbridgeConfig` and returns one REST surfa
 | :--- | :--- | :--- |
 | `createLogsApi(config)` | `LogsApi` | `recent()`, `stream(options)` |
 | `createMetricsApi(config)` | `MetricsApi` | `raw()`, `parsed()` |
-| `createRegistryApi(config)` | `RegistryApi` | `list()`, `apply()`, `delete()`, `invoke()` |
+| `createRegistryApi(config)` | `RegistryApi` | `list({ name?, version? })`, `apply()`, `delete()`, `invoke()` |
 | `createSystemApi(config)` | `SystemApi` | `health()`, `cache.stats()`, `cache.flush()` |
 
 ### `createToolsProxy(mcp)`
@@ -81,7 +81,7 @@ The MCP protocol wrapper (v2 streamable HTTP). Construct it directly with a reso
 | :--- | :--- | :--- |
 | `connect()` | `() => Promise<void>` | Opens the session; negotiates protocol versions; reconnects transparently once, then throws `ProtocolError` |
 | `listTools()` | `() => Promise<ToolDefinition[]>` | Lists server tools |
-| `callTool(name, args)` | `(name: string, args: ToolCallArguments) => Promise<ToolResult>` | Calls a tool; server-side failures come back as `ToolResult { isError: true }` |
+| `callTool(name, args)` | `(name: string, args: ToolCallArguments) => Promise<McpToolResult>` | Calls a tool and preserves the complete MCP result envelope |
 | `close()` | `() => Promise<void>` | Closes the session and transport |
 
 `INVALID_PARAMS_CODE` is the numeric `-32602` used for JSON-RPC invalid-parameter responses.
@@ -95,7 +95,7 @@ The MCP protocol wrapper (v2 streamable HTTP). Construct it directly with a reso
 | `mcp` | `McpClient` | Protocol surface: connect, list, call, close |
 | `tools` | `Record<string, ToolFunction>` | Exact-name tool proxy (outside `.registry` so tool names like `list` never collide with registry methods) |
 | `registry` | `RegistryApi` | REST registry CRUD over stored tool resources |
-| `invoke` | `(name, args) => Promise<ToolResult>` | Direct REST invocation, identical to `registry.invoke` |
+| `invoke` | `(name, args, { role? }) => Promise<ToolResult>` | Direct REST invocation; `role` is sent as `X-ERPBridge-Role` |
 | `logs` | `LogsApi` | `recent()` and `stream()` (SSE) |
 | `metrics` | `MetricsApi` | Raw and parsed Prometheus metrics |
 | `health` | `SystemApi['health']` | Server health check |
@@ -109,6 +109,7 @@ All errors extend `ErpbridgeError` and carry `status` and `code` where available
 ```
 ErpbridgeError
 ├── AuthenticationError      HTTP 401
+├── AuthorizationError       HTTP 403
 ├── NotFoundError            HTTP 404
 ├── RateLimitError           HTTP 429
 ├── ClientError              HTTP 4xx (other than 401/404/429)
@@ -116,7 +117,8 @@ ErpbridgeError
 └── ProtocolError            MCP/SSE transport failures
 ```
 
-`AuthenticationError` also surfaces server 401s in v1 even though the SDK itself sends no credentials — token support follows the server's auth release.
+`AuthenticationError` represents an unauthenticated request. `AuthorizationError`
+represents a forbidden request and may carry a server-declared `requiredScope`.
 
 ## Configuration
 
@@ -128,8 +130,10 @@ ErpbridgeError
 | `mcpUrl` | `string` | derived from `baseUrl` | MCP streamable HTTP endpoint |
 | `timeoutMs` | `number` | SDK default | Per-request timeout |
 | `fetch` | `typeof fetch` | `globalThis.fetch` | Injectable fetch for testing |
-| `token` | `string` | — | Inert in v1 (auth-free by design) |
-| `tokenEnv` | `string` | — | Inert in v1 |
+| `token` | `string` | — | Global bearer token; surface credentials may override it |
+| `tokenEnv` | `string` | `ERPBridge_TOKEN` | Environment-variable name for the global bearer token |
+| `declaredScopes` | `readonly ('mcp' \| 'metrics' \| 'logs')[]` | — | Optional local assertion used for fail-fast scope checks |
+| `auth` | `{ mcp?, metrics?, logs? }` | — | Per-surface token/tokenEnv/declaredScopes overrides |
 
 ## Shared types
 
@@ -140,7 +144,8 @@ Types used across the public surface:
 | `LogRecord` | A single log entry as returned by `logs.recent()` |
 | `LogStreamOptions` | Options for `logs.stream()` (follow, tail, etc.) |
 | `ToolDefinition` | Server tool metadata: name, description, input schema |
-| `ToolResult` | `{ content, isError? }` — MCP tool call result |
+| `McpToolResult` | Official MCP `CallToolResult` envelope (`content`, optional `structuredContent`, `isError`) |
+| `ToolResult` | REST direct-invoke envelope (`result`, optional `error`, `isError`) |
 | `ToolCallArguments` | `Record<string, unknown>` tool arguments |
 | `ToolFunction` | The callable tool signature used by the proxy |
 | `CacheStats` | Cache statistics from `cache.stats()` |

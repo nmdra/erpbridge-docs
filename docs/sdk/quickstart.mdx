@@ -38,7 +38,7 @@ const client = createClient({ baseUrl: 'http://localhost:8080' })
 
 await client.mcp.connect()
 const result = await client.tools.list_employees({ department: 'engineering' })
-console.log(result.result)
+console.log(result.content)
 ```
 
 That is the whole flow: create the client, connect the MCP session, call a tool
@@ -56,9 +56,11 @@ Every failure is an `ErpbridgeError` subclass:
 | Error | When |
 | :--- | :--- |
 | `AuthenticationError` | The server rejected the request as unauthenticated |
+| `AuthorizationError` | The server rejected the request as unauthorized |
 | `NotFoundError` | Unknown tool or resource |
 | `RateLimitError` | HTTP 429, carries `retryAfter` |
-| `ServerError` | HTTP 4xx/5xx, carries `status` and `body` |
+| `ClientError` | Other HTTP 4xx, carries `status` and `body` |
+| `ServerError` | HTTP 5xx, carries `status` and `body` |
 | `ProtocolError` | Protocol or session failure, carries a numeric `code` |
 
 ```ts

@@ -14,6 +14,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Added the API Token Guide and bridgectl token command references.
 - **SDK API reference** page (`docs/sdk/api-reference.mdx`) documenting the complete public surface of `@erpbridge/sdk` — entry points, every function, the client facade, the error hierarchy, configuration, and shared types. Replaces the generated TypeDoc site.
 - **SDK overview** now links the npm package (with provenance note) and the new API reference page.
+- **SDK authentication** page (`docs/sdk/authentication.mdx`) covering consume-only bearer credentials, per-surface token routing, declared scopes, and auth error handling.
+- **SDK upgrade guide** (`docs/sdk/upgrade-guide.mdx`) migrating consumers to the v0.3 compatibility contract: `McpToolResult` envelopes and active credential configuration.
+- SDK pages now document `AuthorizationError`, exact registry filters, REST invoke roles via `X-ERPBridge-Role`, and per-surface auth configuration.
 
 - **Roadmap** split into Server, Bridgectl, and SDK sections and updated with current active plans.
 - **Bridgectl Skill Usage** page (`docs/bridgectl/skills.mdx`) documenting the `bridgectl-ops` AI agent skill — onboarding, maintenance, authentication, operations, troubleshooting, and sanitized bug-report workflows
