@@ -47,7 +47,7 @@ This starts:
 - `mock-erp` (mock ERPNext) on port `8081`
 
 :::info Redis is optional
-The exact-match cache needs Redis. Without it the server still runs — only the cache endpoints return `503`. See [Caching](./caching.mdx).
+The exact-match cache uses a bounded in-memory LRU when Redis is not configured. Set `CACHE_MEMORY_MAX_ENTRIES=0` to disable memory-cache storage. See [Caching](./caching.mdx).
 :::
 
 ## 2. Verify the server is healthy

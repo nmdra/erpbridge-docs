@@ -9,7 +9,7 @@ Manage tool cache
 ### Synopsis
 
 The cache command provides tools to monitor and manage the middleware's 
-Redis-based caching system. You can view real-time statistics 
+backend-independent caching system. You can view real-time statistics
 and manually flush entries by tool, module, or for the entire system.
 
 ### Options

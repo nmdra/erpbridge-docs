@@ -89,7 +89,7 @@ Convert the OpenAPI spec of your ERP into MCP tool schemas:
 ./bridgectl tool generate --api erp --openapi mock-erp/openapi.yaml
 ```
 
-The command writes one JSON schema file per generated tool into `schemas/erp/` (one directory per module), for example `schemas/erp/list_employees.json`. It also prints the generated schemas to stdout — ignore that output; the files on disk are what you apply in the next step.
+The command writes one JSON schema file per generated tool into `schemas/erp/` (one directory per module), for example `schemas/erp/list_employees.json`. With `-o yaml`, it also prints one YAML sequence containing all generated tools to stdout.
 
 :::tip Check the path first
 If you are unsure the spec exists: `ls mock-erp/openapi.yaml`
@@ -107,8 +107,8 @@ Upload your schemas to the ERPBridge server. Point `apply` at the directory the 
 ./bridgectl tool apply -f schemas/erp/
 ```
 
-:::tip Why not redirect stdout to a YAML file
-The generator writes individual `.json` files to disk for you. If you pipe the stdout output to a file and apply it, `apply` fails — it accepts a single schema or a directory of schema files, not a multi-document manifest.
+:::tip Apply generated YAML directly
+The generator writes individual `.json` files to disk for verification and also supports a YAML manifest. If you redirect `bridgectl tool generate ... -o yaml` to a file, `bridgectl tool apply` applies every sequence item or YAML document in that file.
 :::
 
 ## Step 6 — Verify Everything Is Working

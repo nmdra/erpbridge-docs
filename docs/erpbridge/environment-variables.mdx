@@ -18,7 +18,8 @@ The server reads these variables directly from the environment. It does not load
 | `MCP_PORT` | `8080` | HTTP listen port. |
 | `MCP_TRANSPORT` | (unset) | `stdio` runs the server in stdio mode. Any other value runs the HTTP server. |
 | `DATABASE_PATH` | `data/erpbridge.db` | Path of the SQLite tool registry. The parent directory is created automatically. |
-| `REDIS_URL` | (empty) | Redis URL (for example `redis://localhost:6379`). If empty, the cache is disabled. |
+| `REDIS_URL` | (empty) | Redis URL (for example `redis://localhost:6379`). If empty, the server uses the bounded in-memory cache. |
+| `CACHE_MEMORY_MAX_ENTRIES` | `10000` | Maximum number of entries in the in-memory cache when `REDIS_URL` is empty. `0` disables memory-cache storage. Invalid or negative values use the default. |
 | `RATE_LIMIT_RPS` | `5.0` | Per-session requests per second (token bucket). |
 | `RATE_LIMIT_BURST` | `10` | Token bucket burst size. |
 | `BASE_URL` | `http://localhost:<MCP_PORT>` | Public URL of the server. Used for log lines and telemetry only. |
@@ -68,10 +69,3 @@ Set `BRIDGE_SERVER` or edit the config file before you use `bridgectl cache` or 
 | :--- | :--- |
 | `MOCK_ERP_PORT` | Declared in `.env.example` and the Makefile. The mock ERP hardcodes port `8081` in `main.py`. |
 | `MOCK_ERP_LOG_LEVEL` | Log level for the mock ERP (e.g. `debug`, `info`). Declared in `.env.example` (`debug`). |
-
-## Deprecated Variables
-
-| Variable | Status |
-| :--- | :--- |
-| `SCHEMAS_DIR` | Present in the local `.env`. No code reads it. Remove it. |
-| `EMBEDDER_URL` | Present in the local `.env`. No code reads it. Remove it. |

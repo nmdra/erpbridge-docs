@@ -8,7 +8,7 @@ Delete cache entries
 
 ### Synopsis
 
-Manually invalidate cache entries stored in Redis. 
+Manually invalidate cache entries stored by the configured cache backend.
 You can target a specific tool by name, an entire module using the --module flag, 
 or clear the entire cache with --all.
 

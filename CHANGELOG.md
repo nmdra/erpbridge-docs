@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- Documentation now covers the bounded in-memory cache fallback, generated YAML sequence and multi-document apply flow, exact tool filters, and MCP result-envelope boundaries.
 - **SDK API reference** page (`docs/sdk/api-reference.mdx`) documenting the complete public surface of `@erpbridge/sdk` — entry points, every function, the client facade, the error hierarchy, configuration, and shared types. Replaces the generated TypeDoc site.
 - **SDK overview** now links the npm package (with provenance note) and the new API reference page.
 
@@ -52,6 +53,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- Updated cache, environment, onboarding, quickstart, FAQ, REST API, and MCP client pages to match the current server behavior.
 - Corrected the MCP handshake URL from `POST /mcp/initialize` to `POST /mcp/` with a JSON-RPC `initialize` request in the Transports and Connectivity guides (drift from server.go:465)
 - Cache guide: TTL now documented as defaulting to `0` (no expiry), and `bridgectl cache flush` documented with the positional tool argument instead of the non-existent `--tool` flag
 - REST API reference: documented all 11 Prometheus metrics (names, types, labels), the `201` apply response envelope, the `422` admission status, and the `/api/tools/invoke`, `/api/cache/stats`, `/api/cache/flush` response envelopes (drift from internal/metrics/metrics.go and internal/mcp/server.go)
