@@ -39,6 +39,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- SDK release references updated from v0.1.1 to **v1.0.0** across the homepage release badge, announcement bar, SDK overview status callout, and roadmap pages; the SDK roadmap now lists consume-only authentication as Shipped and the upgrade guide describes the ERPBridge v0.3 compatibility contract as the breaking v1.0.0 release.
+- Product release versions (`ERPBridge + bridgectl` and `@erpbridge/sdk`) are centralized in `src/constants/releases.ts`; site chrome (announcement bar, docs version label, homepage badges) imports from it.
 - ERPBridge now uses a clearer, scalable bridge-and-connection mark in the site logo and social card.
 - SDK documentation now replaces the shared docs badge with `SDK · v0.1.1`; Server and `bridgectl` pages retain the ERPBridge release badge.
 - Homepage and docs now show separate, current version lines for ERPBridge Server/`bridgectl` and `@erpbridge/sdk`.

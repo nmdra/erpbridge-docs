@@ -38,7 +38,7 @@ origin/main (release-please commits); pull it separately.
   above; **Verify:** `npm run build` green; `build/llms-full.txt` and
   `build/docs/**/**.md` contain rendered versions with no `{*_RELEASE}`
   literals.)
-- [ ] **Task 2: Document the v1.0.0 release line.** Bump `SDK_RELEASE` to
+- [x] **Task 2: Document the v1.0.0 release line.** Bump `SDK_RELEASE` to
   `v1.0.0` and update every literal `v0.1.1` mention in
   `docs/sdk/overview.mdx`, `docs/roadmap/overview.mdx`, and
   `docs/roadmap/sdk.mdx`. Reword `docs/sdk/upgrade-guide.mdx` so the ERPBridge
