@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import Translate from '@docusaurus/Translate';
 import {ThemeClassNames} from '@docusaurus/theme-common';
 import {useDoc, useDocsVersion} from '@docusaurus/plugin-content-docs/client';
+import {SDK_RELEASE} from '@site/src/constants/releases';
 
 type DocVersionBadgeProps = {
   className?: string;
@@ -17,7 +18,7 @@ export default function DocVersionBadge({className}: DocVersionBadgeProps): Reac
   }
 
   const isSdkPage = metadata.permalink.includes('/docs/sdk/');
-  const versionLabel = isSdkPage ? 'SDK · v0.1.1' : versionMetadata.label;
+  const versionLabel = isSdkPage ? `SDK · ${SDK_RELEASE}` : versionMetadata.label;
 
   return (
     <span

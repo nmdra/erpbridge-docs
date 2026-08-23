@@ -3,6 +3,7 @@ import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import HomepageFeatures from '@site/src/components/HomepageFeatures';
+import {ERPBRIDGE_RELEASE, SDK_RELEASE} from '@site/src/constants/releases';
 import Heading from '@theme/Heading';
 
 import styles from './index.module.css';
@@ -12,12 +13,12 @@ function ReleaseBadge() {
     <div className={styles.releaseBadges} aria-label="Current ERPBridge releases">
       <Link to="/docs/roadmap/overview" className={styles.releaseBadge}>
         <span className={styles.releaseDot} aria-hidden="true" />
-        ERPBridge · v0.3.0-alpha.1
+        ERPBridge · {ERPBRIDGE_RELEASE}
       </Link>
       <Link
         to="/docs/sdk/overview"
         className={`${styles.releaseBadge} ${styles.releaseBadgeSdk}`}>
-        SDK · v0.1.1
+        SDK · {SDK_RELEASE}
       </Link>
     </div>
   );

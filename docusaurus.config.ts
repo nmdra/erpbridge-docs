@@ -1,6 +1,7 @@
 import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
+import {ERPBRIDGE_RELEASE, SDK_RELEASE} from './src/constants/releases';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
@@ -65,7 +66,7 @@ const config: Config = {
           lastVersion: 'current',
           versions: {
             current: {
-              label: 'ERPBridge + bridgectl · v0.3.0-alpha.1',
+              label: `ERPBridge + bridgectl · ${ERPBRIDGE_RELEASE}`,
               path: '',
               badge: true,
             },
@@ -117,7 +118,7 @@ const config: Config = {
     announcementBar: {
       id: 'alpha-notice',
       content:
-        '🚧 ERPBridge Server and bridgectl are in <b>Alpha (v0.3.0-alpha.1)</b>; the SDK follows its own release line (<b>v0.1.1</b>). <a href="/erpbridge-docs/docs/roadmap/overview">View release status →</a>',
+        `🚧 ERPBridge Server and bridgectl are in <b>Alpha (${ERPBRIDGE_RELEASE})</b>; the SDK follows its own release line (<b>${SDK_RELEASE}</b>). <a href="/erpbridge-docs/docs/roadmap/overview">View release status →</a>`,
       backgroundColor: '#1b1b1d',
       textColor: '#e0e0e0',
       isCloseable: true,
