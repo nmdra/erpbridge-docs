@@ -52,7 +52,7 @@ Rules for agents making changes to the SDK repository.
 
 ### Secrets
 
-- Resolve credentials from configuration or environment only — explicit `token`, configured `tokenEnv`, or the default `ERPBridge_TOKEN` env var. Keep token values out of code, logs, tests, and commits.
+- Resolve credentials from configuration or environment only — explicit `token`, configured `tokenEnv`, or the default `ERPBRIDGE_TOKEN` env var. `ERPBridge_TOKEN` remains a legacy fallback when the canonical variable is absent. Keep token values out of code, logs, tests, and commits.
 - When debugging or writing tests, assert header injection but never log the token value itself.
 - Auth is consume-only: the SDK sends `Authorization: Bearer`; it never creates, lists, reveals, revokes, refreshes, or stores tokens (that is server-admin work via bridgectl).
 

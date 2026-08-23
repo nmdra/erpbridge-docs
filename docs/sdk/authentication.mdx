@@ -22,20 +22,25 @@ import { createClient } from '@erpbridge/sdk'
 
 const client = createClient({
   baseUrl: 'https://bridge.example.com',
-  tokenEnv: 'ERPBridge_TOKEN',
+  tokenEnv: 'ERPBRIDGE_TOKEN',
   auth: {
-    metrics: { tokenEnv: 'ERPBridge_METRICS_TOKEN' },
-    logs: { tokenEnv: 'ERPBridge_LOGS_TOKEN' },
+    metrics: { tokenEnv: 'ERPBRIDGE_METRICS_TOKEN' },
+    logs: { tokenEnv: 'ERPBRIDGE_LOGS_TOKEN' },
   },
 })
 ```
+
+The canonical default environment variable is `ERPBRIDGE_TOKEN`. The legacy
+`ERPBridge_TOKEN` name is checked only when the canonical variable is absent,
+so existing deployments continue to work while they migrate.
 
 For each MCP, metrics, or logs request, the precedence is:
 
 1. surface `token`;
 2. surface `tokenEnv` value;
 3. global `token`;
-4. global `tokenEnv` value, defaulting to `ERPBridge_TOKEN`;
+4. global `tokenEnv` value, defaulting to `ERPBRIDGE_TOKEN`, then the legacy
+   `ERPBridge_TOKEN` value when the canonical variable is absent;
 5. anonymous access.
 
 An empty token is treated as absent. A browser bundle cannot read a Node
@@ -62,7 +67,7 @@ You may declare expected scopes for local fail-fast checks:
 
 ```ts
 const client = createClient({
-  tokenEnv: 'ERPBridge_TOKEN',
+  tokenEnv: 'ERPBRIDGE_TOKEN',
   declaredScopes: ['mcp'],
 })
 ```

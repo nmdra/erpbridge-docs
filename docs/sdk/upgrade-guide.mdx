@@ -40,3 +40,7 @@ The existing `token` and `tokenEnv` configuration fields now send bearer
 credentials when set. Applications that passed these fields while they were
 inert must account for the change. See [Authentication](./authentication.mdx)
 for precedence, surface overrides, and the consume-only token lifecycle.
+
+The default credential environment variable is now `ERPBRIDGE_TOKEN`.
+`ERPBridge_TOKEN` remains a compatibility fallback when the canonical variable
+is absent; migrate deployments to the all-caps name.

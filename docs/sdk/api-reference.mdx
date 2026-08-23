@@ -131,7 +131,7 @@ represents a forbidden request and may carry a server-declared `requiredScope`.
 | `timeoutMs` | `number` | SDK default | Per-request timeout |
 | `fetch` | `typeof fetch` | `globalThis.fetch` | Injectable fetch for testing |
 | `token` | `string` | — | Global bearer token; surface credentials may override it |
-| `tokenEnv` | `string` | `ERPBridge_TOKEN` | Environment-variable name for the global bearer token |
+| `tokenEnv` | `string` | `ERPBRIDGE_TOKEN` | Environment-variable name for the global bearer token; legacy `ERPBridge_TOKEN` is a fallback |
 | `declaredScopes` | `readonly ('mcp' \| 'metrics' \| 'logs')[]` | — | Optional local assertion used for fail-fast scope checks |
 | `auth` | `{ mcp?, metrics?, logs? }` | — | Per-surface token/tokenEnv/declaredScopes overrides |
 
