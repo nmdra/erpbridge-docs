@@ -8,6 +8,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- Added the Agentic Tools MCP Integration guide for Codex CLI, OpenCode,
+  OpenClaw, and Hermes Agent, including scoped bearer authentication and stdio
+  credential boundaries.
+
 - Documentation now covers the bounded in-memory cache fallback, generated YAML sequence and multi-document apply flow, exact tool filters, and MCP result-envelope boundaries.
 - Authentication documentation now covers hashed scoped API tokens, admin roles, bearer route policy, and one-time token disclosure.
 - REST, connectivity, schema, environment, and bridgectl pages now document per-tool roles, selector handling, CORS, and CLI token precedence.

@@ -47,6 +47,14 @@ Stdio is the preferred transport for local integrations. The client starts the E
 erpbridge-server --stdio
 ```
 
+The stdio stream reserves stdout for MCP JSON-RPC. ERPBridge writes its startup
+banner and diagnostics to stderr in this mode. HTTP bearer authentication does
+not apply to stdio; the child process receives upstream ERP credentials through
+its environment.
+
+See the [Agentic Tools MCP Integration](./agent-integrations.mdx) guide for
+Codex CLI, OpenCode, OpenClaw, and Hermes Agent examples.
+
 :::caution No session ID needed
 The stdio transport does not use `Mcp-Session-Id`. The process boundary itself is the session.
 :::
