@@ -51,3 +51,14 @@ origin/main (release-please commits); pull it separately.
   `docs/sdk/upgrade-guide.mdx`, `CHANGELOG.md`;
   **Verify:** `npm run build` green and no remaining `v0.1.1` references
   outside `CHANGELOG.md` history.)
+- [x] **Task 3: Correct OpenCode MCP config shape in agent-integrations.**
+  The guide showed a nested `mcp.servers.<name>` block; current opencode
+  releases validate a flat `mcp.<name>` record and reject the nested shape.
+  Fix both examples (stdio, remote HTTP), add required-in-practice
+  `"enabled": true`, document `oauth: false` for static bearer tokens, and
+  note the client-side `tools` glob control (`"erpbridge_*": false`).
+  Verified against https://opencode.ai/docs/mcp-servers and a live local
+  server (nested shape → config validation error; flat shape → connected).
+  (**Seam:** agent onboarding instructions for OpenCode; **Files:**
+  `docs/erpbridge/agent-integrations.mdx`, `CHANGELOG.md`; **Verify:**
+  `npm run build` green.)

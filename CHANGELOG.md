@@ -23,6 +23,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - SDK pages now document `AuthorizationError`, exact registry filters, REST invoke roles via `X-ERPBridge-Role`, and per-surface auth configuration.
 
 - **Roadmap** split into Server, Bridgectl, and SDK sections and updated with current active plans.
+
+### Fixed
+
+- The OpenCode section of the Agentic Tools MCP Integration guide now shows
+  the validated flat `mcp.<name>` config shape instead of the rejected
+  `mcp.servers.<name>` nesting, adds `"enabled": true`, documents
+  `oauth: false` for static bearer tokens, and notes client-side tool
+  filtering via `tools` glob patterns.
 - **Bridgectl Skill Usage** page (`docs/bridgectl/skills.mdx`) documenting the `bridgectl-ops` AI agent skill — onboarding, maintenance, authentication, operations, troubleshooting, and sanitized bug-report workflows
 - **SDK Agent Guide** page (`docs/sdk/agent-guide.mdx`) mirroring the ERPBridge SDK repository's `AGENTS.md` — plan-first workflow, TDD, quality gates, release pipeline, and code conventions
 - SDK overview page now links to the SDK repository and its agent guide

@@ -75,7 +75,9 @@ config.toml; codex mcp list and /mcp show connection status.
 
 ## OpenCode
 
-OpenCode uses mcp.servers in opencode.json or opencode.jsonc.
+OpenCode keys each MCP server by name directly under mcp in opencode.json or
+opencode.jsonc. Do not nest servers under mcp.servers; that shape fails
+config validation on current releases.
 
 Local stdio:
 
@@ -83,13 +85,12 @@ Local stdio:
 {
   "$schema": "https://opencode.ai/config.json",
   "mcp": {
-    "servers": {
-      "erpbridge": {
-        "type": "local",
-        "command": ["erpbridge-server", "--stdio"],
-        "environment": {
-          "ERP_PRIMARY_KEY": "{env:ERP_PRIMARY_KEY}"
-        }
+    "erpbridge": {
+      "type": "local",
+      "command": ["erpbridge-server", "--stdio"],
+      "enabled": true,
+      "environment": {
+        "ERP_PRIMARY_KEY": "{env:ERP_PRIMARY_KEY}"
       }
     }
   }
@@ -102,24 +103,27 @@ Remote Streamable HTTP:
 {
   "$schema": "https://opencode.ai/config.json",
   "mcp": {
-    "servers": {
-      "erpbridge": {
-        "type": "remote",
-        "url": "https://<erpbridge-host>/mcp/",
-        "oauth": false,
-        "headers": {
-          "Authorization": "Bearer {env:ERPBRIDGE_MCP_TOKEN}"
-        }
+    "erpbridge": {
+      "type": "remote",
+      "url": "https://<erpbridge-host>/mcp/",
+      "oauth": false,
+      "enabled": true,
+      "headers": {
+        "Authorization": "Bearer {env:ERPBRIDGE_MCP_TOKEN}"
       }
     }
   }
 }
 ```
 
-OpenCode uses the env:NAME substitution for environment-backed values. It does
-not document a server-native tool allowlist in this config shape; restrict
-exposure in the ERPBridge registry and use approval controls for writes.
-Restart the OpenCode session after changing the config.
+Set oauth to false so OpenCode does not start an OAuth flow against the
+static bearer-token endpoint. OpenCode uses the env:NAME substitution for
+environment-backed values. The mcp block has no per-server tool allowlist;
+restrict exposure in the ERPBridge registry and use approval controls for
+writes. Client-side, you can hide tools through the tools config with glob
+patterns, for example `"tools": { "erpbridge_*": false }`. Restart the
+OpenCode session after changing the config; `opencode mcp list` shows
+connection status.
 
 ## OpenClaw
 
