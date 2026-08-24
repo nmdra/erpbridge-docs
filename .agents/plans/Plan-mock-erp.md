@@ -2,7 +2,7 @@
 
 ## Goal
 
-Document the pinned MockERP 0.2.0 image, versioned OpenAPI contract, credential
+Document the pinned MockERP 0.2.1 image, versioned OpenAPI contract, credential
 boundary, SQLite reset workflow, and supported ERPNext-aligned fixture groups.
 Keep this site synchronized with ERPBridge's in-repository `docs/mock-erp.md`.
 
@@ -14,7 +14,7 @@ Keep this site synchronized with ERPBridge's in-repository `docs/mock-erp.md`.
   (**Verify:** `npm run build`.)
 - [x] **Task 2: Update the changelog and verify documentation safety.** Add an
   Unreleased entry, avoid literal credentials, and confirm the guide uses the
-  same `0.2.0` image and OpenAPI tag.
+  same `0.2.1` image and OpenAPI tag.
   (**Verify:** `npm run build` and `rg -n -i '(api[_-]?key|token|password):\\s*[^<$ {]' docs/erpbridge`.)
 
 ## Completion

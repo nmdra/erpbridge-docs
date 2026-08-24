@@ -23,7 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - SDK pages now document `AuthorizationError`, exact registry filters, REST invoke roles via `X-ERPBridge-Role`, and per-surface auth configuration.
 
 - **Roadmap** split into Server, Bridgectl, and SDK sections and updated with current active plans.
-- Added the MockERP Integration Contract guide for the pinned 0.2.0 image,
+- Added the MockERP Integration Contract guide for the pinned 0.2.1 image,
   credential boundary, SQLite reset flow, and supported fixture groups.
 
 ### Fixed
