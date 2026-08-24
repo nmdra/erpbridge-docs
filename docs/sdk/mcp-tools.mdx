@@ -49,7 +49,10 @@ await client.close()
 
 - `connect()` negotiates the protocol version with the server (the client
   negotiates down from `2025-11-25`) and transparently **reconnects once**
-  with a fresh session before giving up with a `ProtocolError`.
+  with a fresh session before giving up with a `ProtocolError` by default.
+  Set `mcpRetryPolicy: 'never'` for side-effecting workflows that must not
+  replay an operation after an ambiguous transport failure. In that mode the
+  first transport failure becomes a `ProtocolError` and no reconnect occurs.
 - `callTool` returns the complete MCP `McpToolResult` envelope. Inspect its
   `content` blocks and optional `structuredContent`; an unknown tool surfaces
   as `NotFoundError`, and a tool that runs but reports failure returns
