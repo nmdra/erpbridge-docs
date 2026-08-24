@@ -39,12 +39,16 @@ Environment variables for the server are set in the `docker-compose.yml` file.
 | :--- | :--- | :--- |
 | `BASE_URL` | Public URL of the MCP server. | `http://localhost:8080` |
 | `ERP_BASE_URL` | Base URL of the underlying ERP system. | `http://mock-erp:8081` |
+| `MOCK_ERP_IMAGE` | Pinned MockERP image. | `ghcr.io/nmdra/mockerp:0.2.0` |
+| `MOCK_ERP_VERSION` | MockERP release used for OpenAPI generation. | `0.2.0` |
+| `MOCK_ERP_CREDENTIALS_JSON` | JSON credentials for local/container use. | (required) |
+| `MOCK_ERP_CREDENTIALS_FILE` | Mounted JSON secret path. | (required alternative) |
 | `REDIS_URL` | URL for the Redis cache. | `redis://redis:6379` |
 | `DATABASE_PATH` | Path of the SQLite tool registry inside the container. | `/app/data/erpbridge.db` |
 | `RATE_LIMIT_RPS` | Per-session requests per second. | `10` |
 | `RATE_LIMIT_BURST` | Token bucket burst size. | `20` |
 
-For the full list of server environment variables, see the [Environment Variables Reference](./environment-variables.mdx).
+For the full list of server environment variables, see the [Environment Variables Reference](./environment-variables.mdx). See the [MockERP Integration Contract](./mock-erp.mdx) for the pinned release, credential boundary, SQLite reset, and supported fixture groups.
 
 ## 3. Tool Registry
 
@@ -58,7 +62,7 @@ To load tools into the registry, generate and apply the schemas from your host:
    ```
 2. Generate the tool schemas:
    ```bash title="Generate schemas"
-   ./bridgectl tool generate --api erp --openapi mock-erp/openapi.yaml -o yaml > schemas/erp/generated.yaml
+   make generate-tools
    ```
 3. Apply the schemas to the registry:
    ```bash title="Apply schemas"
@@ -79,11 +83,11 @@ You can use the local `bridgectl` binary to interact with the server running in 
    ```bash title="Verify connection"
    ./bridgectl tool get
    ```
-3. **Generate a new tool:**
-   ```bash title="Generate a tool from OpenAPI"
-   ./bridgectl tool generate --api mock-erp --openapi mock-erp/openapi.yaml -o yaml > schemas/mock-erp/generated.yaml
+3. **Generate the pinned MockERP tools:**
+   ```bash title="Generate and apply tools"
+   make generate-tools
    ```
-   The generated YAML goes to stdout. Redirect it to a file as shown, then apply it with `bridgectl tool apply -f`.
+   The Makefile downloads the versioned MockERP OpenAPI contract, generates the tool YAML, and applies it to ERPBridge.
 
 ## 5. Logs & Monitoring
 

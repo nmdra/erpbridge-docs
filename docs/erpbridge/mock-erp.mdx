@@ -1,0 +1,70 @@
+---
+sidebar_position: 14
+title: MockERP Integration Contract
+description: Use the pinned SQLite-backed MockERP fixture with ERPBridge.
+keywords: [mockerp, docker, sqlite, erpnext, integration testing]
+---
+
+# MockERP Integration Contract
+
+ERPBridge uses [MockERP](https://github.com/nmdra/mockerp) as a versioned,
+ERPNext-compatible ERP fixture. The Compose service name is `mock-erp` and the
+internal URL is `http://mock-erp:8081`.
+
+## Pinned release
+
+Use the same release for the image and OpenAPI contract:
+
+- Image: `ghcr.io/nmdra/mockerp:0.2.0`
+- Contract: `https://raw.githubusercontent.com/nmdra/mockerp/v0.2.0/openapi.yaml`
+
+Update both values together. Do not use `latest`.
+
+## Credentials
+
+MockERP fails closed when no credential source is configured. Set one of these
+variables before starting the Compose stack:
+
+- `MOCK_ERP_CREDENTIALS_JSON` for local development.
+- `MOCK_ERP_CREDENTIALS_FILE` for a mounted JSON Docker secret.
+
+The JSON document can contain `credentials`, `sessions`, and `basic` lists.
+Each identity has a role and identity name. Never commit credential values.
+
+## SQLite data and reset
+
+MockERP stores data at `/data/mockerp.db`. Compose persists this path in the
+`mockerp-data` volume. Startup applies idempotent migrations and seeds the
+fictional Serendib Consumer Products scenario.
+
+The reset command is for development only:
+
+```bash
+MOCK_ERP_ENV=development MOCK_ERP_ALLOW_RESET=true \
+  docker compose exec mock-erp python -m seed --reset
+```
+
+Do not run this command in a shared environment.
+
+## Supported fixture groups
+
+The API follows ERPNext-style `/api/resource/{DocType}` paths and `data`
+response envelopes. MockERP 0.2.0 includes:
+
+- organization, roles, sequential approvals, and redacted audit events;
+- LKR chart of accounts, journals, payments, and AR/AP open items;
+- employees, attendance, leave, payroll, advances, and expense claims;
+- customers, suppliers, items, UOMs, warehouses, and stock ledger;
+- procure-to-pay and order-to-cash source-document flows;
+- a Floor Cleaner 5L manufacturing flow and fixed assets; and
+- role-gated operational reports and audit readback.
+
+`make generate-tools` downloads the pinned contract before tool generation.
+Generated schemas remain in the ignored `schemas/` directory.
+
+## Integration fixture
+
+The authenticated `GET /api/resource/Plugin Fixture` endpoint returns a stable
+source object for external-plugin tests. The authenticated
+`POST /api/integration/echo` endpoint returns the submitted JSON object without
+request metadata. Its readback endpoint is process-local test state.

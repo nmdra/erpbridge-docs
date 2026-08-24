@@ -75,5 +75,8 @@ Set `BRIDGE_SERVER` or edit the config file before you use `bridgectl cache` or 
 
 | Variable | Purpose |
 | :--- | :--- |
-| `MOCK_ERP_PORT` | Declared in `.env.example` and the Makefile. The mock ERP hardcodes port `8081` in `main.py`. |
-| `MOCK_ERP_LOG_LEVEL` | Log level for the mock ERP (e.g. `debug`, `info`). Declared in `.env.example` (`debug`). |
+| `MOCK_ERP_PORT` | Host port exposed for MockERP. | `8081` |
+| `MOCK_ERP_IMAGE` | Pinned MockERP image. | `ghcr.io/nmdra/mockerp:0.2.0` |
+| `MOCK_ERP_VERSION` | Release used for OpenAPI generation. | `0.2.0` |
+| `MOCK_ERP_CREDENTIALS_JSON` | JSON credentials for local/container use. | required |
+| `MOCK_ERP_CREDENTIALS_FILE` | Mounted JSON secret path. | required alternative |

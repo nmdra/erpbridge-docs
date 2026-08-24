@@ -85,14 +85,14 @@ It helps the LLM layer understand the purpose of the API. The command fails with
 
 Convert the OpenAPI spec of your ERP into MCP tool schemas:
 
-```bash title="Generate schemas from OpenAPI"
-./bridgectl tool generate --api erp --openapi mock-erp/openapi.yaml
+```bash title="Generate and apply schemas from the pinned OpenAPI"
+make generate-tools
 ```
 
 The command writes one JSON schema file per generated tool into `schemas/erp/` (one directory per module), for example `schemas/erp/list_employees.json`. With `-o yaml`, it also prints one YAML sequence containing all generated tools to stdout.
 
-:::tip Check the path first
-If you are unsure the spec exists: `ls mock-erp/openapi.yaml`
+:::tip Check the pinned contract first
+The Makefile downloads `https://raw.githubusercontent.com/nmdra/mockerp/v0.2.0/openapi.yaml` before generation.
 :::
 
 :::note
@@ -258,8 +258,8 @@ make build
 # Register API
 ./bridgectl api register --name erp --url http://localhost:8081 --module erp --description "..."
 
-# Generate schemas from OpenAPI spec
-./bridgectl tool generate --api erp --openapi mock-erp/openapi.yaml -o yaml > schemas/erp/generated.yaml
+# Generate and apply schemas from the pinned MockERP contract
+make generate-tools
 
 # Apply all tools
 ./bridgectl tool apply -f schemas/erp/
