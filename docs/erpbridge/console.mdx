@@ -79,9 +79,12 @@ Prometheus queries or percentile latency.
 
 The Plugins page and tool detail panels show exact plugin and tool versions,
 active state, binding phase, priority, failure policy, timeout, and
-configuration-present state. The topology also shows plugin and binding nodes
-when both read-only plugin list routes are available. The console does not
-deploy plugins or call plugin endpoints. It never shows plugin endpoints,
-credentials, static configuration, or raw invocation payloads, and reports
-plugin health as unknown unless the API provides an approved health field.
-Older deployments without the plugin routes show an unavailable feature state.
+configuration-present state. Each plugin entry links to an exact-version
+plugin detail page with matching bindings and unknown health. Tool binding
+entries link back to that plugin detail page. The topology also shows plugin
+and binding nodes when both read-only plugin list routes are available. The
+console does not deploy plugins or call plugin endpoints. It never shows plugin
+endpoints, credentials, static configuration, or raw invocation payloads, and
+reports plugin health as unknown unless the API provides an approved health
+field. Older deployments without the plugin routes show an unavailable feature
+state.
