@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- Documented the full green-accent Console workspace redesign: grouped Monitor, Inventory, and Diagnose navigation; context-aware Overview; session-local metric trends; responsive mobile navigation; accessible stale/empty states; and safe drill-down links.
 - Added the read-only ERPBridge Console guide and `bridgectl web` command reference, including its loopback security boundary, safe data projections, topology match states, live metrics limitations, and plugin feature gate.
 - Documented clickable tool inventory entries and the read-only tool manifest detail view.
 - Documented the light-mode default and collapsible ERPBridge Console sidebar.
