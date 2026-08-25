@@ -1,0 +1,153 @@
+---
+sidebar_position: 11
+title: External Plugins
+description: Configure externally operated HTTP plugins that transform successful ERPBridge tool responses.
+keywords: [plugins, external process, response transformation, bindings, control plane]
+---
+
+# External Plugins
+
+ERPBridge can send a successful tool result to an HTTP plugin process before it
+returns the result to an MCP client or direct REST caller. The plugin process is
+outside ERPBridge. ERPBridge stores its endpoint and configuration, but it does
+not install, start, download, upgrade, or schedule plugin code.
+
+:::warning Separate deployment boundary
+Deploy and operate plugin images separately. Use a pinned image from the
+[`ERPBridge-Plugins`](https://github.com/nmdra/ERPBridge-Plugins) repository (or
+your own compatible process), then apply the matching ERPBridge resources.
+:::
+
+## Resource model
+
+A `Plugin` identifies one exact plugin release and its endpoint:
+
+```yaml
+apiVersion: erpbridge.io/v1
+kind: Plugin
+metadata:
+  name: response-transformer
+  version: 1.0.0
+  isActive: true
+spec:
+  endpoint: http://plugin-host:9000
+  timeoutMilliseconds: 5000
+```
+
+The endpoint must be an absolute `http` or `https` URL without userinfo, query
+parameters, or a fragment. ERPBridge appends `/v1/process`. The timeout is
+bounded from 1 millisecond to 5 minutes.
+
+A `PluginBinding` connects exact plugin and tool versions:
+
+```yaml
+apiVersion: erpbridge.io/v1
+kind: PluginBinding
+metadata:
+  name: transform-orders
+  isActive: true
+spec:
+  pluginRef:
+    name: response-transformer
+    version: 1.0.0
+  toolRef:
+    name: list-orders
+    version: 1.0.0
+  phase: after_response
+  priority: 10
+  failurePolicy: continue
+  config:
+    mode: safe
+```
+
+The only supported phase is `after_response`. Active bindings run in ascending
+priority order after the tool result passes its output schema. A binding never
+moves automatically to a new tool or plugin version. Apply a new binding when
+either version changes.
+
+Soft deletion retains a resource with `isActive: false`. A plugin cannot be
+hard-deleted while an active binding references that exact version. Binding
+admission requires active exact plugin and tool references.
+
+## HTTP protocol
+
+The protocol is synchronous JSON over `POST /v1/process`. ERPBridge sends only
+these fields:
+
+```json
+{
+  "protocolVersion": "v1",
+  "invocationId": "generated-id",
+  "tool": {"name": "list-orders", "version": "1.0.0"},
+  "result": {"id": "order-1"},
+  "config": {"mode": "safe"}
+}
+```
+
+The plugin returns a JSON object with a `result` member:
+
+```json
+{"result":{"id":"order-1","processed":true}}
+```
+
+The request does not contain original arguments, inbound headers, caller
+identity, caller tokens, or ERP credentials. Request and response JSON are
+limited to 1 MiB. ERPBridge disables redirects and retries, and it applies the
+request context and configured timeout.
+
+A plugin can transform the result for the next binding. ERPBridge validates the
+transformed result against the tool output schema after every plugin. With the
+default `continue` policy, a timeout, non-2xx response, malformed or oversized
+JSON, or invalid transformed result returns the original validated result. The
+`fail` policy returns a generic tool error without exposing the endpoint,
+payload, credentials, or plugin error body.
+
+## Cache and transports
+
+Bindings run only after a successful tool execution and only on a cache miss.
+The cache stores the final transformed MCP result, so a cache hit does not call
+the plugin. Applying, changing, soft-deleting, or hard-deleting a plugin or
+binding flushes affected target-tool cache entries.
+
+The same pipeline runs for MCP `tools/call` and `POST /api/tools/invoke`. The
+MCP envelope and the direct-invoke `{ "result": ... }` compatibility envelope
+remain unchanged. A tool without an active binding keeps its existing result.
+
+## Control-plane API and CLI
+
+Plugin and binding routes use the admin authentication policy:
+
+- `POST` and `GET /apis/erpbridge.io/v1/plugins`
+- `DELETE /apis/erpbridge.io/v1/plugins?name=<name>&version=<version>`
+- `POST` and `GET /apis/erpbridge.io/v1/pluginbindings`
+- `DELETE /apis/erpbridge.io/v1/pluginbindings?name=<name>`
+
+Plugin deletion is soft by default. Add `hard=true` for permanent deletion.
+The server returns `409 Conflict` when an active binding protects a plugin.
+
+Use the CLI for declarative files:
+
+```bash
+bridgectl plugin validate -f plugin.yaml
+bridgectl plugin apply -f plugin.yaml
+bridgectl plugin get response-transformer@1.0.0 -o yaml
+bridgectl plugin binding validate -f binding.yaml
+bridgectl plugin binding apply -f binding.yaml
+bridgectl plugin binding get transform-orders -o yaml
+```
+
+Apply accepts JSON, YAML sequences, multi-document YAML, and resource
+directories. Use `--hard --yes` for a non-interactive permanent delete.
+
+## Docker integration fixture
+
+The ERPBridge repository contains an opt-in test that uses the deterministic
+`mock-plugin` from the separate polyrepo and the pinned MockERP fixture:
+
+```bash
+make test-plugin-integration
+```
+
+The script uses the isolated Compose project `erpbridge-plugin-test`, waits for
+both HTTP services, runs MCP initialize/list/call and direct-invoke assertions,
+and removes only that project's containers, network, and volumes on exit.

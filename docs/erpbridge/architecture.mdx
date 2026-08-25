@@ -92,11 +92,43 @@ The controller runs every 10 seconds. It compares the database state against the
 - If a tool is inactive (soft-deleted) or missing from SQLite, the controller deregisters it from the MCP runtime.
 - If a tool changes, the controller re-registers the new version.
 
-Each check uses a state hash (`count-activeSum-max(updated_at)`) from the store. If the hash is unchanged, the controller skips the pass. This keeps the check cheap.
+Each check uses a SHA-256 state hash over ordered tool, plugin, and binding identity, activity, update timestamp, and stored resource data. If the hash is unchanged, the controller skips the pass. This keeps the check cheap.
 
 When the registry changes, the controller sends the `notifications/tools/list_changed` notification to all active MCP sessions.
 
 The controller also runs immediately after a `tool apply` HTTP request. The tool is visible to agents right after apply. It does not wait for the next 10-second tick.
+
+## External response plugins
+
+ERPBridge can pass a successful, normalized tool result to an externally
+operated HTTP plugin. The control plane stores the endpoint and exact release,
+but never installs, starts, upgrades, or schedules plugin code.
+
+A `PluginBinding` connects one exact plugin version to one exact tool version.
+Active `after_response` bindings run synchronously in ascending priority order
+before MCP or direct-invoke serialization. They do not add tools to `tools/list`.
+The plugin request contains only the protocol version, invocation ID, exact tool
+identity, normalized result, and binding configuration. It excludes original
+arguments, inbound headers, caller identity, caller tokens, and ERP credentials.
+
+```mermaid
+sequenceDiagram
+    participant Client as MCP or direct client
+    participant Bridge as ERPBridge
+    participant ERP as ERP
+    participant Plugin as External plugin
+    Client->>Bridge: invoke exact tool
+    Bridge->>ERP: execute tool request
+    ERP-->>Bridge: normalized validated result
+    Bridge->>Plugin: POST /v1/process
+    Plugin-->>Bridge: transformed result
+    Bridge-->>Client: final result
+```
+
+The pipeline runs only on cache misses. The cache stores the final transformed
+MCP result, and plugin or binding lifecycle changes flush affected tool cache
+entries. `continue` keeps the original result after a plugin failure; `fail`
+returns a generic tool error.
 
 ## Tool Generation & Templating
 

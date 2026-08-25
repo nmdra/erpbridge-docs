@@ -25,6 +25,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **Roadmap** split into Server, Bridgectl, and SDK sections and updated with current active plans.
 - Added the MockERP Integration Contract guide for the pinned 0.2.1 image,
   credential boundary, SQLite reset flow, and supported fixture groups.
+- Added the External Plugins guide covering exact-version resources, the
+  synchronous HTTP protocol, failure policies, cache behavior, and the
+  separate plugin deployment boundary.
+- Updated architecture, REST API, Docker, and bridgectl references for
+  external plugins and the opt-in black-box integration fixture.
 
 ### Fixed
 
