@@ -11,6 +11,12 @@ ERPBridge uses [MockERP](https://github.com/nmdra/mockerp) as a versioned,
 ERPNext-compatible ERP fixture. The Compose service name is `mock-erp` and the
 internal URL is `http://mock-erp:8081`.
 
+:::caution Testing and learning only
+MockERP uses fictional data. Use it to test and learn ERPBridge before you
+integrate ERPBridge with a real workload. Do not use MockERP as a production
+ERP or as a security boundary.
+:::
+
 ## Pinned release
 
 Use the same release for the image and OpenAPI contract:
