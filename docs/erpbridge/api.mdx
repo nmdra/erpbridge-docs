@@ -272,6 +272,12 @@ are scoped by verified role.
 | Endpoint | Method | Description |
 | :--- | :--- | :--- |
 | `/metrics` | `GET` | Prometheus-formatted metrics. |
+| `/api/info` | `GET` | Authenticated safe build and runtime metadata. |
+
+`/api/info` returns the ERPBridge version, optional commit and build date,
+cache backend label, active tool count, and observation timestamp. It does not
+return credentials or ERP configuration. Older deployments may not implement
+this optional endpoint; clients should treat a `404` as unavailable.
 
 ### Prometheus Metrics
 

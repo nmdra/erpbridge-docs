@@ -1,0 +1,87 @@
+---
+sidebar_position: 6
+title: ERPBridge Console
+description: Run the read-only local ERPBridge Console with bridgectl web.
+keywords: [console, bridgectl web, monitoring, topology, logs, metrics]
+---
+
+# ERPBridge Console
+
+The console starts in light mode. Its sidebar can be collapsed on wide screens
+when more room is needed for tables and topology views.
+
+`bridgectl web` starts a read-only local console for configured ERPBridge
+contexts. The homepage notice directs monitoring to the console and configuration
+or modification work to `bridgectl`. It shows deployment availability, health, MCP tools, cache statistics,
+projected logs, live metrics, API-to-MCP topology, and safe external plugin
+metadata. Use `bridgectl` for mutations such as applying tools, flushing cache,
+invoking tools, and managing tokens.
+
+## Start
+
+```bash
+bridgectl web
+```
+
+The command binds to `127.0.0.1` on an available port and opens the default
+browser. Use these options when needed:
+
+```bash
+bridgectl web --no-open  # keep the browser closed
+bridgectl web --url      # print the URL without opening the browser
+bridgectl web --dev      # proxy frontend development traffic to Vite
+```
+
+The process stops on interrupt or termination. The console does not listen on a
+remote address and does not discover Kubernetes, Docker, or cloud deployments.
+
+## Security boundary
+
+The console is a local backend-for-frontend. It keeps ERPBridge bearer tokens,
+ERP credentials, registry credentials, and raw upstream responses on the CLI
+side. Each launch creates a one-time high-entropy capability. The URL carries
+this capability in a fragment; the browser removes the fragment and sends it
+in `X-ERPBridge-Console-Capability` for data and log-stream requests.
+
+The server validates the exact loopback `Host` and same-origin `Origin`. It
+validates configured upstream URLs, disables redirects, forwards no browser
+headers, allows only fixed read operations, and bounds response sizes. It does
+not provide routes to apply or delete tools, flush cache, invoke tools, create
+or revoke tokens, deploy plugins, or restart a deployment.
+
+## Data and topology
+
+The console reads named `bridgectl` contexts. Health, metrics, and tools use the
+configured MCP server; cache and logs use the management server. Optional server
+metadata comes from `/api/info`. Missing optional endpoints show as unavailable
+and do not expose upstream error bodies.
+
+The topology matches sanitized tool definitions to local API registry entries
+and shows exact plugin binding relationships when the plugin API is available.
+It labels API relationships `exact`, `base-prefix`, `ambiguous`, or `unresolved`.
+It does not claim cross-context ownership when the registry has no context field,
+and it shows paths rather than full upstream URLs. A keyboard-accessible
+relationship list is available beside the interactive canvas.
+
+The Tools page is a filterable inventory. Select a tool name to open its
+read-only manifest view. The view presents the tool description and guidance,
+input fields, execution path, response path, security roles, routing hints,
+cache settings, and lifecycle metadata. It omits credential references,
+default values, raw output schemas, and full upstream URLs.
+
+Logs are projected into a fixed safe shape and omit raw payloads and unknown
+fields. The Logs page shows the most recent valid timestamps first. Metrics are
+live scrape samples. The console calculates rates only from
+samples observed during the current session; it does not provide historical
+Prometheus queries or percentile latency.
+
+## Plugins
+
+The Plugins page and tool detail panels show exact plugin and tool versions,
+active state, binding phase, priority, failure policy, timeout, and
+configuration-present state. The topology also shows plugin and binding nodes
+when both read-only plugin list routes are available. The console does not
+deploy plugins or call plugin endpoints. It never shows plugin endpoints,
+credentials, static configuration, or raw invocation payloads, and reports
+plugin health as unknown unless the API provides an approved health field.
+Older deployments without the plugin routes show an unavailable feature state.

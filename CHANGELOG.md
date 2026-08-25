@@ -8,6 +8,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- Added the read-only ERPBridge Console guide and `bridgectl web` command reference, including its loopback security boundary, safe data projections, topology match states, live metrics limitations, and plugin feature gate.
+- Documented clickable tool inventory entries and the read-only tool manifest detail view.
+- Documented the light-mode default and collapsible ERPBridge Console sidebar.
+- Documented the homepage notice that separates monitoring from `bridgectl` configuration work.
+- Documented descending timestamp order for recent Logs page events.
+- Documented read-only plugin and binding metadata views, plugin-aware topology, and safe tool binding panels.
 - Added the Agentic Tools MCP Integration guide for Codex CLI, OpenCode,
   OpenClaw, and Hermes Agent, including scoped bearer authentication and stdio
   credential boundaries.
