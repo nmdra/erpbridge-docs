@@ -28,15 +28,42 @@ kind: Plugin
 metadata:
   name: response-transformer
   version: 1.0.0
+  type: api
   isActive: true
 spec:
-  endpoint: http://plugin-host:9000
+  endpoint: https://plugin-host:9000
   timeoutMilliseconds: 5000
+  auth:
+    type: bearer
+    credentialRef: PLUGIN_RESPONSE_TOKEN
 ```
 
 The endpoint must be an absolute `http` or `https` URL without userinfo, query
 parameters, or a fragment. ERPBridge appends `/v1/process`. The timeout is
-bounded from 1 millisecond to 5 minutes.
+bounded from 1 millisecond to 5 minutes. `metadata.type` is `api` or `docker`
+and defaults to `api`; it describes the plugin deployment boundary and does
+not make ERPBridge manage Docker.
+
+Credentialed plugins support only `bearer` and `api-key` authentication. Store
+only an environment-variable reference, such as `PLUGIN_RESPONSE_TOKEN` or
+`PLUGIN_RESPONSE_API_KEY`; never put a token or key in the resource. API-key
+authentication can set a validated custom header:
+
+```yaml
+spec:
+  endpoint: https://plugin-host:9000
+  auth:
+    type: api-key
+    credentialRef: PLUGIN_RESPONSE_API_KEY
+    header: X-API-Key
+```
+
+Credentialed plugin endpoints must use HTTPS. For an isolated development
+fixture, add the exact normalized `host:port` to
+`INSECURE_AUTH_ALLOWED_HOSTS`; ERPBridge emits a warning and rejects all other
+credentialed HTTP endpoints. `PLUGIN_ENDPOINT_ALLOWLIST` must also contain the
+exact normalized `host:port` for a credentialed plugin. Userinfo, query
+parameters, fragments, redirects, and broad wildcard allowlists are rejected.
 
 A `PluginBinding` connects exact plugin and tool versions:
 
@@ -93,7 +120,9 @@ The plugin returns a JSON object with a `result` member:
 The request does not contain original arguments, inbound headers, caller
 identity, caller tokens, or ERP credentials. Request and response JSON are
 limited to 1 MiB. ERPBridge disables redirects and retries, and it applies the
-request context and configured timeout.
+request context and configured timeout. Authentication failures and plugin
+failures use safe errors; credential values, endpoints, payloads, and plugin
+error bodies are not returned or logged.
 
 A plugin can transform the result for the next binding. ERPBridge validates the
 transformed result against the tool output schema after every plugin. With the
@@ -138,6 +167,26 @@ bridgectl plugin binding get transform-orders -o yaml
 
 Apply accepts JSON, YAML sequences, multi-document YAML, and resource
 directories. Use `--hard --yes` for a non-interactive permanent delete.
+
+## Credential rotation and legacy migration
+
+Credential references resolve from the ERPBridge process environment at request
+time. To rotate a plugin credential, update the `PLUGIN_*` environment value,
+restart or reload the deployment, and flush affected cache entries with an
+authenticated `bridgectl cache flush --all`. ERPBridge never stores the resolved
+value.
+
+Older local API registries may contain `authKey` or `authToken`. State-changing
+API commands and `bridgectl api test` stop until an operator runs the explicit,
+destructive migration:
+
+```bash
+bridgectl api scrub-credentials --yes
+bridgectl api set-credential-ref get-invoices --credential-ref ERP_API_KEY
+```
+
+Scrubbing atomically removes the legacy fields and does not create a plaintext
+backup. Set a new environment-backed reference after the scrub.
 
 ## Docker integration fixture
 

@@ -51,6 +51,11 @@ Environment variables for the server are set in the `docker-compose.yml` file.
 | `DATABASE_PATH` | Path of the SQLite tool registry inside the container. | `/app/data/erpbridge.db` |
 | `RATE_LIMIT_RPS` | Per-session requests per second. | `10` |
 | `RATE_LIMIT_BURST` | Token bucket burst size. | `20` |
+| `API_AUTH_TOKEN` | Admin bearer token for protected control-plane, MCP, and direct-invoke routes. | (unset) |
+| `ERP_PRIMARY_KEY` | Example environment credential referenced by generated ERP tools. | (unset) |
+| `PLUGIN_<NAME>` | Environment credential referenced by a plugin `credentialRef`; the value is never persisted. | (unset) |
+| `PLUGIN_ENDPOINT_ALLOWLIST` | Exact normalized `host:port` values allowed for credentialed plugin endpoints. | (unset) |
+| `INSECURE_AUTH_ALLOWED_HOSTS` | Exact development-only `host:port` exceptions for credentialed HTTP. | (unset) |
 
 For the full list of server environment variables, see the [Environment Variables Reference](./environment-variables.mdx). See the [MockERP Integration Contract](./mock-erp.mdx) for the pinned release, credential boundary, SQLite reset, and supported fixture groups.
 
@@ -62,7 +67,7 @@ To load tools into the registry, generate and apply the schemas from your host:
 
 1. Register the ERP API:
    ```bash title="Register the API"
-   ./bridgectl api register --name erp --url http://localhost:8081 --module erp --description "Mock ERP"
+   ./bridgectl api register --name erp --url http://localhost:8081 --module erp --description "Mock ERP" --auth-type api-key --credential-ref ERP_PRIMARY_KEY
    ```
 2. Generate the tool schemas:
    ```bash title="Generate schemas"
@@ -122,12 +127,29 @@ services:
 ```
 
 The plugin image is separate from the ERPBridge server image and receives no
-ERP credentials or inbound request headers.
+ERP credentials or inbound request headers. Configure plugin authentication with
+an environment-backed `PLUGIN_*` reference, not a literal secret:
+
+```yaml
+spec:
+  endpoint: https://response-transformer:8080
+  auth:
+    type: api-key
+    credentialRef: PLUGIN_RESPONSE_API_KEY
+    header: X-API-Key
+```
+
+Credentialed plugin endpoints require HTTPS and exact
+`PLUGIN_ENDPOINT_ALLOWLIST` membership. Use an exact
+`INSECURE_AUTH_ALLOWED_HOSTS` entry only for isolated development fixtures.
+Rotate the environment value, then flush affected cache entries with an
+authenticated `bridgectl cache flush --all`.
 
 The ERPBridge repository includes an opt-in black-box fixture. It builds the
-`mock-plugin` from the sibling `../ERPBridge-Plugins` polyrepo, starts it with
-the pinned MockERP image, tests both MCP and direct invocation, and removes only
-its isolated project:
+`mock-plugin` from the sibling `../ERPBridge-Plugins` polyrepo, generates
+separate admin, ERP, and plugin API keys without printing them, starts it with
+the pinned MockERP image, checks missing/wrong/correct plugin keys, tests both
+MCP and direct invocation, and removes only its isolated project:
 
 ```bash
 make test-plugin-integration
