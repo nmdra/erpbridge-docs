@@ -116,15 +116,27 @@ const capabilities: Capability[] = [
     Svg: require("@site/static/img/feature-mcp.svg").default,
   },
   {
-    title: "Ready for real operations",
+    title: "Authentication without secret drift",
     description: (
       <>
-        Use scoped API tokens, resilient upstream calls, cache controls,
-        structured logs, health checks, and Prometheus metrics.
+        Use scoped API tokens for inbound access and environment-backed
+        credential references for ERP calls. Redaction keeps secrets out of
+        resources and logs.
       </>
     ),
     to: "/docs/erpbridge/auth",
     Svg: require("@site/static/img/feature-resilient.svg").default,
+  },
+  {
+    title: "External response plugins",
+    description: (
+      <>
+        Transform successful tool responses with exact-version plugins, bearer
+        or API-key references, HTTPS transport, and cache-aware failure policy.
+      </>
+    ),
+    to: "/docs/erpbridge/plugins",
+    Svg: require("@site/static/img/feature-registry.svg").default,
   },
   {
     title: "A typed path into your app",
