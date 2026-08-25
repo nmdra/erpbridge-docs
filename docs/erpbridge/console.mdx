@@ -66,6 +66,11 @@ empty results from filtered results.
 The topology matches sanitized tool definitions to local API registry entries
 and shows exact plugin binding relationships when the plugin API is available.
 It labels API relationships `exact`, `base-prefix`, `ambiguous`, or `unresolved`.
+For filtered graphs with at least 20 nodes or 30 edges, the canvas starts with
+a compact endpoint-component overview: one safe ERP endpoint identity per
+component, its MCP tool count, and a match-state summary. Select a component to
+show its related MCP tools, endpoint,
+bindings, and plugins. Escape or the back control returns to the compact view.
 Search and facet filters cover node type, match confidence, and context state.
 Selecting a node or edge highlights the related path and opens a safe inspector
 with source, target, authority, context state, and endpoint paths. It does not
