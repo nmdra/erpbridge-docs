@@ -59,9 +59,13 @@ and do not expose upstream error bodies.
 The topology matches sanitized tool definitions to local API registry entries
 and shows exact plugin binding relationships when the plugin API is available.
 It labels API relationships `exact`, `base-prefix`, `ambiguous`, or `unresolved`.
-It does not claim cross-context ownership when the registry has no context field,
-and it shows paths rather than full upstream URLs. A keyboard-accessible
-relationship list is available beside the interactive canvas.
+Search and facet filters cover node type, match confidence, and context state.
+Selecting a node or edge highlights the related path and opens a safe inspector
+with source, target, authority, context state, and endpoint paths. It does not
+claim cross-context ownership when the registry has no context field, and it
+shows paths rather than full upstream URLs. A keyboard-accessible relationship
+list is available beside the interactive canvas. The BFF reports when safety
+caps omit graph elements.
 
 The Tools page is a filterable inventory. Select a tool name to open its
 read-only manifest view. The view presents the tool description and guidance,
