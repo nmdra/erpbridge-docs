@@ -30,6 +30,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   separate plugin deployment boundary.
 - Updated architecture, REST API, Docker, and bridgectl references for
   external plugins and the opt-in black-box integration fixture.
+- Documented plugin bearer/API-key credential references, exact endpoint
+  allowlists, HTTPS transport policy, credential rotation, and explicit legacy
+  registry scrubbing without plaintext backups.
 
 ### Fixed
 

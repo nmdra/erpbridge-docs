@@ -100,6 +100,21 @@ plugin with an active binding returns `409 Conflict`. Binding admission requires
 active exact plugin and tool versions. Use resource-specific name and version
 filters to list exact records.
 
+### Plugin authentication and transport
+
+A plugin can declare only bearer or API-key authentication. Its `credentialRef`
+must name an environment variable with a `PLUGIN_` prefix. The resource stores
+that name, never the resolved credential. API-key authentication may use a
+validated custom header, such as `X-API-Key`; raw tokens, keys, authorization
+headers, and unknown authentication fields are rejected at admission.
+
+Credentialed plugin calls require HTTPS. A development-only HTTP exception
+requires the exact normalized `host:port` in `INSECURE_AUTH_ALLOWED_HOSTS`, and
+credentialed plugin admission also requires exact membership in
+`PLUGIN_ENDPOINT_ALLOWLIST`. URL userinfo, query parameters, fragments,
+broad wildcards, and redirect-based transport are rejected. Unauthenticated
+plugins remain compatible with HTTP where the endpoint policy permits it.
+
 ### Plugin HTTP protocol
 
 For an active `after_response` binding, ERPBridge sends a synchronous JSON
@@ -127,7 +142,17 @@ caller tokens, and ERP credentials. Bound response processing runs only on cache
 misses; the cache stores the final transformed MCP result. Plugin and binding
 lifecycle changes flush affected target-tool cache entries.
 
+Change the referenced `PLUGIN_*` environment value to rotate a credential, then
+flush affected caches using an authenticated `bridgectl cache flush --all` (or
+restart the deployment). Dynamic secret providers, OAuth, mTLS, and
+application-level encryption are not part of this contract.
+
 ### Admission Rules
+
+The server rejects plugin definitions with missing exact references, unsupported
+or malformed authentication, raw-secret-looking fields, reserved or
+hop-by-hop headers, disallowed endpoints, or credentialed HTTP without both
+allowlist checks. Plugin and binding routes require the admin credential.
 
 The server rejects tool definitions when:
 

@@ -130,6 +130,16 @@ MCP result, and plugin or binding lifecycle changes flush affected tool cache
 entries. `continue` keeps the original result after a plugin failure; `fail`
 returns a generic tool error.
 
+Plugin resources support `api` and `docker` metadata types; both describe an
+external deployment. ERPBridge does not own plugin images or their lifecycle.
+Credentialed calls support bearer and API-key headers only. A `credentialRef`
+is an environment-variable name with a `PLUGIN_` prefix; the resolved value is
+read at request time and is never persisted or logged. Credentialed endpoints
+require HTTPS, except for exact development-only `host:port` entries in
+`INSECURE_AUTH_ALLOWED_HOSTS`, and exact endpoint admission in
+`PLUGIN_ENDPOINT_ALLOWLIST`. Redirects, URL userinfo, raw secrets, and broad
+wildcards are not accepted.
+
 ## Tool Generation & Templating
 
 ERPBridge uses a "Template-Based Generation" approach. When generating tools (especially in bulk from OpenAPI):
@@ -170,6 +180,8 @@ sequenceDiagram
 
 ## Security Design
 
-- **Secret Decoupling**: Schemas never contain raw tokens or keys. They only contain a reference (`credentialRef`). The middleware resolves these references at the moment of execution using secure environment variables.
-- **Admission Controllers**: The API server rejects any tool definition that contains suspicious strings (like `token ` or `key=`) in its endpoint path.
-- **Redaction**: All logs produced by tool executions are automatically filtered to redact sensitive keys defined in `internal/types/sensitive.go`.
+- **Secret Decoupling**: Schemas and plugin resources never contain raw tokens or keys. They only contain a `credentialRef`; the middleware resolves it at request time from the environment. Legacy local API registries require an explicit confirmed scrub before state changes continue.
+- **Transport Admission**: Credentialed ERP and plugin endpoints require HTTPS, except exact development-only `host:port` entries. Plugin endpoints also require exact `PLUGIN_ENDPOINT_ALLOWLIST` membership. Userinfo and redirects cannot be used to bypass the policy.
+- **Admission Controllers**: The API server rejects suspicious endpoint content, unknown authentication fields, reserved headers, raw-secret-looking values, and invalid credential references.
+- **Redaction**: All logs produced by tool executions are automatically filtered to redact sensitive keys defined in `internal/types/sensitive.go`; ERP request and response bodies are not logged.
+- **Deployment Boundary**: ERPBridge stores plugin configuration and invokes the protocol, but does not install, start, update, or schedule plugin code.
