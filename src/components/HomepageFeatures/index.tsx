@@ -139,6 +139,17 @@ const capabilities: Capability[] = [
     Svg: require("@site/static/img/feature-registry.svg").default,
   },
   {
+    title: "Operational visibility",
+    description: (
+      <>
+        Use structured logs, Prometheus metrics, health checks, and cache
+        controls to diagnose integrations and keep production workflows clear.
+      </>
+    ),
+    to: "/docs/erpbridge/api",
+    Svg: require("@site/static/img/feature-mcp.svg").default,
+  },
+  {
     title: "A typed path into your app",
     description: (
       <>

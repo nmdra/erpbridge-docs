@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 - Documentation now covers the bounded in-memory cache fallback, generated YAML sequence and multi-document apply flow, exact tool filters, and MCP result-envelope boundaries.
 - The homepage now highlights environment-backed authentication and external response plugins. The ERPBridge sidebar groups External Plugins under Plugin integration & development.
+- The homepage durable-integration capability grid now contains six balanced cards.
 - The MockERP guide now states that MockERP is for testing and learning only.
 - Authentication documentation now covers hashed scoped API tokens, admin roles, bearer route policy, and one-time token disclosure.
 - REST, connectivity, schema, environment, and bridgectl pages now document per-tool roles, selector handling, CORS, and CLI token precedence.
