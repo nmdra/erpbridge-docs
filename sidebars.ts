@@ -112,6 +112,15 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
+      label: 'Skill commands',
+      collapsed: false,
+      items: [
+        'bridgectl/bridgectl_skill',
+        'bridgectl/bridgectl_skill_install',
+      ],
+    },
+    {
+      type: 'category',
       label: 'Other commands',
       collapsed: true,
       items: [

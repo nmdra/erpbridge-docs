@@ -11,16 +11,16 @@ ERPBridge ecosystem. The skill follows the [Agent Skills
 Specification](https://agentskills.io/specification) and lives in the
 ERPBridge repository under `skills/bridgectl-ops/`.
 
-Use the skill when an agent must onboard an ERP API, manage MCP tools, manage
-tokens or roles, inspect cache and logs, diagnose an integration, or prepare a
-sanitized bug report.
+Use the skill when an agent must onboard an ERP API, manage MCP tools or
+external plugins and bindings, manage tokens or roles, inspect cache and logs,
+diagnose an integration, or prepare a sanitized bug report.
 
 ## `bridgectl-ops`
 
 | | |
 | :--- | :--- |
 | **Location** | `skills/bridgectl-ops/SKILL.md` |
-| **Version** | 3.0.0 |
+| **Version** | 3.1.0 |
 | **Prerequisites** | A current `bridgectl` binary, an authorized ERPBridge context, and network access to the target services |
 | **Optional tools** | Git for repository diagnosis and GitHub CLI for approved issue creation |
 
@@ -33,13 +33,28 @@ sanitized bug report.
 | Authentication and authorization | Create, list, and revoke scoped bearer tokens; assign roles; test authorized and denied guarded calls |
 | Operations | Inspect structured logs, cache statistics, cache invalidation, contexts, and runtime health |
 | Diagnosis | Trace context, authentication, connectivity, schema, registry, MCP, SDK, cache, and server failures |
+| External plugins and bindings | Validate, apply, inspect, secure, and troubleshoot exact-version plugin resources and post-response bindings |
 | Bug reporting | Create a sanitized repository draft and offer GitHub issue creation after user approval |
 
 ## Safety behavior
 
 The skill records the active context and CLI version before it acts. It uses
 the narrowest target for changes and asks for confirmation before it applies or
-deletes a tool, creates or revokes a token, or flushes cache entries.
+deletes a tool, plugin, or plugin binding; creates or revokes a token; or
+flushes cache entries.
+
+Install the bundled skill with:
+
+```bash
+bridgectl skill install
+# Project-scoped installation:
+bridgectl skill install --project
+# Explicit destination:
+bridgectl skill install --dir /path/to/bridgectl-ops
+```
+
+The global destination is `~/.agents/skills/bridgectl-ops`; project installs use
+`./.agents/skills/bridgectl-ops`. Existing destinations require `--force`.
 
 Credentials stay in environment variables or the configured secret manager.
 Tool schemas use `credentialRef`; they never contain a raw secret. A token
@@ -53,4 +68,5 @@ bug reports.
 - [Authentication](../erpbridge/auth.mdx)
 - [API token guide](../erpbridge/tokens.mdx)
 - [SDK overview](../sdk/overview.mdx)
+- [Complete published documentation index](https://blog.nimendra.xyz/erpbridge-docs/llms.txt)
 - [ERPBridge repository skill](https://github.com/nmdra/ERPBridge/tree/main/skills/bridgectl-ops)

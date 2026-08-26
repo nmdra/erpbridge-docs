@@ -30,6 +30,7 @@ and supports multiple output formats including Table, JSON, and YAML.
 * [bridgectl context](bridgectl_context.md)	 - Manage bridgectl contexts
 * [bridgectl doc](bridgectl_doc.md)	 - Generate Markdown documentation for bridgectl
 * [bridgectl log](bridgectl_log.md)	 - Manage and view logs
+* [bridgectl skill](bridgectl_skill.md)	 - Manage bundled Agent Skills
 * [bridgectl token](bridgectl_token.md)	 - Manage ERPBridge API tokens
 * [bridgectl tool](bridgectl_tool.md)	 - Manage MCP tool resources (V2 Control Plane)
 * [bridgectl version](bridgectl_version.md)	 - Print the version number of bridgectl

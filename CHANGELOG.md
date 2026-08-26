@@ -8,6 +8,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- Documented `bridgectl skill install`, including the embedded `bridgectl-ops`
+  Agent Skill, global and project-scoped destinations, explicit directories,
+  and forced replacement.
 - Documented compact topology for filtered graphs with at least 20 nodes or 30 edges, bounded endpoint components, related-node drill-down, raw relationship fallback, and safe topology-cap behavior.
 - Documented the full green-accent Console workspace redesign: grouped Monitor, Inventory, and Diagnose navigation; context-aware Overview; session-local metric trends; responsive mobile navigation; accessible stale/empty states; and safe drill-down links.
 - Added the read-only ERPBridge Console guide and `bridgectl web` command reference, including its loopback security boundary, safe data projections, topology match states, live metrics limitations, and plugin feature gate.

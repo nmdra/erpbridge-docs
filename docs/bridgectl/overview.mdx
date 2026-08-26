@@ -10,6 +10,10 @@ keywords: [bridgectl, cli, command reference]
 
 The CLI interacts with the ERPBridge middleware via a REST API and supports multiple output formats including Table, JSON, and YAML.
 
+The CLI also bundles the `bridgectl-ops` Agent Skill. Install it locally with
+`bridgectl skill install`; use `--project` for a project-scoped install or
+`--dir` to select an explicit destination.
+
 ## Quick start
 
 ```bash title="Build the CLI"
@@ -32,6 +36,7 @@ make build
 | `bridgectl token` | Manage ERPBridge API tokens | [`token create`](./bridgectl_token_create.md), [`token list`](./bridgectl_token_list.md), [`token revoke`](./bridgectl_token_revoke.md) |
 | `bridgectl completion` | Generate shell autocompletion | `bash`, `zsh`, `fish`, `powershell` |
 | `bridgectl doc` | Generate Markdown documentation for bridgectl | — |
+| `bridgectl skill` | Manage the bundled Agent Skill | [`skill install`](./bridgectl_skill_install.md) |
 | `bridgectl version` | Print the version number of bridgectl | — |
 
 ## Global options
