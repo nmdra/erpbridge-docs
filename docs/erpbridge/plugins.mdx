@@ -1,16 +1,18 @@
 ---
 sidebar_position: 11
 title: External Plugins
-description: Configure externally operated HTTP plugins that transform successful ERPBridge tool responses.
+description: Configure externally operated HTTP plugins that adapt ERPBridge ERP responses, including bounded media, before stable MCP output.
 keywords: [plugins, external process, response transformation, bindings, control plane]
 ---
 
 # External Plugins
 
-ERPBridge can send a successful tool result to an HTTP plugin process before it
-returns the result to an MCP client or direct REST caller. The plugin process is
-outside ERPBridge. ERPBridge stores its endpoint and configuration, but it does
-not install, start, download, upgrade, or schedule plugin code.
+ERPBridge can send an ERP response to an externally operated HTTP plugin before
+it returns the final result to an MCP client or direct REST caller. A
+`raw_response` plugin can adapt bounded media, such as an ERP image to OCR text,
+before normal response processing. The plugin process is outside ERPBridge.
+ERPBridge stores its endpoint and configuration, but it does not install,
+start, download, upgrade, or schedule plugin code.
 
 :::warning Separate deployment boundary
 Deploy and operate plugin images separately. Use a pinned image from the
@@ -62,8 +64,12 @@ Credentialed plugin endpoints must use HTTPS. For an isolated development
 fixture, add the exact normalized `host:port` to
 `INSECURE_AUTH_ALLOWED_HOSTS`; ERPBridge emits a warning and rejects all other
 credentialed HTTP endpoints. `PLUGIN_ENDPOINT_ALLOWLIST` must also contain the
-exact normalized `host:port` for a credentialed plugin. Userinfo, query
-parameters, fragments, redirects, and broad wildcard allowlists are rejected.
+exact normalized `host:port` for a credentialed plugin. A `raw_response` binding
+requires that allowlist even when the plugin has no authentication. Raw
+admission also requires a configured `API_AUTH_TOKEN`, an authenticated admin
+request, an active HTTP-backed tool, and an explicit object-shaped output
+schema. Userinfo, query parameters, fragments, redirects, and broad wildcard
+allowlists are rejected.
 
 A `PluginBinding` connects exact plugin and tool versions:
 
@@ -87,10 +93,17 @@ spec:
     mode: safe
 ```
 
-The only supported phase is `after_response`. Active bindings run in ascending
-priority order after the tool result passes its output schema. A binding never
-moves automatically to a new tool or plugin version. Apply a new binding when
-either version changes.
+The supported phases are `raw_response` and `after_response`. Raw bindings run
+first, before `responsePath` and output-schema validation. After-response
+bindings run after successful normalization and validation. Each phase uses
+ascending priority order. A raw binding must target an active HTTP-backed tool
+with an explicit object-shaped final output schema. Missing raw admission
+requirements keep the binding inactive during reconciliation.
+
+A binding never moves automatically to a new tool or plugin version. A plugin
+that changes the meaning or type of output requires a new MCP-visible tool name
+and exact tool version. For example, keep `read-invoice` for invoice objects
+and publish `read-invoice-text` version `1.0.0` for OCR text.
 
 Soft deletion retains a resource with `isActive: false`. A plugin cannot be
 hard-deleted while an active binding references that exact version. Binding
@@ -98,8 +111,11 @@ admission requires active exact plugin and tool references.
 
 ## HTTP protocol
 
-The protocol is synchronous JSON over `POST /v1/process`. ERPBridge sends only
-these fields:
+The protocol is synchronous JSON over `POST /v1/process`.
+
+### Normalized response
+
+An `after_response` binding receives only the normalized result:
 
 ```json
 {
@@ -110,6 +126,28 @@ these fields:
   "config": {"mode": "safe"}
 }
 ```
+
+### Raw response
+
+A `raw_response` binding receives the bounded ERP response before normalization:
+
+```json
+{
+  "protocolVersion": "v1",
+  "invocationId": "generated-id",
+  "tool": {"name": "read-invoice-text", "version": "1.0.0"},
+  "rawResponse": {
+    "status": 200,
+    "contentType": "image/png",
+    "body": {"encoding": "base64", "value": "..."}
+  },
+  "config": {"mode": "ocr"}
+}
+```
+
+`encoding` is `json` for one complete decoded JSON document. Empty, malformed,
+and non-JSON bodies use `base64`. Raw invocations omit `result`, while legacy
+normalized invocations retain `result: null` when the result is nil.
 
 The plugin returns a JSON object with a `result` member:
 
@@ -124,23 +162,29 @@ request context and configured timeout. Authentication failures and plugin
 failures use safe errors; credential values, endpoints, payloads, and plugin
 error bodies are not returned or logged.
 
-A plugin can transform the result for the next binding. ERPBridge validates the
-transformed result against the tool output schema after every plugin. With the
-default `continue` policy, a timeout, non-2xx response, malformed or oversized
-JSON, or invalid transformed result returns the original validated result. The
-`fail` policy returns a generic tool error without exposing the endpoint,
-payload, credentials, or plugin error body.
+A raw plugin can transform the response body for the next phase. For
+successful 2xx responses, ERPBridge applies `responsePath`, validates the
+declared output schema, runs after-response plugins, and validates the final
+result. Terminal non-2xx responses, including 3xx, remain errors and skip
+success-only phases. With `continue`, the original captured response is used
+only when it satisfies the final schema. Otherwise a safe error is returned.
+The `fail` policy returns a generic tool error without exposing the endpoint,
+payload, credentials, or plugin response body.
 
 ## Cache and transports
 
-Bindings run only after a successful tool execution and only on a cache miss.
-The cache stores the final transformed MCP result, so a cache hit does not call
-the plugin. Applying, changing, soft-deleting, or hard-deleting a plugin or
-binding flushes affected target-tool cache entries.
+Bindings run only on a cache miss. The cache stores the final transformed MCP
+result and never stores error results, so a cache hit bypasses ERP and plugins.
+Applying, changing, soft-deleting, or hard-deleting a plugin or binding
+flushes affected target-tool cache entries.
 
-The same pipeline runs for MCP `tools/call` and `POST /api/tools/invoke`. The
-MCP envelope and the direct-invoke `{ "result": ... }` compatibility envelope
-remain unchanged. A tool without an active binding keeps its existing result.
+The same pipeline runs for MCP `tools/call` and `POST /api/tools/invoke`. MCP
+advertises the developer-owned final output schema and returns structured
+content with equivalent text content. An image-to-text tool can expose
+`{text: string}` as structured `{text: ...}` plus text containing only the
+extracted text. Tool execution errors use `isError: true`. The direct-invoke
+endpoint preserves its `{ "result": ... }` compatibility envelope. A tool
+without an active binding keeps its existing result and invocation payload.
 
 ## Control-plane API and CLI
 

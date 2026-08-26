@@ -97,8 +97,12 @@ routes:
 
 Plugin deletion is soft by default. Use `hard=true` for permanent deletion. A
 plugin with an active binding returns `409 Conflict`. Binding admission requires
-active exact plugin and tool versions. Use resource-specific name and version
-filters to list exact records.
+active exact plugin and tool versions. A `raw_response` binding additionally
+requires configured `API_AUTH_TOKEN`, an authenticated admin request, an
+allowlisted plugin endpoint, an active HTTP-backed tool, and an explicit
+object-shaped output schema. Missing raw prerequisites prevent activation during
+reconciliation. Use resource-specific name and version filters to list exact
+records.
 
 ### Plugin authentication and transport
 
@@ -117,8 +121,9 @@ plugins remain compatible with HTTP where the endpoint policy permits it.
 
 ### Plugin HTTP protocol
 
-For an active `after_response` binding, ERPBridge sends a synchronous JSON
-request to `<spec.endpoint>/v1/process`:
+For an active binding, ERPBridge sends a synchronous JSON request to
+`<spec.endpoint>/v1/process`. An `after_response` binding receives the
+normalized result:
 
 ```json
 {
@@ -130,17 +135,42 @@ request to `<spec.endpoint>/v1/process`:
 }
 ```
 
-The plugin returns `{"result": <JSON value>}`. Request and response JSON are
-limited to 1 MiB; redirects and retries are disabled. A timeout, non-2xx
-response, malformed or oversized response, or invalid transformed output follows
-the binding policy: `continue` keeps the original result and `fail` returns a
-generic tool error. Plugin URLs, payloads, credentials, and plugin error bodies
-are not returned to callers.
+A `raw_response` binding instead receives the bounded ERP response before
+normalization:
+
+```json
+{
+  "protocolVersion": "v1",
+  "invocationId": "generated-id",
+  "tool": {"name": "read-invoice-text", "version": "1.0.0"},
+  "rawResponse": {
+    "status": 200,
+    "contentType": "image/png",
+    "body": {"encoding": "base64", "value": "..."}
+  }
+}
+```
+
+`encoding` is `json` for one complete decoded JSON document. Empty, malformed,
+and non-JSON bodies use `base64`. Raw invocations omit `result`; normalized
+legacy invocations retain `result: null` when the result is nil. The plugin
+returns `{"result": <JSON value>}` and can replace only the body; status remains
+immutable. Request and response JSON are limited to 1 MiB; redirects and
+retries are disabled.
+
+For successful 2xx responses ERPBridge applies `responsePath`, validates the
+declared output schema, runs after-response bindings, and validates the final
+result. Terminal non-2xx responses, including 3xx, remain errors and skip
+success-only processing. `continue` uses the original captured response only
+when it satisfies the final schema; otherwise it returns a safe error. Use
+`fail` for image conversion unless a compatible fallback is known. Plugin URLs,
+payloads, credentials, and plugin error bodies are not returned to callers.
 
 The protocol excludes original arguments, inbound headers, caller identity,
 caller tokens, and ERP credentials. Bound response processing runs only on cache
-misses; the cache stores the final transformed MCP result. Plugin and binding
-lifecycle changes flush affected target-tool cache entries.
+misses; the cache stores the final transformed MCP result and never stores error
+results. Plugin and binding lifecycle changes flush affected target-tool cache
+entries.
 
 Change the referenced `PLUGIN_*` environment value to rotate a credential, then
 flush affected caches using an authenticated `bridgectl cache flush --all` (or
@@ -188,7 +218,13 @@ must be present in both the caller identity and the tool `allowedRoles` list.
 
 This endpoint resolves registered tools only. MCP built-ins such as `system.progress_test` are available through MCP `tools/call`, but not through this REST endpoint.
 
-The REST endpoint returns the legacy `ToolResult` compatibility shape. MCP clients receive the MCP result envelope, including `content` and any structured result fields. SDK clients must preserve that envelope; text content can contain JSON encoded by the compatibility handler and must not be flattened as if it were the whole protocol response.
+The REST endpoint returns the legacy `ToolResult` compatibility shape. MCP
+clients receive the MCP result envelope, including `content`,
+`structuredContent` for declared object-shaped output schemas, and
+`isError: true` for tool execution errors. An image-to-text tool can expose
+`{text: string}` as structured `{text: ...}` plus equivalent text containing
+only the extracted text. SDK clients must preserve that envelope and must not
+flatten structured content.
 
 ```json title="Success response"
 {

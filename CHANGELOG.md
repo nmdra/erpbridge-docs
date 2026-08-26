@@ -8,6 +8,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- Documented the `raw_response` plugin phase, bounded JSON/base64 media
+  adaptation, secure raw binding admission, stable MCP output schemas, exact
+  tool-version migration, error handling, cache behavior, and image-to-text
+  workflow
 - Documented `bridgectl skill install`, including the embedded `bridgectl-ops`
   Agent Skill, global and project-scoped destinations, explicit directories,
   and forced replacement.

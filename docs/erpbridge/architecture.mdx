@@ -100,16 +100,33 @@ The controller also runs immediately after a `tool apply` HTTP request. The tool
 
 ## External response plugins
 
-ERPBridge can pass a successful, normalized tool result to an externally
-operated HTTP plugin. The control plane stores the endpoint and exact release,
-but never installs, starts, upgrades, or schedules plugin code.
+ERPBridge invokes an externally operated HTTP plugin. The control plane stores
+the endpoint and exact release, but never installs, starts, upgrades, or
+schedules plugin code.
 
 A `PluginBinding` connects one exact plugin version to one exact tool version.
-Active `after_response` bindings run synchronously in ascending priority order
-before MCP or direct-invoke serialization. They do not add tools to `tools/list`.
-The plugin request contains only the protocol version, invocation ID, exact tool
-identity, normalized result, and binding configuration. It excludes original
-arguments, inbound headers, caller identity, caller tokens, and ERP credentials.
+A `raw_response` binding runs first and receives a bounded ERP response with
+status, normalized content type, and a tagged JSON or base64 body. It can adapt
+media, such as an ERP image to OCR text. The plugin cannot change status or
+receive ERP headers, URLs, credentials, caller identity, or original arguments.
+The developer owns the final object-shaped MCP output schema; plugins never
+change it dynamically. An incompatible output meaning requires a new
+MCP-visible tool name and exact tool version.
+
+For successful responses, the fixed order is:
+
+```mermaid
+flowchart LR
+    ERP[ERP response bytes] --> Raw[raw_response plugins]
+    Raw --> Path[responsePath]
+    Path --> Schema[output-schema validation]
+    Schema --> After[after_response plugins]
+    After --> Final[final validation and MCP result]
+```
+
+Terminal non-2xx responses can be inspected by raw plugins while retaining ERP
+retry and circuit-breaker accounting. They remain errors, including 3xx, and
+skip success-only normalization and after-response processing.
 
 ```mermaid
 sequenceDiagram
@@ -119,16 +136,20 @@ sequenceDiagram
     participant Plugin as External plugin
     Client->>Bridge: invoke exact tool
     Bridge->>ERP: execute tool request
-    ERP-->>Bridge: normalized validated result
-    Bridge->>Plugin: POST /v1/process
-    Plugin-->>Bridge: transformed result
-    Bridge-->>Client: final result
+    ERP-->>Bridge: bounded response bytes and status
+    Bridge->>Plugin: raw_response with safe tagged body
+    Plugin-->>Bridge: JSON result
+    Bridge->>Plugin: optional after_response normalized result
+    Plugin-->>Bridge: final JSON result
+    Bridge-->>Client: structured content and equivalent text
 ```
 
 The pipeline runs only on cache misses. The cache stores the final transformed
-MCP result, and plugin or binding lifecycle changes flush affected tool cache
-entries. `continue` keeps the original result after a plugin failure; `fail`
-returns a generic tool error.
+MCP result and never stores an error result, so cache hits bypass ERP and
+plugins. Plugin or binding lifecycle changes flush affected tool cache entries.
+`continue` uses the original captured response only when it satisfies the final
+schema; otherwise it returns a safe error. Use `fail` for media conversion
+unless a compatible fallback is known.
 
 Plugin resources support `api` and `docker` metadata types; both describe an
 external deployment. ERPBridge does not own plugin images or their lifecycle.
@@ -137,7 +158,9 @@ is an environment-variable name with a `PLUGIN_` prefix; the resolved value is
 read at request time and is never persisted or logged. Credentialed endpoints
 require HTTPS, except for exact development-only `host:port` entries in
 `INSECURE_AUTH_ALLOWED_HOSTS`, and exact endpoint admission in
-`PLUGIN_ENDPOINT_ALLOWLIST`. Redirects, URL userinfo, raw secrets, and broad
+`PLUGIN_ENDPOINT_ALLOWLIST`. Raw bindings require the allowlist even without
+plugin authentication, plus authenticated admin admission and an explicit
+object-shaped tool schema. Redirects, URL userinfo, raw secrets, and broad
 wildcards are not accepted.
 
 ## Tool Generation & Templating

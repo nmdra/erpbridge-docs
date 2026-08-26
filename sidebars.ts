@@ -33,7 +33,7 @@ const sidebars: SidebarsConfig = {
       type: 'category',
       label: 'Plugin integration & development',
       collapsed: false,
-      items: ['erpbridge/plugins'],
+      items: [{ type: 'doc', id: 'erpbridge/plugins', label: 'External Plugins & Media Adaptation' }],
     },
   ],
   bridgectlSidebar: [
