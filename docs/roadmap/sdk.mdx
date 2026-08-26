@@ -7,7 +7,7 @@ keywords: [roadmap, sdk, typescript, mcp, browser]
 
 # SDK roadmap
 
-The `@erpbridge/sdk` is a TypeScript client for consuming ERPBridge from applications and agent workflows. The current release focuses on typed MCP, operational access, and consume-only authentication; additional language ports remain future work.
+`@erpbridge/sdk` is a TypeScript client for applications and agent workflows. The current release provides typed MCP, operational access, and consume-only authentication. Additional language ports remain future work.
 
 ## Shipped in v1.0.0
 
@@ -15,7 +15,7 @@ The `@erpbridge/sdk` is a TypeScript client for consuming ERPBridge from applica
 | :--- | :--- | :--- |
 | MCP client | Programmatic tool discovery and execution through the built-in MCP client. | [MCP Tools](../sdk/mcp-tools.mdx) |
 | Tool proxy | Exact-name `client.tools.<name>(args)` calls with input-schema validation. | [MCP Tools](../sdk/mcp-tools.mdx) |
-| REST access | Typed wrappers for direct invocation, tool registry, logs, metrics, health, and cache operations. | [API Reference](../sdk/api-reference.mdx) · [Logs & Metrics](../sdk/logs-metrics.mdx) |
+| REST access | Typed wrappers for direct invocation, tool registry, logs, metrics, health, and cache operations. | [API reference](../sdk/api-reference.mdx) · [Logs and metrics](../sdk/logs-metrics.mdx) |
 | Browser support | ESM MCP client and exact-name tool proxy for browser bundles when the server CORS policy exposes `/mcp/`. | [Installation](../sdk/installation.mdx) |
 | Authentication | Consume-only bearer credentials with per-surface routing, declared scopes, and typed `AuthorizationError` handling. | [Authentication](../sdk/authentication.mdx) |
 | Packaging | ESM and CommonJS builds with TypeScript declarations for Node.js 20 or newer. | [Installation](../sdk/installation.mdx) |

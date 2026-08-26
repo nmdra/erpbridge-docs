@@ -7,15 +7,15 @@ keywords: [sdk, authentication, bearer, tokens, scopes]
 
 # Authentication
 
-The SDK supports consume-only bearer authentication for ERPBridge
-`v0.3.0-alpha.1` and later. Applications provide an opaque token that was
-provisioned by an ERPBridge administrator; the SDK sends it but never creates,
-lists, reveals, revokes, refreshes, or stores tokens.
+The ERPBridge SDK supports consume-only bearer authentication for ERPBridge
+`v0.3.0-alpha.1` and later. An ERPBridge administrator provisions the opaque
+token. The ERPBridge SDK sends the token but never creates, lists, reveals,
+revokes, refreshes, or stores tokens.
 
 ## Configuration
 
-Use an explicit token or an environment-variable name. The SDK resolves the
-credential once when `createClient` runs:
+Set an explicit token or an environment-variable name. The ERPBridge SDK
+resolves the credential once when `createClient` runs:
 
 ```ts
 import { createClient } from '@erpbridge/sdk'
@@ -30,11 +30,11 @@ const client = createClient({
 })
 ```
 
-The canonical default environment variable is `ERPBRIDGE_TOKEN`. The legacy
+The default environment variable is `ERPBRIDGE_TOKEN`. The legacy
 `ERPBridge_TOKEN` name is checked only when the canonical variable is absent,
 so existing deployments continue to work while they migrate.
 
-For each MCP, metrics, or logs request, the precedence is:
+For each MCP, metrics, or logs request, the ERPBridge SDK uses this precedence:
 
 1. surface `token`;
 2. surface `tokenEnv` value;
@@ -43,15 +43,14 @@ For each MCP, metrics, or logs request, the precedence is:
    `ERPBridge_TOKEN` value when the canonical variable is absent;
 5. anonymous access.
 
-An empty token is treated as absent. A browser bundle cannot read a Node
-environment automatically, so browser applications should provide a token
-explicitly when the server requires authentication. Do not put a long-lived
-token in a public browser bundle unless the deployment design explicitly makes
-that safe.
+The ERPBridge SDK treats an empty token as absent. A browser bundle cannot
+read a Node environment automatically. Provide a token explicitly when the
+server requires authentication. Do not put a long-lived token in a public
+browser bundle unless the deployment design makes that safe.
 
-The global credential is also used for health, cache, registry, and direct
-invoke requests. The SDK does not locally assert that this credential has the
-server's admin permission.
+The ERPBridge SDK also uses the global credential for health, cache, registry,
+and direct invoke requests. It does not locally assert that this credential
+has the server's admin permission.
 
 ## Server scopes
 
@@ -63,7 +62,7 @@ When server authentication is enabled, the protected surface scopes are:
 | `client.metrics` | `metrics` |
 | `client.logs` | `logs` |
 
-You may declare expected scopes for local fail-fast checks:
+Declare expected scopes for local fail-fast checks:
 
 ```ts
 const client = createClient({
@@ -72,23 +71,23 @@ const client = createClient({
 })
 ```
 
-`declaredScopes` is an application assertion, not token introspection. If it is
-omitted, the SDK sends the request and lets the server decide. It never infers
-permissions from an opaque token.
+`declaredScopes` is an application assertion, not token introspection. If you
+omit it, the ERPBridge SDK sends the request and lets the server decide. It
+never infers permissions from an opaque token.
 
-If a non-empty declaration excludes the surface being called, the SDK throws
-`AuthorizationError` before making a network request. This local check is only
-an early configuration check; the server remains the authority.
+If a non-empty declaration excludes the requested surface, the ERPBridge SDK
+throws `AuthorizationError` before it makes a network request. This local
+check only detects configuration errors. The server remains the authority.
 
 ## Errors
 
 - `AuthenticationError` represents HTTP 401: the server did not accept the
   credential. Its optional `wwwAuthenticate` field is the server challenge;
-  applications should not log its value.
+  Applications must not log its value.
 - `AuthorizationError` represents HTTP 403: the credential is not authorized
   for the request. Its optional `requiredScope` is present only when the server
   explicitly supplies one.
 
-The SDK does not implement OAuth, PKCE, token refresh, or token lifecycle
-operations. Use `bridgectl` or the server's administrator workflow to manage
-tokens.
+The ERPBridge SDK does not implement OAuth, PKCE, token refresh, or token
+lifecycle operations. Use `bridgectl` or the server administrator workflow to
+manage tokens.

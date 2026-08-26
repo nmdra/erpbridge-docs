@@ -7,12 +7,11 @@ keywords: [authentication, token, api token, bearer, security]
 
 # Authentication
 
-Authentication protects the management endpoints and MCP transport from unauthorized access.
+Authentication protects management endpoints and the MCP transport from unauthorized access.
 
 ## HTTP authentication
 
-HTTP authentication is enabled when `API_AUTH_TOKEN` is non-empty. Send the
-admin credential or an API token in the `Authorization` header:
+HTTP authentication is enabled when `API_AUTH_TOKEN` is not empty. Send the admin credential or an API token in the `Authorization` header:
 
 ```http
 Authorization: Bearer <token>
@@ -30,7 +29,7 @@ scoped to `mcp`, `metrics`, or `logs`:
 | `/mcp/health` | Always open |
 
 When authentication is disabled, HTTP routes keep their open-mode behavior.
-Guarded tools still deny calls without a verified identity. Stdio remains
+Guarded tools still deny calls without a verified identity. stdio remains
 available for open tools only; it does not provide an identity for guarded
 tools.
 
@@ -94,7 +93,7 @@ Key properties:
 - When `API_AUTH_TOKEN` is set, protected routes return `401` for missing or invalid credentials and `403` for insufficient scope.
 - `API_AUTH_ADMIN_ROLES` assigns verified roles to the admin identity.
 
-See the [API Token Guide](./tokens.mdx) for lifecycle requests and CLI usage.
+See the [API token guide](./tokens.mdx) for lifecycle requests and CLI usage.
 
 ## Role-protected tools
 
@@ -110,6 +109,6 @@ match `[a-z][a-z0-9_-]{0,63}`, be unique, and contain no more than 32 values.
   unchanged.
 - Denied calls happen before cache lookup and downstream ERP execution.
 
-## Reporting auth issues
+## Report authentication issues
 
 Open an issue at [github.com/nmdra/ERPBridge/issues](https://github.com/nmdra/ERPBridge/issues).

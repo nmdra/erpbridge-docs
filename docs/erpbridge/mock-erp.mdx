@@ -1,15 +1,13 @@
 ---
 sidebar_position: 14
-title: MockERP Integration Contract
+title: MockERP integration contract
 description: Use the pinned SQLite-backed MockERP fixture with ERPBridge.
 keywords: [mockerp, docker, sqlite, erpnext, integration testing]
 ---
 
-# MockERP Integration Contract
+# MockERP integration contract
 
-ERPBridge uses [MockERP](https://github.com/nmdra/mockerp) as a versioned,
-ERPNext-compatible ERP fixture. The Compose service name is `mock-erp` and the
-internal URL is `http://mock-erp:8081`.
+ERPBridge uses [MockERP](https://github.com/nmdra/mockerp) as a versioned, ERPNext-compatible ERP fixture. The Compose service name is `mock-erp`, and the internal URL is `http://mock-erp:8081`.
 
 :::caution Testing and learning only
 MockERP uses fictional data. Use it to test and learn ERPBridge before you
@@ -19,7 +17,7 @@ ERP or as a security boundary.
 
 ## Pinned release
 
-Use the same release for the image and OpenAPI contract:
+Use the same release for the image and OpenAPI specification:
 
 - Image: `ghcr.io/nmdra/mockerp:0.2.1`
 - Contract: `https://raw.githubusercontent.com/nmdra/mockerp/v0.2.1/openapi.yaml`
@@ -65,7 +63,7 @@ response envelopes. MockERP 0.2.1 includes:
 - a Floor Cleaner 5L manufacturing flow and fixed assets; and
 - role-gated operational reports and audit readback.
 
-`make generate-tools` downloads the pinned contract before tool generation.
+`make generate-tools` downloads the pinned OpenAPI specification before tool generation.
 Generated schemas remain in the ignored `schemas/` directory.
 
 ## Integration fixture

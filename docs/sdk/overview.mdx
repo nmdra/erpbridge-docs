@@ -1,17 +1,17 @@
 ---
 sidebar_position: 1
 title: ERPBridge SDK
-description: SDK for integrating ERPBridge into your Agentic AI workflow applications.
+description: Integrate ERPBridge into agentic AI workflow applications with the ERPBridge SDK.
 keywords: [sdk, mcp client, metrics, logs]
 ---
 
 # ERPBridge SDK
 
-The `@erpbridge/sdk` TypeScript client library lets you integrate ERPBridge into your Agentic AI workflow applications. It is the easiest way to embed the bridge in your own products: call MCP tools by exact name, invoke tools over REST, aggregate logs, read metrics, check health, and manage the cache and tool registry — all through one typed facade.
+The ERPBridge SDK is a TypeScript client library for agentic AI workflow applications. Use `@erpbridge/sdk` to call MCP tools by exact name, invoke tools over REST, collect logs, read metrics, check health, and manage the cache and tool registry through one typed facade.
 
 ## Features
 
-- **Built-in MCP client** for the ERPBridge server — connect, discover, and call tools programmatically
+- **Built-in MCP client** for ERPBridge Server — connect, discover, and call tools programmatically
 - **Exact-name tool proxy** — call registered tools such as `list_employees` directly, with argument validation against each tool's input schema
 - **Log aggregation** — collect and inspect bridge logs from your application
 - **View metrics** — read Prometheus metrics from the server, raw or parsed
@@ -20,17 +20,17 @@ The `@erpbridge/sdk` TypeScript client library lets you integrate ERPBridge into
 - **Typed errors** — a single `ErpbridgeError` hierarchy across the whole surface
 - **Consume-only authentication** — send administrator-provisioned bearer tokens with per-surface routing
 - **Dual build** — ESM + CJS, Node.js >= 20, dependency-light
-- **Browser MCP/tools** — use the ESM MCP client and exact-name tool proxy in
+- **Browser MCP and tools** — use the ESM MCP client and exact-name tool proxy in
   browser bundles when the server's `/mcp/` CORS policy is configured
 
-## Getting started
+## Get started
 
 | Page | What it covers |
 | :--- | :--- |
 | [Installation](./installation.mdx) | Requirements and package managers |
-| [Quickstart](./quickstart.mdx) | First tool call in five lines |
+| [quickstart](./quickstart.mdx) | First tool call in five lines |
 | [MCP tools](./mcp-tools.mdx) | The MCP client, the tool proxy, and the registry |
-| [Logs & metrics](./logs-metrics.mdx) | Log streaming, metrics, health, and cache |
+| [Logs and metrics](./logs-metrics.mdx) | Log streaming, metrics, health, and cache |
 | [Authentication](./authentication.mdx) | Bearer credentials, scopes, and auth errors |
 | [Upgrade guide](./upgrade-guide.mdx) | Migrate MCP result handling and active credentials |
 | [API reference](./api-reference.mdx) | Every public export, the client facade, and the error hierarchy |
@@ -45,8 +45,8 @@ The `@erpbridge/sdk` TypeScript client library lets you integrate ERPBridge into
 
 ## Package
 
-`@erpbridge/sdk` is published on [npm](https://www.npmjs.com/package/@erpbridge/sdk) with signed provenance (SLSA), dual ESM + CJS builds, and TypeScript declarations for both. Install it from the [installation](./installation.mdx) page.
+The `@erpbridge/sdk` package is published on [npm](https://www.npmjs.com/package/@erpbridge/sdk) with signed provenance (SLSA), dual ESM + CJS builds, and TypeScript declarations for both. Install it from the [installation](./installation.mdx) page.
 
 ## Repository
 
-The SDK is developed in the [erpbridge-sdk](https://github.com/nmdra/erpbridge-sdk) repository. Its operating manual for AI agents and contributors — plan-first workflow, TDD, quality gates, release pipeline, and code conventions — lives in the [Agent Guide](./agent-guide.mdx).
+The ERPBridge SDK is developed in the [erpbridge-sdk](https://github.com/nmdra/erpbridge-sdk) repository. The [Agent guide](./agent-guide.mdx) describes the plan-first workflow, TDD, quality gates, release pipeline, and code conventions for AI agents and contributors.

@@ -1,25 +1,25 @@
 ---
 sidebar_position: 5
-title: Logs & metrics
+title: Logs and metrics
 description: Log streaming, Prometheus metrics, health, and cache through the SDK.
 keywords: [sdk, logs, metrics, sse, prometheus, health, cache]
 ---
 
-# Logs & metrics
+# Logs and metrics
 
-The REST surface of the SDK mirrors the server's own REST endpoints, all typed
-against the same error hierarchy.
+The ERPBridge SDK REST surface mirrors the server REST endpoints. All methods
+use the same typed error hierarchy.
 
 ## Logs
 
-`client.logs` gives access to the server's structured JSON logs.
+Use `client.logs` to access the server's structured JSON logs.
 
 ```ts
 const recent = await client.logs.recent() // LogRecord[] — the last buffered records
 ```
 
-`stream()` consumes the server's SSE log stream (`data: <json>\n\n`). The
-stream reconnects automatically — including across failed connection attempts —
+Use `stream()` to consume the server's SSE log stream (`data: <json>\n\n`). The
+stream reconnects automatically, including after failed connection attempts,
 until you abort it:
 
 ```ts
@@ -33,17 +33,16 @@ for await (const record of client.logs.stream({ signal: controller.signal })) {
 
 ## Metrics
 
-`client.metrics` reads the server's Prometheus endpoint.
+Use `client.metrics` to read the server's Prometheus endpoint.
 
 ```ts
 const text = await client.metrics.text()       // raw Prometheus text format
 const parsed = await client.metrics.parsed()   // { families, skipped }
 ```
 
-`parsed()` parses counters, gauges, and histograms (including `_bucket` /
-`_sum` / `_count` series) into typed families. Families the parser does not
-consume — summaries and untyped — are reported in `skipped` instead of
-throwing.
+`parsed()` parses counters, gauges, and histograms, including `_bucket`,
+`_sum`, and `_count` series, into typed families. It reports unsupported
+summary and untyped families in `skipped` instead of throwing.
 
 ## Health
 
@@ -59,14 +58,14 @@ const flushed = await client.cache.flush({ all: true }) // { deleted, status }
 ```
 
 `flush()` targets a tool, a module, or the whole cache. The endpoints work with
-both the configured Redis backend and the bounded in-memory backend. In memory
-mode, `redisMemory` is an empty string. A configured but unreachable Redis
-backend remains selected and surfaces a typed `ServerError` rather than
-silently switching to memory.
+the configured Redis backend and the bounded in-memory backend. In-memory mode
+returns an empty string for `redisMemory`. A configured but unreachable Redis
+backend remains selected and returns a typed `ServerError`. The ERPBridge SDK
+does not switch to memory mode.
 
 ## The typed error hierarchy
 
-Every REST failure is an `ErpbridgeError` subclass — `NotFoundError`,
+Every REST failure is an `ErpbridgeError` subclass, such as `NotFoundError`,
 `RateLimitError` (with `retryAfter`), `ServerError` (with `status` and `body`),
-`ProtocolError` (with a numeric `code` for malformed server responses). See the
-[quickstart](./quickstart.mdx) for the full table.
+or `ProtocolError` (with a numeric `code` for malformed server responses). See
+the [quickstart](./quickstart.mdx) for the full table.

@@ -1,15 +1,15 @@
 ---
 sidebar_position: 11
-title: Environment Variables Reference
-description: Every environment variable read by the ERPBridge server, the bridgectl CLI, and the mock ERP service.
+title: Environment variables reference
+description: Every environment variable read by ERPBridge Server, the bridgectl CLI, and the mock-erp service.
 keywords: [environment variables, configuration, MCP_PORT, REDIS_URL, DATABASE_PATH]
 ---
 
-# Environment Variables Reference
+# Environment variables reference
 
-This page lists all environment variables read by the ERPBridge server, the `bridgectl` CLI, and the mock ERP service.
+This page lists all environment variables read by ERPBridge Server, the `bridgectl` CLI, and the `mock-erp` service.
 
-## Server Variables
+## Server variables
 
 The server reads these variables directly from the environment. It does not load a `.env` file. Export the variables in your shell, or set them in `docker-compose.yml`.
 
@@ -43,20 +43,11 @@ server resolves `credentialRef` entries from the environment at call time and
 redacts them from logs. Plugin references must use the `PLUGIN_` prefix.
 :::
 
-Credentialed ERP and plugin calls require HTTPS. For isolated development only,
-`INSECURE_AUTH_ALLOWED_HOSTS` can contain exact normalized `host:port` entries;
-there is no broad insecure boolean. Credentialed plugin admission also requires
-exact `PLUGIN_ENDPOINT_ALLOWLIST` membership. Rotate a value in the deployment
-environment, then flush affected cache entries with an authenticated
-`bridgectl cache flush --all`.
+Credentialed ERP and plugin calls require HTTPS. For isolated development, `INSECURE_AUTH_ALLOWED_HOSTS` can contain exact normalized `host:port` entries. There is no broad insecure boolean. Credentialed plugin admission also requires exact `PLUGIN_ENDPOINT_ALLOWLIST` membership. Rotate a value in the deployment environment. Then flush affected cache entries with an authenticated `bridgectl cache flush --all`.
 
-The local API registry stores `credentialRef` names only. If an older registry
-contains `authKey` or `authToken`, state-changing API commands and `api test`
-stop until `bridgectl api scrub-credentials --yes` atomically removes those
-fields. The scrub creates no plaintext backup; assign a new reference after it
-completes.
+The local API registry stores `credentialRef` names only. If an older registry contains `authKey` or `authToken`, state-changing API commands and `api test` stop until `bridgectl api scrub-credentials --yes` atomically removes those fields. The scrub creates no plaintext backup. Assign a new reference after it completes.
 
-## CLI Variables (`bridgectl`)
+## CLI variables (`bridgectl`)
 
 The CLI reads these variables to override the active context.
 
@@ -90,12 +81,12 @@ The CLI reads its defaults from `~/.bridgectl/config.yaml`. The default context 
 Set `BRIDGE_SERVER` or edit the config file before you use `bridgectl cache` or `bridgectl log`.
 :::
 
-## Mock ERP Variables
+## mock-erp variables
 
-| Variable | Purpose |
-| :--- | :--- |
-| `MOCK_ERP_PORT` | Host port exposed for MockERP. | `8081` |
-| `MOCK_ERP_IMAGE` | Pinned MockERP image. | `ghcr.io/nmdra/mockerp:0.2.1` |
-| `MOCK_ERP_VERSION` | Release used for OpenAPI generation. | `0.2.1` |
+| Variable | Purpose | Default |
+| :--- | :--- | :--- |
+| `MOCK_ERP_PORT` | Host port exposed for mock-erp. | `8081` |
+| `MOCK_ERP_IMAGE` | Pinned mock-erp image. | `ghcr.io/nmdra/mockerp:0.2.1` |
+| `MOCK_ERP_VERSION` | Release used for OpenAPI specification generation. | `0.2.1` |
 | `MOCK_ERP_CREDENTIALS_JSON` | JSON credentials for local/container use. | required |
 | `MOCK_ERP_CREDENTIALS_FILE` | Mounted JSON secret path. | required alternative |

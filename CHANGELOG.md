@@ -52,6 +52,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   allowlists, HTTPS transport policy, credential rotation, and explicit legacy
   registry scrubbing without plaintext backups.
 
+### Changed
+
+- Standardized headings, terminology, link labels, and task-oriented language across the Server, `bridgectl`, SDK, roadmap, FAQ, and homepage documentation
+- Updated homepage and metadata copy to describe existing ERP APIs and the ERP codebase
+- Standardized `ERPBridge Server`, `bridgectl`, `stdio`, OpenAPI specification, and `mock-erp` terminology across hand-written pages
+
 ### Fixed
 
 - The OpenCode section of the Agentic Tools MCP Integration guide now shows
@@ -59,14 +65,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   `mcp.servers.<name>` nesting, adds `"enabled": true`, documents
   `oauth: false` for static bearer tokens, and notes client-side tool
   filtering via `tools` glob patterns.
+- Corrected the SDK API reference to document `MetricsApi.text()` alongside `parsed()`.
+- Corrected the FAQ MCP initialize endpoint to `POST /mcp/`.
 - **Bridgectl Skill Usage** page (`docs/bridgectl/skills.mdx`) documenting the `bridgectl-ops` AI agent skill — onboarding, maintenance, authentication, operations, troubleshooting, and sanitized bug-report workflows
 - **SDK Agent Guide** page (`docs/sdk/agent-guide.mdx`) mirroring the ERPBridge SDK repository's `AGENTS.md` — plan-first workflow, TDD, quality gates, release pipeline, and code conventions
 - SDK overview page now links to the SDK repository and its agent guide
 - Roadmap Phase 3 lists the ERPBridge SDK as an ecosystem item
 - **SDK docs**: real landing page (`docs/sdk/overview.mdx`) plus new `installation.mdx`, `quickstart.mdx` (npm/pnpm tabs), `mcp-tools.mdx`, and `logs-metrics.mdx` covering the shipped client surface
-- SDK listed in the `erpbridge/intro.mdx` components table and the SDK roadmap moved to Shipped (v0.1.1)
+- SDK listed in the `erpbridge/intro.mdx` components table and the SDK roadmap moved to Shipped (v1.0.0)
 
-- Docs now distinguish the independently released products: ERPBridge Server and `bridgectl` at **v0.3.0-alpha.1**, and `@erpbridge/sdk` at **v0.1.1**
+- Docs now distinguish the independently released products: ERPBridge Server and `bridgectl` at **v0.3.0-alpha.1**, and `@erpbridge/sdk` at **v1.0.0**
 - Homepage redesigned with a modern dark theme: release badge pill, gradient title, atmospheric radial glows, and a **bridgectl terminal mockup** hero card
 - Homepage **Start building** section with 6 pathway cards (**Quickstart**, **Onboarding Guide**, **Bridgectl CLI**, **ERPBridge SDK**, **REST API Reference**, and **Roadmap**) with circular animated arrow-chip buttons
 - **Dedicated social card** (`static/img/social-card.svg`) for link previews on social platforms; replaces the SVG logo as the OG image
@@ -82,13 +90,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - SDK release references updated from v0.1.1 to **v1.0.0** across the homepage release badge, announcement bar, SDK overview status callout, and roadmap pages; the SDK roadmap now lists consume-only authentication as Shipped and the upgrade guide describes the ERPBridge v0.3 compatibility contract as the breaking v1.0.0 release.
 - Product release versions (`ERPBridge + bridgectl` and `@erpbridge/sdk`) are centralized in `src/constants/releases.ts`; site chrome (announcement bar, docs version label, homepage badges) imports from it.
 - ERPBridge now uses a clearer, scalable bridge-and-connection mark in the site logo and social card.
-- SDK documentation now replaces the shared docs badge with `SDK · v0.1.1`; Server and `bridgectl` pages retain the ERPBridge release badge.
+- SDK documentation now replaces the shared docs badge with `SDK · v1.0.0`; Server and `bridgectl` pages retain the ERPBridge release badge.
 - Homepage and docs now show separate, current version lines for ERPBridge Server/`bridgectl` and `@erpbridge/sdk`.
 - Roadmap pages now separate shipped, in-flight, and future work with product status cards and technical references.
 - The global FAQ is organized by product, onboarding, security, and operations with links to the owning technical guides.
 - Homepage refreshed with marketing-led onboarding copy, an ERP-to-agent workflow, Server/bridgectl/SDK entry points, shipped capability highlights, and focused start routes; product introduction pages retain technical-first language.
 - Homepage product chooser now distinguishes the Server’s control-plane/runtime role from bridgectl’s developer tools and calls out the shipped `bridgectl-ops` agent skill.
-- Homepage hero subtitle now uses the product tagline: “Connect your legacy ERP to AI-based workflows without changing your code base.”
+- Homepage hero subtitle now uses the product tagline: “Connect your existing ERP APIs to AI workflows without modifying your ERP codebase.”
 - Navbar now exposes local search directly, with stronger keyboard focus treatment and responsive reduced-motion safeguards shared across the site.
 - Homepage feature-card icons marked `aria-hidden` so screen readers skip the decorative image and announce only the card title
 - Homepage hero terminal: the six `bridgectl` lines now fade up in sequence on first paint instead of appearing all at once (disabled under `prefers-reduced-motion`)
@@ -103,9 +111,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Homepage feature cards modernized into a clean **3×2 grid** with large left-aligned icons, hover lift, and dark-mode border glow
 - Navbar reordered: **SDK** entry moved to right after **Bridgectl** (before Roadmap and FAQ)
 - Site title shortened from "ERPBridge Docs" to "ERPBridge" (navbar, hero, browser tab)
-- Hero primary button renamed to **Try ERPBridge**
+- Hero primary button renamed to **Follow the quickstart**
 - Hero illustration redesigned: minimal composition (no text labels) showing data transformation — raw ERP packets flow into the hub and leave as structured packets for AI agents
-- Site tagline updated to "Connect your legacy ERP to AI-based workflows without changing your code base" (homepage hero, meta description, `llms.txt`)
+- Site tagline updated to "Connect your existing ERP APIs to AI workflows without modifying your ERP codebase" (homepage hero and metadata)
 - Homepage feature sections extended to six: the original **MCP Made Simple**, **Tool Registry**, and **Resilient by Default**, plus **Non-Invasive Integration**, **AI-Agent-First Design**, and **BYOERP — Bring Your Own ERP**, each with a custom icon
 
 ### Fixed

@@ -110,11 +110,11 @@ function HomepageHeader() {
               ERPBridge
             </Heading>
             <p className={styles.heroSubtitle}>
-              Connect your legacy ERP to AI-based workflows without changing your code base.
+              Connect your existing ERP APIs to AI workflows without modifying your ERP codebase.
             </p>
             <div className={styles.buttons}>
               <Link className={styles.primaryButton} to="/docs/erpbridge/quickstart">
-                Start with the quickstart
+                Follow the quickstart
               </Link>
               <Link className={styles.secondaryButton} to="/docs/sdk/overview">
                 Explore the SDK
@@ -140,7 +140,7 @@ export default function Home(): ReactNode {
   return (
     <Layout
       title={`${siteConfig.title}`}
-      description="Connect existing ERP APIs to AI agents with ERPBridge — MCP middleware, bridgectl, and a typed SDK for production workflows."
+      description="Connect existing ERP APIs to AI agents with ERPBridge: MCP tools, bridgectl, and a typed SDK for production workflows."
     >
       <HomepageHeader />
       <main>

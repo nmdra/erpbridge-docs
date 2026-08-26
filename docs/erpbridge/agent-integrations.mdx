@@ -1,11 +1,11 @@
 ---
 sidebar_position: 5
-title: Agentic Tools MCP Integration
+title: Agentic tools MCP integration
 description: Connect Codex CLI, OpenCode, OpenClaw, and Hermes Agent to ERPBridge using standard MCP transports.
 keywords: [mcp, agents, codex, opencode, openclaw, hermes, bearer, stdio]
 ---
 
-# Agentic Tools MCP Integration
+# Agentic tools MCP integration
 
 ERPBridge implements standard Model Context Protocol (MCP). Codex CLI,
 OpenCode, OpenClaw, and Hermes Agent can connect without an ERPBridge-specific
@@ -69,7 +69,7 @@ bearer_token_env_var = "ERPBRIDGE_MCP_TOKEN"
 enabled_tools = ["list_employees", "list_departments"]
 ```
 
-bearer_token_env_var sends the environment value as a bearer token. Stdio
+bearer_token_env_var sends the environment value as a bearer token. stdio
 does not use inbound HTTP bearer authentication. Restart Codex after changing
 config.toml; codex mcp list and /mcp show connection status.
 
@@ -202,10 +202,10 @@ HTTP bearer authentication does not apply to this local process.
 | 403 Forbidden | The token lacks the mcp scope, or the operation is outside its role or tool policy. |
 | HTTP client cannot connect | Use the exact https://erpbridge-host.example/mcp/ URL, verify GET /mcp/health, and check reverse-proxy forwarding of POST, GET, Authorization, Mcp-Session-Id, and MCP-Protocol-Version. |
 | Tools list is empty | Check active ERPBridge tools and client-side filters. |
-| Stdio parse errors | Start with --stdio and ensure no wrapper prints to stdout. ERPBridge writes startup diagnostics to stderr in stdio mode. |
+| stdio parse errors | Start with `--stdio` and make sure that no wrapper prints to stdout. ERPBridge writes startup diagnostics to stderr in stdio mode. |
 | Upstream ERP calls fail | Check ERP_BASE_URL and the environment variable named by each tool credentialRef. |
 
-See [Connectivity & Transport](./connectivity.mdx) and [API Tokens](./tokens.mdx).
+See [Connectivity and transport](./connectivity.mdx) and [API tokens](./tokens.mdx).
 
 ## Official client references
 

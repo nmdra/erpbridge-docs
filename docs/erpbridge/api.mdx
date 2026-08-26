@@ -1,13 +1,13 @@
 ---
 sidebar_position: 13
-title: REST API Reference
-description: Direct HTTP endpoints of the ERPBridge server — tool registry control plane, invocation, cache, logs, MCP, and metrics.
+title: REST API reference
+description: Direct HTTP endpoints of ERPBridge Server for tool registry control, invocation, cache, logs, MCP, and metrics.
 keywords: [rest api, control plane, tools, cache, logs, invoke]
 ---
 
-# REST API Reference
+# REST API reference
 
-The ERPBridge server exposes direct HTTP endpoints. They do not require an MCP handshake. They serve the `bridgectl` CLI, scripts, and monitoring tools.
+ERPBridge Server exposes direct HTTP endpoints. These endpoints do not require an MCP handshake. They serve the `bridgectl` CLI, scripts, and monitoring tools.
 
 ## Base URL
 
@@ -27,18 +27,18 @@ or a non-admin token on an admin route returns `403`.
 ## MockERP upstream contract
 
 The local Compose stack uses the pinned `ghcr.io/nmdra/mockerp:0.2.1` image at
-`http://mock-erp:8081`. The matching OpenAPI contract is published at
+`http://mock-erp:8081`. The matching OpenAPI specification is published at
 `https://raw.githubusercontent.com/nmdra/mockerp/v0.2.1/openapi.yaml`.
 
 MockERP is a downstream ERP fixture, not an ERPBridge control-plane endpoint.
 See the [MockERP Integration Contract](./mock-erp.mdx) for credentials, SQLite
 reset, supported DocTypes, and integration fixtures.
 
-## Tool Registry (Control Plane)
+## Tool registry (control plane)
 
 The registry API is Kubernetes-style. It stores tool definitions in SQLite.
 
-### List Tools
+### List tools
 
 ```http title="List tool definitions"
 GET /apis/erpbridge.io/v1/tools
@@ -52,7 +52,7 @@ Use the optional exact-match query parameters `name` and `version` to request a 
 GET /apis/erpbridge.io/v1/tools?name=list_employees&version=1.0.0
 ```
 
-### Apply a Tool
+### Apply a tool
 
 ```http title="Apply a tool definition"
 POST /apis/erpbridge.io/v1/tools
@@ -71,7 +71,7 @@ Body: one JSON tool definition (kind `MCPTool`). Returns `201 Created` on succes
 
 When the admission rules reject the definition, the server returns `422 Unprocessable Entity` with an error message.
 
-### Delete a Tool
+### Delete a tool
 
 ```http title="Delete a tool"
 DELETE /apis/erpbridge.io/v1/tools?name=<name>&version=<version>&hard=true
@@ -85,7 +85,7 @@ DELETE /apis/erpbridge.io/v1/tools?name=<name>&version=<version>&hard=true
 
 Returns `204 No Content` on success.
 
-## External Plugin Registry
+## External plugin registry
 
 Plugin and binding resources use the admin-only Kubernetes-style control-plane
 routes:
@@ -177,7 +177,7 @@ flush affected caches using an authenticated `bridgectl cache flush --all` (or
 restart the deployment). Dynamic secret providers, OAuth, mTLS, and
 application-level encryption are not part of this contract.
 
-### Admission Rules
+### Admission rules
 
 The server rejects plugin definitions with missing exact references, unsupported
 or malformed authentication, raw-secret-looking fields, reserved or
@@ -192,9 +192,9 @@ The server rejects tool definitions when:
   than 32 roles.
 - A guarded tool defines or requires its own `role` input.
 
-## Tool Invocation
+## Tool invocation
 
-### Invoke a Tool
+### Invoke a tool
 
 ```http title="Invoke a tool directly"
 POST /api/tools/invoke
@@ -210,7 +210,7 @@ Body:
 }
 ```
 
-The call goes through the middleware chain: rate limiting, cache, and resilience.
+The call goes through the middleware chain: rate limiting, caching, and resilience.
 
 For guarded tools, direct callers pass the verified selector in
 `X-ERPBridge-Role`. A `role` field in the JSON body is rejected. The selector
@@ -249,7 +249,7 @@ On failure the server returns `500 Internal Server Error` with a JSON error enve
 | `/api/cache/stats` | `GET` | Cache key counts and memory usage. Works with Redis and the bounded in-memory backend. |
 | `/api/cache/flush` | `GET` | Flush cache entries. Query params: `tool`, `module`, `all=true`. A module flush covers all stored versions, including inactive versions. |
 
-### Cache Stats Response
+### Cache stats response
 
 ```json title="GET /api/cache/stats"
 {
@@ -263,7 +263,7 @@ On failure the server returns `500 Internal Server Error` with a JSON error enve
 }
 ```
 
-### Flush Response
+### Flush response
 
 ```json title="GET /api/cache/flush?tool=list_employees"
 {
@@ -289,7 +289,7 @@ On failure the server returns `500 Internal Server Error` with a JSON error enve
 | `/api/auth/tokens` | `GET` | List token metadata without raw values or hashes. Admin only. |
 | `/api/auth/tokens/{id}` | `DELETE` | Revoke a token. Admin only. |
 
-## MCP Endpoints
+## MCP endpoints
 
 | Endpoint | Method | Description |
 | :--- | :--- | :--- |
@@ -337,10 +337,10 @@ The server exposes the following metrics in Prometheus text format. All counters
 curl http://localhost:8080/metrics | grep -E "erp_requests_total|mcp_tool_invocations_total"
 ```
 
-## Error Responses
+## Error responses
 
 The server uses standard HTTP status codes. For cache endpoints, `503` means the cache is not enabled.
 
 :::tip Need the full lifecycle?
-See the [MCP Client Guide](./mcp-client-guide.mdx) for the JSON-RPC request/response flow over the MCP endpoints.
+See the [MCP client guide](./mcp-client-guide.mdx) for the JSON-RPC request/response flow over the MCP endpoints.
 :::

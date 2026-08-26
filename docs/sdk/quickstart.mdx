@@ -1,7 +1,7 @@
 ---
 sidebar_position: 3
 title: Quickstart
-description: Call an ERPBridge tool in five lines with the SDK.
+description: Call an ERPBridge tool with the ERPBridge SDK.
 keywords: [sdk, quickstart, mcp, tools]
 ---
 
@@ -9,6 +9,9 @@ import Tabs from '@theme/Tabs'
 import TabItem from '@theme/TabItem'
 
 # Quickstart
+
+Install the ERPBridge SDK, connect to ERPBridge Server, and call a tool by
+its exact registered name.
 
 ## Install
 
@@ -41,13 +44,13 @@ const result = await client.tools.list_employees({ department: 'engineering' })
 console.log(result.content)
 ```
 
-That is the whole flow: create the client, connect the MCP session, call a tool
-by its exact registered name, and read the result.
+This flow creates the client, connects the MCP session, calls a tool by its
+exact registered name, and reads the result.
 
-- `client.tools` is a **lazy proxy** over the MCP `tools/list` result — every
-  property is a registered tool called by its exact name. Tool calls validate
-  their arguments against each tool's input schema before leaving the client.
-- Call `client.close()` when done to tear down the MCP session.
+- `client.tools` is a **lazy proxy** over the MCP `tools/list` result. Each
+  property is a registered tool with its exact name. Tool calls validate their
+  arguments against the tool input schema before they leave the client.
+- Call `client.close()` when the application finishes to close the MCP session.
 
 ## Errors are typed
 
@@ -77,7 +80,7 @@ try {
 }
 ```
 
-## What is next
+## Next steps
 
-- [MCP tools](./mcp-tools.mdx) — the MCP client and the tool proxy in detail
-- [Logs & metrics](./logs-metrics.mdx) — log streaming, metrics, health, cache
+- [MCP tools](./mcp-tools.mdx) — the MCP client and tool proxy
+- [Logs and metrics](./logs-metrics.mdx) — log streaming, metrics, health, and cache

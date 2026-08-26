@@ -1,6 +1,6 @@
 ---
 sidebar_position: 10
-title: Docker Deployment Guide
+title: Docker deployment guide
 description: Deploy and manage the ERPBridge ecosystem with Docker and Docker Compose — server, mock ERP, Redis, and MCP clients.
 keywords: [docker, docker compose, deployment, claude desktop, cursor]
 ---
@@ -8,11 +8,11 @@ keywords: [docker, docker compose, deployment, claude desktop, cursor]
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Docker Deployment Guide
+# Docker deployment guide
 
 This guide covers how to deploy and manage the ERPBridge ecosystem with Docker and Docker Compose.
 
-## 1. Quick Start
+## 1. Quick start
 
 Make sure that you have [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/) installed.
 
@@ -28,7 +28,7 @@ docker compose up -d --build
 The stack includes:
 
 - **ERPBridge Server** (`:8080`): The core MCP middleware.
-- **Mock ERP** (`:8081`): Simulates legacy ERP endpoints.
+- **`mock-erp`** (`:8081`): Simulates ERP endpoints.
 - **Redis** (`:6379`): Provides the exact-match cache.
 
 ## 2. Configuration
@@ -42,7 +42,7 @@ Environment variables for the server are set in the `docker-compose.yml` file.
 | `ERP_BASE_URL` | Base URL of the underlying ERP system. | `http://mock-erp:8081` |
 | `MOCK_ERP_HOST_PORT` | Host port for the MockERP container. | `8081` |
 | `MOCK_ERP_IMAGE` | Pinned MockERP image. | `ghcr.io/nmdra/mockerp:0.2.1` |
-| `MOCK_ERP_VERSION` | MockERP release used for OpenAPI generation. | `0.2.1` |
+| `MOCK_ERP_VERSION` | MockERP release used for OpenAPI specification generation. | `0.2.1` |
 | `MOCK_ERP_CREDENTIALS_JSON` | JSON credentials for local/container use. | (required) |
 | `MOCK_ERP_CREDENTIALS_FILE` | Mounted JSON secret path. | (required alternative) |
 | `REDIS_URL` | URL for the Redis cache. | `redis://redis:6379` |
@@ -57,9 +57,9 @@ Environment variables for the server are set in the `docker-compose.yml` file.
 | `PLUGIN_ENDPOINT_ALLOWLIST` | Exact normalized `host:port` values allowed for credentialed plugin endpoints. | (unset) |
 | `INSECURE_AUTH_ALLOWED_HOSTS` | Exact development-only `host:port` exceptions for credentialed HTTP. | (unset) |
 
-For the full list of server environment variables, see the [Environment Variables Reference](./environment-variables.mdx). See the [MockERP Integration Contract](./mock-erp.mdx) for the pinned release, credential boundary, SQLite reset, and supported fixture groups.
+For the full list of server environment variables, see the [environment variables reference](./environment-variables.mdx). See the [MockERP integration contract](./mock-erp.mdx) for the pinned release, credential boundary, SQLite reset, and supported fixture groups.
 
-## 3. Tool Registry
+## 3. Tool registry
 
 The server keeps tool definitions in a SQLite database (`DATABASE_PATH`). The `schemas/` directory is NOT mounted into the container. `schemas/` is also not tracked by git. There is no file-system watcher.
 
@@ -98,7 +98,7 @@ You can use the local `bridgectl` binary to interact with the server running in 
    ```
    The Makefile downloads the versioned MockERP OpenAPI contract, generates the tool YAML, and applies it to ERPBridge.
 
-## 5. Logs & Monitoring
+## 5. Logs and monitoring
 
 - **View Container Logs:**
   ```bash title="Follow container logs"
@@ -126,7 +126,7 @@ services:
     image: ghcr.io/nmdra/erpbridge-plugins/mock-plugin:0.1.0
 ```
 
-The plugin image is separate from the ERPBridge server image and receives no
+The plugin image is separate from the ERPBridge Server image and receives no
 ERP credentials or inbound request headers. Configure plugin authentication with
 an environment-backed `PLUGIN_*` reference, not a literal secret:
 
@@ -158,12 +158,12 @@ make test-plugin-integration
 The test uses the Compose project `erpbridge-plugin-test`. Its cleanup trap
 removes the containers, network, and volumes even when an assertion fails.
 
-## 7. Connecting MCP Clients
+## 7. Connecting MCP clients
 
-ERPBridge supports the **Stdio** and **Streamable HTTP** transports.
+ERPBridge supports the **stdio** and **Streamable HTTP** transports.
 
 <Tabs groupId="clients">
-  <TabItem value="claude" label="Claude Desktop (Stdio)">
+  <TabItem value="claude" label="Claude Desktop (stdio)">
 
 Claude Desktop connects to MCP servers via standard input and output. The server binary supports the `--stdio` flag.
 
@@ -222,7 +222,7 @@ Cursor connects to remote MCP servers via HTTP. Use this method when the ERPBrid
 ## 8. Troubleshooting
 
 - **Connection Refused:** Make sure that `ERP_BASE_URL` in `docker-compose.yml` uses the service name `http://mock-erp:8081` instead of `localhost`.
-- **Claude Stdio Timeout:** If Claude fails to connect, build the server binary first and run it directly. This shows any startup errors.
+- **Claude stdio timeout:** If Claude fails to connect, build the server binary first and run it directly. This shows any startup errors.
 - **Schema Errors:** Validate the tool definition locally before you apply it:
   ```bash title="Validate a schema"
   ./bridgectl tool validate -f schemas/erp/list_employees.json

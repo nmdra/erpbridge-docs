@@ -7,18 +7,18 @@ keywords: [roadmap, server, mcp, rest, registry, security]
 
 # Server roadmap
 
-The ERPBridge server is the runtime boundary between ERP APIs and MCP clients. This page tracks the server capabilities available in the current release and the areas under active development.
+ERPBridge Server is the runtime boundary between ERP APIs and MCP clients. This page tracks shipped capabilities and active development.
 
 ## Shipped in v0.3.0-alpha.1
 
 | Area | Current capability | Technical reference |
 | :--- | :--- | :--- |
-| MCP middleware | Streamable HTTP and stdio transports, tool discovery, calls, and notifications over MCP 2025-03-26; the server negotiates up to 2025-11-25. | [Transports](../erpbridge/transports.mdx) · [MCP Client Guide](../erpbridge/mcp-client-guide.mdx) |
-| Tool registry | ERP registration, schema generation and validation, soft/hard delete, versioned tools, and 10-second reconciliation. | [Architecture](../erpbridge/architecture.mdx) · [Tool Schema](../erpbridge/tool-schema.mdx) |
-| Resilience | 15-second HTTP timeout, circuit breaker, and retry with jitter for network errors and 429/5xx responses. | [Connectivity](../erpbridge/connectivity.mdx) |
-| Caching | Optional exact-match cache with Redis or bounded in-memory storage, flush and stats endpoints, and per-tool `flushOn` invalidation. | [Caching](../erpbridge/caching.mdx) |
-| Observability | Structured logs, JSON output in production, Prometheus metrics, health checks, and per-component log levels. | [REST API](../erpbridge/api.mdx) · [Environment Variables](../erpbridge/environment-variables.mdx) |
-| Security | Credential references resolved from environment variables, secret redaction in logs, scoped API tokens, and role-protected routes. | [Authentication](../erpbridge/auth.mdx) · [API Tokens](../erpbridge/tokens.mdx) |
+| MCP middleware | Streamable HTTP and stdio transports, tool discovery, calls, and notifications over MCP 2025-03-26; the server negotiates up to 2025-11-25. | [Transports](../erpbridge/transports.mdx) · [MCP client guide](../erpbridge/mcp-client-guide.mdx) |
+| Tool registry | ERP registration, schema generation and validation, soft/hard delete, versioned tools, and 10-second reconciliation. | [architecture](../erpbridge/architecture.mdx) · [tool schema](../erpbridge/tool-schema.mdx) |
+| Resilience | 15-second HTTP timeout, circuit breaker, and retry with jitter for network errors and 429/5xx responses. | [connectivity](../erpbridge/connectivity.mdx) |
+| Caching | Optional exact-match cache with Redis or bounded in-memory storage, flush and stats endpoints, and per-tool `flushOn` invalidation. | [caching](../erpbridge/caching.mdx) |
+| Observability | Structured logs, JSON output in production, Prometheus metrics, health checks, and per-component log levels. | [REST API](../erpbridge/api.mdx) · [environment variables](../erpbridge/environment-variables.mdx) |
+| Security | Credential references resolved from environment variables, secret redaction in logs, scoped API tokens, and role-protected routes. | [authentication](../erpbridge/auth.mdx) · [API tokens](../erpbridge/tokens.mdx) |
 
 ## In flight
 

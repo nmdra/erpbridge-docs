@@ -1,16 +1,16 @@
 ---
 sidebar_position: 8
-title: MCP Client Guide
-description: Build MCP clients that connect to ERPBridge over Streamable HTTP or Stdio — complete copy-paste examples in Python and TypeScript.
+title: MCP client guide
+description: Build MCP clients that connect to ERPBridge over Streamable HTTP or stdio with examples in Python and TypeScript.
 keywords: [mcp, client, python, typescript, json-rpc, streamable http, stdio]
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# MCP Client Guide (Python & TypeScript)
+# MCP client guide (Python and TypeScript)
 
-> **Who is this guide for?** This guide is written for developers who are new to MCP (Model Context Protocol). It walks you through building clients that connect to an ERPBridge server using either **Streamable HTTP** or **Stdio** transport — with complete, copy-paste-ready examples in both Python and TypeScript.
+> **Who is this guide for?** This guide is for developers who are new to MCP (Model Context Protocol). It shows how to build clients that connect to ERPBridge Server over **Streamable HTTP** or **stdio**, with complete examples in Python and TypeScript.
 
 ## What is MCP?
 
@@ -26,9 +26,9 @@ All communication uses **JSON-RPC 2.0** — a simple, human-readable message for
 
 ## Prerequisites
 
-### Start the ERPBridge Server
+### Start ERPBridge Server
 
-Before writing any client code, you need a running ERPBridge server to connect to.
+Before writing any client code, you need a running ERPBridge Server to connect to.
 
 <Tabs groupId="server-start">
   <TabItem value="docker" label="Docker (recommended for beginners)">
@@ -45,9 +45,9 @@ go run services/erpbridge-server/main.go
 ```
 
   </TabItem>
-  <TabItem value="stdio" label="Run the Stdio server locally">
+  <TabItem value="stdio" label="Run the stdio server locally">
 
-```bash title="Run from source (Stdio)"
+```bash title="Run from source (stdio)"
 go run services/erpbridge-server/main.go --stdio
 ```
 
@@ -55,10 +55,10 @@ go run services/erpbridge-server/main.go --stdio
 </Tabs>
 
 :::tip
-If you're unsure which option to choose, use Docker. It handles all dependencies automatically.
+If you are unsure which option to choose, use Docker. Docker handles all dependencies automatically.
 :::
 
-### Verify the Server is Running
+### Verify that the server is running
 
 Once started, the server listens at:
 
@@ -78,7 +78,7 @@ curl -s -o /dev/null -w "%{http_code}" -X POST http://localhost:8080/mcp/ \
 
 You see `200`.
 
-### Install Language Dependencies
+### Install language dependencies
 
 <Tabs groupId="language">
   <TabItem value="python" label="Python">
@@ -97,18 +97,18 @@ npm install node-fetch   # only needed for Node.js < 18; built-in fetch works in
   </TabItem>
 </Tabs>
 
-## Choosing a Transport
+## Choosing a transport
 
 MCP supports two ways to communicate with the server:
 
 | Transport | How it works | Best for |
 |---|---|---|
 | **Streamable HTTP** | Send JSON-RPC messages over regular HTTP POST requests. Optionally receive server-sent events (SSE) for real-time notifications. | Web apps, services, API testing tools like Postman |
-| **Stdio** | Spawn the server as a child process and communicate over its standard input/output (stdin/stdout). | Local scripts, CLI tools, desktop integrations |
+| **stdio** | Spawn the server as a child process and communicate over its standard input/output (stdin/stdout). | Local scripts, CLI tools, desktop integrations |
 
-**Not sure which to pick?** Start with **Streamable HTTP** — it's easier to debug since you can inspect requests in a browser or Postman.
+**Not sure which to pick?** Start with **Streamable HTTP**. It is easier to debug because you can inspect requests in a browser or Postman.
 
-## How Streamable HTTP Works
+## How Streamable HTTP works
 
 Every message you send follows the **JSON-RPC 2.0** format and is sent as a `POST` to `/mcp/`. Here's the typical flow:
 
@@ -131,7 +131,7 @@ Client                          ERPBridge Server
   |<-- Server-sent events (ongoing) ---|
 ```
 
-### Step 1 — Initialize the Session
+### Step 1 — Initialize the session
 
 Send an `initialize` request first. The server replies with a `Mcp-Session-Id` header that you must include in all subsequent requests.
 
@@ -157,9 +157,9 @@ Send an `initialize` request first. The server replies with a `Mcp-Session-Id` h
 The server uses it to associate your requests with your session. Without it, subsequent calls will fail.
 :::
 
-## Python Client — Streamable HTTP
+## Python client — Streamable HTTP
 
-### Minimal Working Example
+### Minimal working example
 
 This example connects to ERPBridge, lists available tools, and calls one.
 
@@ -227,9 +227,9 @@ print("\nTool result:")
 print(json.dumps(result, indent=2))
 ```
 
-## Python Client — Stdio
+## Python client — stdio
 
-Use this approach when you want to run the ERPBridge server as a subprocess and communicate directly through its standard input/output.
+Use this approach when you want to run ERPBridge Server as a subprocess and communicate directly through its standard input/output.
 
 ### Minimal Working Example
 
@@ -295,9 +295,9 @@ proc.stdin.close()
 proc.wait()
 ```
 
-## TypeScript Client — Streamable HTTP
+## TypeScript client — Streamable HTTP
 
-### Minimal Working Example
+### Minimal working example
 
 ```typescript title="ts_http_client.ts"
 const BASE_URL = "http://localhost:8080/mcp/";
@@ -373,7 +373,7 @@ async function main() {
 main().catch(console.error);
 ```
 
-## TypeScript Client — Stdio
+## TypeScript client — stdio
 
 ```typescript title="ts_stdio_client.ts"
 import { spawn } from "node:child_process";
@@ -449,7 +449,7 @@ async function main() {
 main().catch(console.error);
 ```
 
-## Working with Resources
+## Working with resources
 
 Resources are read-only data sources (like database records or documentation) that the AI can fetch.
 
@@ -472,7 +472,7 @@ Resources are read-only data sources (like database records or documentation) th
 }
 ```
 
-## Working with Prompts
+## Working with prompts
 
 Prompts are predefined instruction templates that help AI agents perform specific tasks.
 
@@ -498,7 +498,7 @@ Prompts are predefined instruction templates that help AI agents perform specifi
 }
 ```
 
-## Completion & Suggestions
+## Completion and suggestions
 
 ERPBridge provides suggestions for tool, resource, and prompt arguments. This is useful for building interactive CLIs or UI components.
 
@@ -522,7 +522,7 @@ ERPBridge provides suggestions for tool, resource, and prompt arguments. This is
 }
 ```
 
-## Hot Reloading & Lifecycle
+## Hot reloading and lifecycle
 
 ERPBridge supports **Hot Reloading** and dynamic tool lifecycle management. If you add, modify, or delete tools via the `bridgectl` CLI, the server automatically updates its registry and notifies all active sessions.
 
@@ -595,7 +595,7 @@ Sent when a tool call fails or a condition needs attention.
 }
 ```
 
-## Built-in System Tools
+## Built-in system tools
 
 The server registers two demonstration tools that are always available. Use them to verify client behavior before you connect a real ERP.
 
@@ -640,11 +640,11 @@ Emits a log line containing the `token` and `message` you pass in. The logger re
 | `token` | string | A sensitive value that must be redacted from logs. |
 | `message` | string | A normal message that stays visible. |
 
-## Error Handling
+## Error handling
 
 JSON-RPC errors are returned inside the response body, not as HTTP error codes. Always check the response for an `error` field.
 
-### What a JSON-RPC Error Looks Like
+### What a JSON-RPC error looks like
 
 ```json title="JSON-RPC error response"
 {
@@ -658,17 +658,17 @@ JSON-RPC errors are returned inside the response body, not as HTTP error codes. 
 }
 ```
 
-### Common JSON-RPC Error Codes
+### Common JSON-RPC error codes
 
 | Code | Meaning | Fix |
 |---|---|---|
 | `-32700` | Parse error | Your request body contains invalid JSON |
 | `-32600` | Invalid request | Missing `jsonrpc`, `id`, or `method` fields |
-| `-32601` | Method not found | Tool name doesn't exist — check with `tools/list` |
+| `-32601` | Method not found | The tool name does not exist. Use `tools/list` to find it. |
 | `-32602` | Invalid params | Wrong or missing arguments for the tool |
 | `-32603` | Internal error | Server-side error — check server logs |
 
-### Preserve the MCP Result Envelope
+### Preserve the MCP result envelope
 
 An MCP `tools/call` response is a JSON-RPC result. Read the `content` array and preserve any structured result fields supplied by the SDK. ERPBridge may place a JSON-encoded ERPBridge compatibility result inside a text content item, so `content[0].text` is not automatically the complete protocol response.
 
@@ -683,22 +683,22 @@ The direct REST endpoint, `/api/tools/invoke`, is a registry-only compatibility 
 **Fix:**
 
 - Make sure your very first request uses `"method": "initialize"`.
-- Make sure you're sending to `POST /mcp/` — not `GET`, not `/mcp` without the trailing slash.
+- Make sure that you send the request to `POST /mcp/`, not `GET` or `/mcp` without the trailing slash.
 
 ### `404 Not Found` or connection refused
 
-**Cause:** The server isn't running or the URL is wrong.
+**Cause:** The server is not running, or the URL is incorrect.
 
 **Fix:**
 
 - Confirm the server started successfully (check Docker logs or terminal output).
 - Verify the port: `curl http://localhost:8080/mcp/`
 
-## Logging & Redaction
+## Logging and redaction
 
 ERPBridge implements standard MCP logging via `notifications/message`.
 
-### Setting the Log Level
+### Setting the log level
 
 ```json title="logging/setLevel"
 {
@@ -711,13 +711,13 @@ ERPBridge implements standard MCP logging via `notifications/message`.
 
 Available levels: `debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency`.
 
-### Automatic Redaction
+### Automatic redaction
 
 For security, ERPBridge automatically redacts sensitive data (API keys, passwords, PII) from all logs sent to clients. Redacted fields appear as `[REDACTED]`.
 
-## Quick Reference Cheat Sheet
+## Quick reference cheat sheet
 
-### JSON-RPC Message Template
+### JSON-RPC message template
 
 ```json title="Message template"
 {
@@ -728,7 +728,7 @@ For security, ERPBridge automatically redacts sensitive data (API keys, password
 }
 ```
 
-### Request Sequence (HTTP)
+### Request sequence (HTTP)
 
 ```text title="Request order"
 1. POST /mcp/  →  initialize          (no session ID needed)
@@ -739,16 +739,16 @@ For security, ERPBridge automatically redacts sensitive data (API keys, password
 6. GET  /mcp/  →  SSE stream          (optional, include Mcp-Session-Id)
 ```
 
-### Transport at a Glance
+### Transport at a glance
 
-| | Streamable HTTP | Stdio |
+| | Streamable HTTP | stdio |
 |---|---|---|
 | Session ID | Required (from `initialize` response header) | Not used |
 | Notifications | Via SSE (GET stream) | Supported (via stdout) |
 | Debugging | Easy (curl, Postman, browser devtools) | Harder |
 | Best for | Services, web apps | Local scripts, CLIs |
 
-### Key Headers
+### Key headers
 
 | Header | When to use |
 |---|---|

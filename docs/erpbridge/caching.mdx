@@ -1,19 +1,19 @@
 ---
 sidebar_position: 12
-title: Exact Match Caching
+title: Exact-match caching
 description: ERPBridge's backend-independent caching layer — SHA-256 exact-match keys, per-tool TTLs, and auto-flush invalidation.
 keywords: [cache, redis, ttl, flush, exact match]
 ---
 
-# Exact Match Caching
+# Exact-match caching
 
-ERPBridge has a caching layer that reduces latency and load on legacy ERP systems. It uses Redis when configured, or a bounded in-memory LRU when Redis is not configured.
+ERPBridge has a caching layer that reduces latency and load on existing ERP systems. It uses Redis when configured, or a bounded in-memory LRU when Redis is not configured.
 
 ## Overview
 
-The caching mechanism runs as middleware in the MCP tool execution pipeline. The server selects Redis when `REDIS_URL` is set and the in-memory backend otherwise. A configured but unreachable Redis server is not replaced by memory.
+The cache runs as middleware in the MCP tool execution pipeline. The server selects Redis when `REDIS_URL` is set and the in-memory backend otherwise. A configured but unreachable Redis server is not replaced by memory.
 
-### Layer 1: Exact Match (SHA256)
+### Layer 1: exact match (SHA-256)
 
 The system gives O(1) lookups for identical requests.
 
@@ -25,7 +25,7 @@ The system gives O(1) lookups for identical requests.
 
 Caching is opt-in. It is configured per tool in the `spec.cache` section of the tool schema.
 
-### Example Schema Configuration
+### Example schema configuration
 
 ```json title="spec.cache — list_employees"
 {
@@ -54,7 +54,7 @@ Caching is opt-in. It is configured per tool in the `spec.cache` section of the 
 | `isReadOnly` | If `true`, the cache uses the shared `role: shared` scope. If `false`, entries use the verified caller role. |
 | `flushOn` | An array of tool names. When the current tool runs, it flushes the cache of the listed tools. |
 
-## Cache Invalidation (Auto-Flush)
+## Cache invalidation (auto-flush)
 
 ERPBridge supports automatic cache invalidation. Use it on `POST`, `PUT`, or `PATCH` tools.
 
@@ -77,7 +77,7 @@ A write tool can keep its own caching disabled while still flushing the read cac
 
 The developer CLI provides tools to monitor and manage the cache.
 
-### Check Cache Statistics
+### Check cache statistics
 
 Shows counts of cached keys and memory usage.
 
@@ -85,7 +85,7 @@ Shows counts of cached keys and memory usage.
 bridgectl cache stats
 ```
 
-### Flush Cache
+### Flush cache
 
 Clears the cache for a specific tool or an entire module.
 
@@ -104,7 +104,7 @@ bridgectl cache flush --all
 `bridgectl cache flush --all` evicts every cached entry. Expect a burst of upstream ERP traffic immediately after.
 :::
 
-## When Redis Is Not Configured
+## When Redis is not configured
 
 If `REDIS_URL` is not set, the server uses the bounded in-memory cache. Set `CACHE_MEMORY_MAX_ENTRIES=0` to disable memory-cache storage while keeping tool calls available. The default capacity is 10,000 entries.
 
@@ -113,9 +113,9 @@ The cache endpoints work with both backends:
 - `GET /api/cache/stats`
 - `GET /api/cache/flush`
 
-## System Architecture
+## System architecture
 
 1. **ERPBridge Server**: Orchestrates the middleware and selects the configured backend.
 2. **Redis or MemoryBackend**: Stores the hashes and responses for high-speed retrieval.
 
-For deployment details, see the [Docker Guide](./docker.mdx).
+For deployment details, see the [Docker deployment guide](./docker.mdx).

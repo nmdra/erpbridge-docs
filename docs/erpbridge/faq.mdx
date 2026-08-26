@@ -1,30 +1,30 @@
 ---
 sidebar_position: 14
-title: Frequently Asked Questions
-description: Common questions about ERPBridge configuration, tools & schemas, authentication, upgrades, and troubleshooting.
+title: Frequently asked questions
+description: Common questions about ERPBridge configuration, tools and schemas, authentication, upgrades, and troubleshooting.
 keywords: [faq, configuration, cache, redis, upgrade, troubleshooting]
 ---
 
-# Frequently Asked Questions
+# Frequently asked questions
 
-## MCP Clients & Transports
+## MCP clients and transports
 
 <details>
 <summary>Which MCP clients can connect to the server?</summary>
 
 The server supports two transports:
 
-- **Streamable HTTP** for remote and web-based clients (for example Postman) at `http://localhost:8080/mcp/`
-- **Stdio** for local agents (Claude, Cursor) by running the binary with `--stdio`
+- **Streamable HTTP** for remote and web-based clients such as Postman at `http://localhost:8080/mcp/`
+- **stdio** for local agents (Claude, Cursor) by running the binary with `--stdio`
 
-See the [Connectivity & Transport Guide](./connectivity.mdx) for session setup.
+See the [Connectivity and transport guide](./connectivity.mdx) for session setup.
 
 </details>
 
 <details>
 <summary>Which MCP protocol version does the server negotiate?</summary>
 
-The server speaks MCP 2025-03-26 and negotiates up to 2025-11-25 during the `initialize` handshake. Clients send `POST /mcp/initialize`, then continue with session-managed requests.
+The server speaks MCP 2025-03-26 and negotiates up to 2025-11-25 during the `initialize` handshake. Clients send the `initialize` request to `POST /mcp/`, then continue with session-managed requests.
 
 </details>
 
@@ -39,19 +39,19 @@ The [Postman setup](https://github.com/nmdra/ERPBridge/blob/main/docs/connectivi
 
 </details>
 
-## Configuration
+## Configure ERPBridge and `bridgectl`
 
 <details>
 <summary>How do I configure the server?</summary>
 
-Set the environment variables listed in the [Environment Variables Reference](./environment-variables.mdx). Export them in your shell, or set them in `docker-compose.yml`.
+Set the environment variables listed in the [Environment variables reference](./environment-variables.mdx). Export them in your shell, or set them in `docker-compose.yml`.
 
 </details>
 
 <details>
 <summary>How do I configure the CLI?</summary>
 
-The CLI reads `~/.bridgectl/config.yaml`. The file holds named contexts. Each context has `server`, `mcp-server`, `erp-base`, and an optional `api-token` value.
+The CLI reads `~/.bridgectl/config.yaml`. The file stores named contexts. Each context has `server`, `mcp-server`, `erp-base`, and an optional `api-token` value.
 
 For HTTP authentication, the CLI uses the `--token` flag first, then
 `BRIDGE_API_TOKEN`, and then the active context's `api-token`.
@@ -122,11 +122,11 @@ A tool schema can declare `flushOn` with a field path. When a tool call modifies
 <details>
 <summary>How does the server protect ERP credentials?</summary>
 
-Tool schemas reference credentials by name (`credentialRef`). The server resolves the reference from environment variables at call time, so schemas never contain raw secrets. Logs redact sensitive values: tokens, passwords, authorization headers, and PII, plus any value flagged with `secret` or `pii` tags. See [the redaction reference](./environment-variables.mdx).
+Tool schemas reference credentials by name (`credentialRef`). The server resolves the reference from environment variables at call time, so schemas never contain raw secrets. Logs redact sensitive values: tokens, passwords, authorization headers, and PII, plus any value flagged with `secret` or `pii` tags. See the [redaction reference](./environment-variables.mdx).
 
 </details>
 
-## Notifications & System Tools
+## Notifications and system tools
 
 <details>
 <summary>What notifications does the server emit?</summary>
@@ -150,7 +150,7 @@ Two built-in tools help you verify the bridge:
 
 </details>
 
-## Errors & Exit Codes
+## Errors and exit codes
 
 <details>
 <summary>What do bridgectl exit codes mean?</summary>
@@ -182,14 +182,12 @@ Failures that an agent can act on return a machine-readable JSON body:
 
 </details>
 
-## Upgrades
-
-## Tools & Schemas
+## Tools and schemas
 
 <details>
 <summary>Where do tool schemas come from?</summary>
 
-The `schemas/` directory is not tracked by git. Generate the schemas from the OpenAPI spec of your ERP:
+The `schemas/` directory is not tracked by git. Generate the schemas from your ERP OpenAPI specification:
 
 ```bash title="Generate from OpenAPI"
 bridgectl api register --name erp --url http://localhost:8081 --module erp --description "Mock ERP"
@@ -257,13 +255,13 @@ Within 10 seconds. The reconciliation controller ticks every 10 seconds. A tool 
 
 Tool schemas reference a credential by name (`credentialRef`). The server resolves the reference from environment variables at call time. Schemas never contain raw secrets.
 
-The mock ERP accepts:
+The mock-erp service accepts:
 
 - Token header: `token adm_key_001:adm_sec_stu901`
 - Session cookie (`sid`)
 - Basic auth: `admin:admin`
 
-See the [Mock ERP in the repository](https://github.com/nmdra/ERPBridge/tree/main/mock-erp) for details.
+See [mock-erp in the repository](https://github.com/nmdra/ERPBridge/tree/main/mock-erp) for details.
 
 </details>
 
@@ -313,6 +311,6 @@ Common causes:
 
 - Report bugs and request features: [GitHub Issues](https://github.com/nmdra/ERPBridge/issues)
 - See [CONTRIBUTING.md](https://github.com/nmdra/ERPBridge/blob/main/CONTRIBUTING.mdx)
-- See the [Troubleshooting section of the Onboarding Guide](./onboarding.mdx#troubleshooting)
+- See the [troubleshooting section of the onboarding guide](./onboarding.mdx#troubleshooting)
 
 </details>

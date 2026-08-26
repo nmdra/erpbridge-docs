@@ -1,15 +1,15 @@
 ---
 sidebar_position: 7
-title: MCP Tool Schema Reference (V2)
+title: MCP tool schema reference (V2)
 description: The Kubernetes-style declarative resource format for defining MCP tools — apiVersion, metadata, spec, and status.
 keywords: [tool schema, MCPTool, yaml, v2, resource]
 ---
 
-# MCP Tool Schema Reference (V2)
+# MCP tool schema reference (V2)
 
-ERPBridge uses a Kubernetes-style declarative resource format to define tools. This ensures tools are versioned, intent-based, and decoupled from the underlying ERP structure.
+ERPBridge uses a Kubernetes-style declarative resource format to define tools. This format versions tools, makes their intent clear, and separates them from the ERP structure.
 
-## Resource Structure
+## Resource structure
 
 A tool definition is composed of four main sections: `apiVersion/kind`, `metadata`, `spec`, and `status` (internal only).
 
@@ -29,13 +29,13 @@ spec:
   routing: { ... }
 ```
 
-## Field Definitions
+## Field definitions
 
 ### `metadata`
 
 Identity and grouping information.
 
-- **`name`**: (String) Unique identifier. Use **intent-based names** (e.g., `list_employees`) instead of technical ones (e.g., `get_resource_employee`).
+- **`name`**: (String) Unique identifier. Use **intent-based names** such as `list_employees`, not technical names such as `get_resource_employee`.
 - **`version`**: (String) SemVer version (e.g., `1.0.0`).
 - **`module`**: (String) Logical grouping for access control and organization.
 - **`isActive`**: (Boolean, optional) Soft-delete flag. When `false`, the tool disappears from MCP `tools/list` and direct resolution but stays in the registry.
@@ -51,7 +51,7 @@ High-signal information to help the LLM select the correct tool.
 
 ### `spec.inputSchema`
 
-Standard JSON Schema defining the arguments. **Strict typing is mandatory.**
+Standard JSON Schema defining the arguments. **Strict typing is required.**
 
 - Use `properties` to define fields and `required` to enforce them.
 - **Avoid "filters" strings**: Break down complex query requirements into individual typed properties.
@@ -111,7 +111,7 @@ Optional support status for a tool version.
 - **`sunsetAt`**: (String, optional) ISO date when the tool is removed.
 - **`replacement`**: (String, optional) Name of the tool that replaces this one.
 
-## Annotated Example
+## Annotated example
 
 ```yaml title="create_purchase_invoice — full example"
 apiVersion: erpbridge.io/v1
@@ -161,4 +161,4 @@ If you have old schemas, use `bridgectl tool generate` to convert them, or manua
 1. Wrap the schema in `spec`.
 2. Move `name`, `version`, `module` to `metadata`.
 3. Separate `endpoint` into `execution` and `security`.
-4. Ensure naming is lowercase and uses underscores.
+4. Use lowercase names with underscores.

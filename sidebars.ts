@@ -31,9 +31,9 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
-      label: 'Plugin integration & development',
+      label: 'Plugin integration and development',
       collapsed: false,
-      items: [{ type: 'doc', id: 'erpbridge/plugins', label: 'External Plugins & Media Adaptation' }],
+      items: [{ type: 'doc', id: 'erpbridge/plugins', label: 'External plugins and media adaptation' }],
     },
   ],
   bridgectlSidebar: [

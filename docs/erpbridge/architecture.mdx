@@ -5,11 +5,11 @@ description: ERPBridge V2 uses a Kubernetes-style declarative control plane — 
 keywords: [architecture, control plane, registry, reconciliation, version resolver]
 ---
 
-# ERPBridge V2 Architecture: Declarative Control Plane
+# ERPBridge V2 architecture: declarative control plane
 
 ERPBridge V2 adopts a **Declarative Control Plane** architecture, inspired by Kubernetes. This design moves away from static, file-system-bound configurations toward a live API-managed resource system for MCP tools.
 
-## High-Level Overview
+## High-level overview
 
 The system is divided into three distinct layers:
 
@@ -43,7 +43,7 @@ flowchart LR
     REDIS -->|response| MCP
 ```
 
-## Endpoint vs. Tool: Key Concepts
+## Endpoint and tool: key concepts
 
 One of the most important concepts in ERPBridge V2 is the distinction between registering an **API Endpoint** and applying an **MCP Tool**.
 
@@ -62,19 +62,19 @@ One of the most important concepts in ERPBridge V2 is the distinction between re
 - **Safety**: Registering an API is a developer-only technical step. Applying a tool is a conscious decision to expose functionality to an AI agent.
 - **Lifecycle**: You can "discover" and test 100 API endpoints locally, but only "apply" the 5 that are safe and ready for the LLM to use.
 
-## Core Components
+## Core components
 
-### 1. Tool Resource Registry (The Source of Truth)
+### 1. Tool resource registry (the source of truth)
 
 Instead of loading files from a directory, the server maintains an internal **Tool Registry** backed by **SQLite**. This registry stores multiple versions of the same tool, allowing for safe rollouts and rollbacks.
 
 Each tool includes an `IsActive` flag. When a tool is "deleted" via the CLI, it is not immediately purged from the database. Instead, it is marked as `IsActive = false`. This "soft-delete" pattern allows the system to manage visibility without breaking existing MCP sessions.
 
-### 2. Version Resolver
+### 2. Version resolver
 
 When an AI agent requests a tool (e.g., `list_employees`), the **Version Resolver** automatically selects the **latest stable version** (e.g., `list_employees@1.2.0`). It explicitly ignores any tools marked as inactive.
 
-### 3. Visibility Filtering (JSON-RPC Interception)
+### 3. Visibility filtering (JSON-RPC interception)
 
 Because the underlying MCP runtime does not always support dynamic removal of tools from an active session, ERPBridge implements a **Visibility Filtering Layer**.
 
@@ -82,7 +82,7 @@ Because the underlying MCP runtime does not always support dynamic removal of to
 - **The Solution**: ERPBridge wraps the MCP server's HTTP handler and intercepts the `tools/list` response. Before the JSON-RPC result reaches the client, ERPBridge parses the list and removes any tools marked as `IsActive = false` in the internal registry.
 - **Result**: The client receives a truthful list of tools. The list matches the desired state of the control plane. This works even when the underlying runtime still knows the "ghost" tools.
 
-### 4. Reconciliation Controller
+### 4. Reconciliation controller
 
 The server runs a background reconciliation controller. It keeps the in-memory MCP registry in sync with the SQLite database.
 
@@ -163,7 +163,7 @@ plugin authentication, plus authenticated admin admission and an explicit
 object-shaped tool schema. Redirects, URL userinfo, raw secrets, and broad
 wildcards are not accepted.
 
-## Tool Generation & Templating
+## Tool generation and templating
 
 ERPBridge uses a "Template-Based Generation" approach. When generating tools (especially in bulk from OpenAPI):
 
@@ -171,9 +171,9 @@ ERPBridge uses a "Template-Based Generation" approach. When generating tools (es
 2. **The Spec**: An `OpenAPI Definition` acts as the source of semantic truth (Paths, Parameters, Descriptions).
 3. **The Result**: The generator merges these, creating production-ready MCP tools that are pre-configured with your environment's connectivity and security settings.
 
-This decoupling allows you to use the same OpenAPI spec to generate tools for different environments (Dev, Staging, Prod) simply by pointing to a different registered API.
+Use the same OpenAPI specification to generate tools for different environments (Dev, Staging, Prod). Point the generator to a different registered API.
 
-## Lifecycle of a Tool Change
+## Lifecycle of a tool change
 
 ```mermaid
 sequenceDiagram
@@ -197,13 +197,13 @@ sequenceDiagram
 1. **Define**: Developer creates a V2 YAML schema for a new tool.
 2. **Validate**: Runs `bridgectl tool validate -f tool.yaml` to check for syntax and admission rules (e.g., no raw secrets).
 3. **Apply**: Runs `bridgectl tool apply -f tool.yaml`.
-4. **Store**: The ERPBridge API validates the payload again and saves it to the SQLite `tools` table.
+4. **Store**: The ERPBridge API validates the payload again and saves it in the SQLite `tools` table.
 5. **Reconcile**: The background controller detects the new DB entry and registers it with the `mcp-go` runtime.
 6. **Execute**: AI agents now see the new tool and can invoke it immediately.
 
-## Security Design
+## Security design
 
-- **Secret Decoupling**: Schemas and plugin resources never contain raw tokens or keys. They only contain a `credentialRef`; the middleware resolves it at request time from the environment. Legacy local API registries require an explicit confirmed scrub before state changes continue.
+- **Secret decoupling**: Schemas and plugin resources never contain raw tokens or keys. They contain only a `credentialRef`; the middleware resolves it from the environment at request time. Legacy local API registries require an explicit scrub before state changes continue.
 - **Transport Admission**: Credentialed ERP and plugin endpoints require HTTPS, except exact development-only `host:port` entries. Plugin endpoints also require exact `PLUGIN_ENDPOINT_ALLOWLIST` membership. Userinfo and redirects cannot be used to bypass the policy.
 - **Admission Controllers**: The API server rejects suspicious endpoint content, unknown authentication fields, reserved headers, raw-secret-looking values, and invalid credential references.
 - **Redaction**: All logs produced by tool executions are automatically filtered to redact sensitive keys defined in `internal/types/sensitive.go`; ERP request and response bodies are not logged.

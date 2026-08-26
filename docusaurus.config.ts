@@ -7,7 +7,7 @@ import {ERPBRIDGE_RELEASE, SDK_RELEASE} from './src/constants/releases';
 
 const config: Config = {
   title: 'ERPBridge',
-  tagline: 'Connect your legacy ERP to AI-based workflows without changing your code base',
+  tagline: 'Connect your existing ERP APIs to AI workflows without modifying your ERP codebase',
   favicon: 'img/logo.svg',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -108,7 +108,7 @@ const config: Config = {
         generateLLMsTxt: true,
         generateLLMsFullTxt: true,
         description:
-          'Documentation for ERPBridge — connect legacy ERP systems to AI agents through the Model Context Protocol.',
+          'Documentation for ERPBridge — connect existing ERP APIs to AI agents through the Model Context Protocol.',
       },
     ],
   ],
@@ -150,7 +150,7 @@ title: 'ERPBridge',
           type: 'docSidebar',
           sidebarId: 'bridgectlSidebar',
           position: 'left',
-          label: 'Bridgectl',
+          label: 'bridgectl',
         },
         {
           type: 'docSidebar',
@@ -194,7 +194,7 @@ title: 'ERPBridge',
               to: '/docs/erpbridge/intro',
             },
             {
-              label: 'Bridgectl CLI',
+              label: 'bridgectl',
               to: '/docs/bridgectl/overview',
             },
             {

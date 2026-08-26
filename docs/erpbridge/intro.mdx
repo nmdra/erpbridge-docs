@@ -1,12 +1,12 @@
 ---
 sidebar_position: 1
 title: Introduction
-description: ERPBridge connects legacy ERP systems to AI agents through the Model Context Protocol (MCP).
+description: ERPBridge connects existing ERP APIs to AI agents through the Model Context Protocol (MCP).
 ---
 
 # Introduction
 
-**ERPBridge** is a middleware that connects legacy ERP systems to modern AI agents through the **Model Context Protocol (MCP)**.
+**ERPBridge** connects existing ERP APIs to AI agents through the **Model Context Protocol (MCP)**.
 
 It exposes ERP functionality as MCP tools, so agents like Claude, Cursor, and other MCP-compatible clients can discover and call ERP operations without writing custom integrations.
 
@@ -15,31 +15,31 @@ Codex CLI, OpenCode, OpenClaw, and Hermes Agent setup.
 
 ## Why ERPBridge?
 
-- **Standards-based** — implements MCP over streamable HTTP and stdio.
+- **Standards-based** — implements MCP over Streamable HTTP and stdio.
 - **Tool registry** — register ERP APIs once, generate and validate MCP tool schemas.
-- **Resilient** — built-in caching, rate limiting, and connection handling for upstream ERP systems.
+- **Resilient** — provides caching, rate limiting, and connection handling for upstream ERP systems.
 - **Observable** — structured JSON logs, Prometheus metrics, and a health endpoint.
-- **Agent-friendly** — a `bridgectl` CLI for local development and CI workflows.
+- **Agent-friendly** — provides the `bridgectl` CLI for local development and CI workflows.
 
 ## Components
 
 | Component | Description |
 | :--- | :--- |
-| `erpbridge-server` | The MCP middleware server (HTTP + stdio transports). |
+| `erpbridge-server` | The ERPBridge Server middleware (HTTP + stdio transports). |
 | `bridgectl` | Developer CLI to register APIs, manage tools, and monitor the middleware. |
-| `mock-erp` | A mock ERP (FastAPI) for local development and testing. |
+| `mock-erp` | A mock ERP service (FastAPI) for local development and testing. |
 | `@erpbridge/sdk` | TypeScript client library — MCP tools, REST invocation, logs, metrics, health, and cache ([SDK docs](../sdk/overview.mdx)). |
 
-:::tip Two docs, two tools
+:::tip Choose a documentation path
 
-This site splits the documentation into two sections:
+This site organizes the documentation by component:
 
 - **Server** — everything about `erpbridge-server`: [quickstart](./quickstart.mdx), [transports](./transports.mdx), [REST API](./api.mdx).
-- **Bridgectl** — the complete CLI reference: [overview](../bridgectl/overview.mdx) and every command.
-- **SDK** — everything about `@erpbridge/sdk`: [overview](../sdk/overview.mdx), [quickstart](../sdk/quickstart.mdx), [MCP tools](../sdk/mcp-tools.mdx), [logs & metrics](../sdk/logs-metrics.mdx).
+- **`bridgectl`** — the complete CLI reference: [overview](../bridgectl/overview.mdx) and every command.
+- **ERPBridge SDK** — everything about `@erpbridge/sdk`: [overview](../sdk/overview.mdx), [quickstart](../sdk/quickstart.mdx), [MCP tools](../sdk/mcp-tools.mdx), [logs and metrics](../sdk/logs-metrics.mdx).
 
 :::
 
 ## Getting started
 
-Start with the [Quickstart](./quickstart.mdx), or jump straight to the [Connectivity & Transport Guide](./connectivity.mdx) if you already run the server.
+Start with the [quickstart](./quickstart.mdx). If you already run ERPBridge Server, read the [Connectivity and transport guide](./connectivity.mdx).

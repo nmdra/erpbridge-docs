@@ -10,15 +10,15 @@ import TabItem from '@theme/TabItem'
 
 # Installation
 
-The full SDK facade requires **Node.js >= 20** (built-in `fetch` and
-`AbortSignal`). The package ships a dual **ESM + CJS** build with type
-declarations for both, and every release is published with **signed
-provenance** — see [@erpbridge/sdk on npm](https://www.npmjs.com/package/@erpbridge/sdk).
+The full ERPBridge SDK facade requires **Node.js >= 20** for built-in `fetch`
+and `AbortSignal`. The package ships dual **ESM + CJS** builds with type
+declarations for both. Each release has **signed provenance**; see
+[@erpbridge/sdk on npm](https://www.npmjs.com/package/@erpbridge/sdk).
 
 Browser applications can use the ESM build for the MCP client and exact-name
-tool proxy. This browser support does not cover the REST surfaces. The
-ERPBridge `/mcp/` endpoint must allow the frontend origin, the MCP protocol
-request headers, and exposure of `Mcp-Session-Id`.
+tool proxy. Browser support does not include the REST surfaces. The ERPBridge
+`/mcp/` endpoint must allow the frontend origin and MCP protocol request
+headers. It must also expose `Mcp-Session-Id`.
 
 ## Install
 
@@ -58,8 +58,8 @@ import { NotFoundError } from '@erpbridge/sdk/types'
 
 ## Server requirements
 
-The SDK talks to an ERPBridge server on its default port `8080` — see the
-[server quickstart](../erpbridge/quickstart.mdx) to start one. The server may
-run in open mode, in which case the SDK connects anonymously, or in authenticated
-mode, in which case configure a token as described in
+The ERPBridge SDK connects to ERPBridge Server on its default port `8080`.
+See the [server quickstart](../erpbridge/quickstart.mdx) to start a server. The
+server can run in open mode, so the ERPBridge SDK connects anonymously. In
+authenticated mode, configure a token as described in
 [Authentication](./authentication.mdx).

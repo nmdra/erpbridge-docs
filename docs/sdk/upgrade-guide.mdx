@@ -1,20 +1,20 @@
 ---
 sidebar_position: 7
 title: Upgrade guide
-description: Migrate an SDK consumer to the ERPBridge v0.3 compatibility contract.
+description: Migrate an ERPBridge SDK consumer to the ERPBridge v0.3 compatibility contract.
 keywords: [sdk, upgrade, migration, MCP, authentication]
 ---
 
 # Upgrade guide
 
-The ERPBridge v0.3.0-alpha.1 compatibility contract shipped as the breaking
+The ERPBridge v0.3.0-alpha.1 compatibility contract shipped in the breaking
 `@erpbridge/sdk` v1.0.0 release.
 
 ## MCP results are no longer flattened
 
 `client.mcp.callTool()` and `client.tools.<name>()` now return `McpToolResult`,
-the official MCP `CallToolResult` envelope. Text is not parsed as JSON and
-content blocks are not moved into a REST-shaped `result` field.
+the official MCP `CallToolResult` envelope. The ERPBridge SDK does not parse
+text as JSON or move content blocks into a REST-shaped `result` field.
 
 Before:
 
@@ -31,16 +31,16 @@ console.log(result.content)
 console.log(result.structuredContent)
 ```
 
-`client.invoke()` and `client.registry.invoke()` remain REST operations and
+`client.invoke()` and `client.registry.invoke()` remain REST operations. They
 continue to return `ToolResult` with a `result` field.
 
 ## Credentials are now active
 
 The existing `token` and `tokenEnv` configuration fields now send bearer
-credentials when set. Applications that passed these fields while they were
-inert must account for the change. See [Authentication](./authentication.mdx)
-for precedence, surface overrides, and the consume-only token lifecycle.
+credentials when set. If your application passed these fields before, update
+it for this behavior. See [Authentication](./authentication.mdx) for
+precedence, surface overrides, and the consume-only token lifecycle.
 
 The default credential environment variable is now `ERPBRIDGE_TOKEN`.
 `ERPBridge_TOKEN` remains a compatibility fallback when the canonical variable
-is absent; migrate deployments to the all-caps name.
+is absent. Migrate deployments to the all-caps name.

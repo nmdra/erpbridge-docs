@@ -14,8 +14,8 @@ Get ERPBridge running locally in a few minutes.
 
 ## Prerequisites
 
-- Docker (recommended) or a local Go toolchain (Go 1.26+)
-- A GitHub account for MCP clients like Claude Desktop or Cursor
+- Docker, or a local Go toolchain with Go 1.26+
+- A GitHub account for MCP clients such as Claude Desktop or Cursor
 
 ## 1. Start the stack
 
@@ -41,7 +41,7 @@ make build
   </TabItem>
 </Tabs>
 
-This starts:
+This starts the following services:
 
 - `erpbridge-server` on port `8080`
 - `mock-erp` (mock ERPNext) on port `8081`
@@ -50,7 +50,7 @@ This starts:
 The exact-match cache uses a bounded in-memory LRU when Redis is not configured. Set `CACHE_MEMORY_MAX_ENTRIES=0` to disable memory-cache storage. See [Caching](./caching.mdx).
 :::
 
-## 2. Verify the server is healthy
+## 2. Verify server health
 
 ```bash title="Health check"
 curl http://localhost:8080/mcp/health
@@ -73,14 +73,14 @@ Base URL:
 http://localhost:8080/mcp/
 ```
 
-See the [Connectivity & Transport Guide](./connectivity.mdx) for the full handshake and Postman setup.
+See the [Connectivity and transport guide](./connectivity.mdx) for the full handshake and Postman setup.
 
   </TabItem>
-  <TabItem value="stdio" label="Stdio (Claude Desktop, Cursor)">
+  <TabItem value="stdio" label="stdio (Claude Desktop, Cursor)">
 
 Run the server binary in stdio mode:
 
-```bash title="Stdio transport"
+```bash title="stdio transport"
 erpbridge-server --stdio
 ```
 
@@ -89,14 +89,14 @@ erpbridge-server --stdio
 
 ## 4. Discover tools
 
-Request the tool list through the MCP `initialize` and `tools/list` lifecycle, or use the CLI:
+Request the tool list through the MCP `initialize` and `tools/list` lifecycle. You can also use `bridgectl`:
 
 ```bash title="List registered tools"
 ./bridgectl tool get
 ```
 
 :::tip Need the CLI?
-The complete `bridgectl` reference lives in its own section — see the [Bridgectl overview](../bridgectl/overview.mdx).
+The complete `bridgectl` reference lives in its own section — see the [`bridgectl` overview](../bridgectl/overview.mdx).
 :::
 
 ## 5. Call a tool
@@ -109,7 +109,7 @@ curl -X POST http://localhost:8080/api/tools/invoke \
 
 ## Next steps
 
-- See the [Connectivity & Transport Guide](./connectivity.mdx) for transport details and Postman setup.
-- Follow the [Onboarding Guide](./onboarding.mdx) to register your own ERP API.
-- See [Environment Variables](./environment-variables.mdx) for configuration options.
-- Browse the [Bridgectl CLI reference](../bridgectl/overview.mdx) for every command.
+- See the [Connectivity and transport guide](./connectivity.mdx) for transport details and Postman setup.
+- Follow the [Onboarding guide](./onboarding.mdx) to register your ERP API.
+- See [Environment variables](./environment-variables.mdx) for configuration options.
+- Browse the [`bridgectl` CLI reference](../bridgectl/overview.mdx) for every command.

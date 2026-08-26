@@ -1,21 +1,21 @@
 ---
 sidebar_position: 4
-title: Connectivity & Transport Guide
+title: Connectivity and transport guide
 description: Connect ERPBridge from Postman, Claude Desktop, Cursor, scripts, and Prometheus across all supported transports.
 keywords: [transport, streamable http, stdio, postman, session, mcp]
 ---
 
-# Connectivity & Transport Guide
+# Connectivity and transport guide
 
-ERPBridge supports multiple transport protocols. It works with modern AI agents, IDEs, and standard developer tools like Postman.
+ERPBridge supports multiple transport protocols. It works with AI agents, IDEs, and developer tools such as Postman.
 
-## 1. Streamable HTTP (Modern MCP)
+## 1. Streamable HTTP
 
-This transport is the MCP streamable HTTP specification. It suits stateless or web-friendly environments. It is the recommended way to connect Postman and other modern MCP clients.
+This transport follows the MCP Streamable HTTP specification. It suits stateless or web-friendly environments. It is the recommended way to connect Postman and other modern MCP clients.
 
 - **Base URL:** `http://localhost:8080/mcp/`
 - **Handshake:** `POST /mcp/` with a JSON-RPC `initialize` request
-- **Transport Specification:** MCP 2025-03-26. The server negotiates up to `2025-11-25` when the client supports it.
+- **Transport specification:** MCP 2025-03-26. The server negotiates up to `2025-11-25` when the client supports it.
 - **Features:**
     - Request and response via standard POST.
     - Session management via the `Mcp-Session-Id` header.
@@ -27,18 +27,18 @@ request still requires authentication when `API_AUTH_TOKEN` is configured.
 In open mode, the server keeps wildcard CORS behavior. CORS applies to `/mcp/`
 only.
 
-### Postman Configuration
+### Postman configuration
 
 - **Transport Type:** Streamable HTTP
 - **URL:** `http://localhost:8080/mcp/`
 
 :::info Session lifecycle
-The first request must be `initialize`. The server replies with a `Mcp-Session-Id` header that every subsequent request must include. See the [MCP Client Guide](./mcp-client-guide.mdx) for the full sequence.
+The first request must be `initialize`. The server replies with a `Mcp-Session-Id` header that every subsequent request must include. See the [MCP client guide](./mcp-client-guide.mdx) for the full sequence.
 :::
 
-## 2. Stdio (Local Integration)
+## 2. stdio
 
-Stdio is the preferred transport for local integrations. The client starts the ERPBridge server as a child process.
+stdio is the preferred transport for local integrations. The client starts ERPBridge Server as a child process.
 
 - **Best For:** Claude Desktop, Cursor, and other IDE-integrated agents running locally.
 - **Usage:** Run the server with the `--stdio` flag.
@@ -59,7 +59,7 @@ Codex CLI, OpenCode, OpenClaw, and Hermes Agent examples.
 The stdio transport does not use `Mcp-Session-Id`. The process boundary itself is the session.
 :::
 
-## 3. Direct API (Internal/CLI)
+## 3. Direct API
 
 The server exposes direct HTTP endpoints for internal management, performance monitoring, and the `bridgectl` CLI. These do not require a full MCP handshake.
 
@@ -77,21 +77,21 @@ routes are admin-only. Log routes accept the `logs` scope, `/metrics` accepts
 the `metrics` scope, and `/mcp/` accepts the `mcp` scope. `/mcp/health` stays
 open.
 
-For the full endpoint reference, see the [REST API Reference](./api.mdx).
+For the full endpoint reference, see the [REST API reference](./api.mdx).
 
-## 4. Protection & Limits
+## 4. Protection and limits
 
 ERPBridge includes built-in protection for underlying ERP systems.
 
 - **Rate Limiting:** Request throttling is enforced per-session (token bucket).
-- **Default Limits:** 5 requests per second with a burst of 10 (configurable via environment variables).
+- **Default limits:** 5 requests per second with a burst of 10 (configurable via environment variables).
 
 Authenticated HTTP requests use the token principal for rate limiting. Open
 HTTP requests and stdio use their session or process fallback.
 
-## 5. Connector Resilience
+## 5. Connector resilience
 
-Every outbound call to an upstream ERP goes through a resilient client with three layers of defense. This keeps legacy ERP systems stable even when AI agents send a heavy or bursty workload.
+Every outbound call to an upstream ERP goes through a resilient client with three layers of defense. This helps existing ERP systems remain stable when AI agents send heavy or bursty workloads.
 
 - **Request timeout:** 15 seconds per HTTP request.
 - **Retry with backoff:** transient failures are retried up to **3 attempts** with a 500ms base delay plus up to 100ms of random jitter. Network errors and HTTP `429` / `5xx` responses are retried; other responses are returned immediately.
@@ -101,18 +101,18 @@ Every outbound call to an upstream ERP goes through a resilient client with thre
 Without resilience, one slow or failing ERP endpoint would stall every AI agent that depends on it. The circuit breaker fails fast during outages and the retry policy absorbs transient spikes.
 :::
 
-## 6. Monitoring & Health
+## 6. Monitoring and health
 
 Standard endpoints for system health and observability.
 
-- **Health Check:** `GET /mcp/health` (Returns `{"status": "ok"}`)
+- **Health check:** `GET /mcp/health` (returns `{"status": "ok"}`)
 - **Metrics:** `GET /metrics` (Prometheus formatted metrics)
 
-## Summary Table
+## Summary table
 
 | Client Type | Recommended Transport | Base URL / Method |
 | :--- | :--- | :--- |
 | **Postman / Web** | Streamable HTTP | `http://localhost:8080/mcp/` |
-| **Claude / Cursor** | Stdio | `erpbridge-server --stdio` |
+| **Claude / Cursor** | stdio | `erpbridge-server --stdio` |
 | **bridgectl / Scripts** | Direct API | `http://localhost:8080/api/` |
 | **Prometheus** | HTTP | `http://localhost:8080/metrics` |
