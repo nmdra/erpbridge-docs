@@ -16,20 +16,28 @@ This guide covers how to deploy and manage the ERPBridge ecosystem with Docker a
 
 Make sure that you have [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/) installed.
 
-```bash title="Start the full stack"
+```bash title="Start the local development stack"
 # Clone the repository
 git clone https://github.com/nmdra/ERPBridge.git
 cd ERPBridge
 
-# Start the full stack
-docker compose up -d --build
+# Safely bootstrap ephemeral local MockERP credentials
+make dev-up
+
+# Direct Compose use requires a credential source first.
+docker compose --env-file .env up --build --force-recreate -d
 ```
 
 The stack includes:
 
-- **ERPBridge Server** (`:8080`): The core MCP middleware.
+- **ERPBridge Server** (`:8080`): The core MCP middleware. The development
+  Compose path enables `system.*_test` demonstration tools; production must
+  leave `MCP_ENABLE_TEST_TOOLS` unset or false.
 - **`mock-erp`** (`:8081`): Simulates ERP endpoints.
 - **Redis** (`:6379`): Provides the exact-match cache.
+
+RedisInsight binds to `127.0.0.1` by default. Keep it loopback-only or opt it
+out; never expose it publicly.
 
 ## 2. Configuration
 
@@ -43,11 +51,14 @@ Environment variables for the server are set in the `docker-compose.yml` file.
 | `MOCK_ERP_HOST_PORT` | Host port for the MockERP container. | `8081` |
 | `MOCK_ERP_IMAGE` | Pinned MockERP image. | `ghcr.io/nmdra/mockerp:0.2.1` |
 | `MOCK_ERP_VERSION` | MockERP release used for OpenAPI specification generation. | `0.2.1` |
+| `MOCK_ERP_OPENAPI_URL` | Versioned MockERP OpenAPI URL. | `https://raw.githubusercontent.com/nmdra/mockerp/v0.2.1/openapi.yaml` |
 | `MOCK_ERP_CREDENTIALS_JSON` | JSON credentials for local/container use. | (required) |
 | `MOCK_ERP_CREDENTIALS_FILE` | Mounted JSON secret path. | (required alternative) |
 | `REDIS_URL` | URL for the Redis cache. | `redis://redis:6379` |
 | `REDIS_HOST_PORT` | Host port for Redis. | `6379` |
+| `REDIS_INSIGHT_BIND_ADDRESS` | Host address for the RedisInsight binding. | `127.0.0.1` |
 | `REDIS_INSIGHT_HOST_PORT` | Host port for RedisInsight. | `8001` |
+| `MCP_ENABLE_TEST_TOOLS` | Development-only registration of `system.*_test` tools. | `true` in this Compose path |
 | `DATABASE_PATH` | Path of the SQLite tool registry inside the container. | `/app/data/erpbridge.db` |
 | `RATE_LIMIT_RPS` | Per-session requests per second. | `10` |
 | `RATE_LIMIT_BURST` | Token bucket burst size. | `20` |
@@ -59,24 +70,43 @@ Environment variables for the server are set in the `docker-compose.yml` file.
 
 For the full list of server environment variables, see the [environment variables reference](./environment-variables.mdx). See the [MockERP integration contract](./mock-erp.mdx) for the pinned release, credential boundary, SQLite reset, and supported fixture groups.
 
+`make dev-up` generates an ephemeral credential pair only when neither
+`MOCK_ERP_CREDENTIALS_JSON` nor `MOCK_ERP_CREDENTIALS_FILE` is set. It keeps
+those values in memory, validates `docker compose config --quiet`, force
+recreates the stack, and waits for both health endpoints. It does not write or
+print credentials. Direct Compose use requires one of the two credential
+sources. Compose reads quoted `.env` values; do not source `.env` in your shell.
+Use `docker compose --env-file .env config --quiet` before
+`up --build --force-recreate -d` when an env file is used.
+
 ## 3. Tool registry
 
 The server keeps tool definitions in a SQLite database (`DATABASE_PATH`). The `schemas/` directory is NOT mounted into the container. `schemas/` is also not tracked by git. There is no file-system watcher.
 
-To load tools into the registry, generate and apply the schemas from your host:
+To load tools into the registry, generate a draft and apply one reviewed
+manifest from your host. Set `CTX` to the intended configured context first:
+
+```bash
+CTX=local # replace local with the selected context
+```
 
 1. Register the ERP API:
    ```bash title="Register the API"
-   ./bridgectl api register --name erp --url http://localhost:8081 --module erp --description "Mock ERP" --auth-type api-key --credential-ref ERP_PRIMARY_KEY
+   ./bridgectl api register --context "$CTX" --name erp --url http://localhost:8081 --module erp --description "Mock ERP" --auth-type api-key --credential-ref ERP_PRIMARY_KEY
    ```
-2. Generate the tool schemas:
-   ```bash title="Generate schemas"
-   make generate-tools
+2. Generate one temporary YAML draft:
+   ```bash title="Generate one draft stream"
+   ./bridgectl tool generate --context "$CTX" --api erp -o yaml > /tmp/erpbridge-draft.yaml
    ```
-3. Apply the schemas to the registry:
-   ```bash title="Apply schemas"
-   ./bridgectl tool apply -f schemas/erp/
+3. Validate and apply the reviewed source manifest:
+   ```bash title="Validate and apply the reviewed manifest"
+   ./bridgectl tool validate --context "$CTX" -f manifests/erp/tools.yaml
+   ./bridgectl tool apply --context "$CTX" -f manifests/erp/tools.yaml
    ```
+
+`make generate-tools` is the convenience path: it applies one temporary draft
+stream once and removes it. Generated output is not a second `schemas/` tree or
+per-tool JSON authority.
 
 The server detects new registry entries within 10 seconds and exposes them over MCP. A restart is not necessary.
 
@@ -97,6 +127,16 @@ You can use the local `bridgectl` binary to interact with the server running in 
    make generate-tools
    ```
    The Makefile downloads the versioned MockERP OpenAPI contract, generates the tool YAML, and applies it to ERPBridge.
+
+4. **Test an API through the server:**
+   ```bash title="Run the server-side probe"
+   ./bridgectl api test --context "$CTX" erp
+   ```
+   The default probe resolves `credentialRef` in the server and returns only a
+   bounded status summary. Use `--local` only for an explicit legacy host-side
+   diagnostic. CLI control-plane requests use the configured MCP host root;
+   only the exact `/mcp` or `/mcp/` suffix is removed. Other paths return
+   `CONTROL_PLANE_URL_INVALID`. `/mcp/` remains the MCP transport endpoint.
 
 ## 5. Logs and monitoring
 
@@ -221,7 +261,10 @@ Cursor connects to remote MCP servers via HTTP. Use this method when the ERPBrid
 
 ## 8. Troubleshooting
 
-- **Connection Refused:** Make sure that `ERP_BASE_URL` in `docker-compose.yml` uses the service name `http://mock-erp:8081` instead of `localhost`.
+- **Connection Refused:** Make sure that `ERP_BASE_URL` in `docker-compose.yml` uses the service name `http://mock-erp:8081` instead of `localhost`. Run `docker compose ps` and check both `/mcp/health` and MockERP `/health`.
+- **Structured control-plane error:** Use the stable `error` value and safe
+  `suggestion` in the JSON envelope. It never contains upstream bodies,
+  credentials, or internal stack details.
 - **Claude stdio timeout:** If Claude fails to connect, build the server binary first and run it directly. This shows any startup errors.
 - **Schema Errors:** Validate the tool definition locally before you apply it:
   ```bash title="Validate a schema"

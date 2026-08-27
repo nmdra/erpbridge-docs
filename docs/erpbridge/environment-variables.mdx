@@ -4,12 +4,11 @@ title: Environment variables reference
 description: Every environment variable read by ERPBridge Server, the bridgectl CLI, and the mock-erp service.
 keywords: [environment variables, configuration, MCP_PORT, REDIS_URL, DATABASE_PATH]
 ---
+# Environment Variables Reference
 
-# Environment variables reference
+This page lists all environment variables read by the ERPBridge server, the `bridgectl` CLI, and the mock ERP service.
 
-This page lists all environment variables read by ERPBridge Server, the `bridgectl` CLI, and the `mock-erp` service.
-
-## Server variables
+## Server Variables
 
 The server reads these variables directly from the environment. It does not load a `.env` file. Export the variables in your shell, or set them in `docker-compose.yml`.
 
@@ -17,8 +16,11 @@ The server reads these variables directly from the environment. It does not load
 | :--- | :--- | :--- |
 | `MCP_PORT` | `8080` | HTTP listen port. |
 | `MCP_TRANSPORT` | (unset) | `stdio` runs the server in stdio mode. Any other value runs the HTTP server. |
+| `MCP_ENABLE_TEST_TOOLS` | `false` | Development-only opt-in for `system.*_test` demo tools. `make dev-up` sets it; do not enable it in production. |
 | `DATABASE_PATH` | `data/erpbridge.db` | Path of the SQLite tool registry. The parent directory is created automatically. |
 | `REDIS_URL` | (empty) | Redis URL (for example `redis://localhost:6379`). If empty, the server uses the bounded in-memory cache. |
+| `REDIS_INSIGHT_BIND_ADDRESS` | `127.0.0.1` | Host address for the RedisInsight binding in Compose. |
+| `REDIS_INSIGHT_HOST_PORT` | `8001` | Host port for RedisInsight in Compose. |
 | `CACHE_MEMORY_MAX_ENTRIES` | `10000` | Maximum number of entries in the in-memory cache when `REDIS_URL` is empty. `0` disables memory-cache storage. Invalid or negative values use the default. |
 | `RATE_LIMIT_RPS` | `5.0` | Per-session requests per second (token bucket). |
 | `RATE_LIMIT_BURST` | `10` | Token bucket burst size. |
@@ -28,26 +30,21 @@ The server reads these variables directly from the environment. It does not load
 | `LOG_LEVEL_<COMPONENT>` | (unset) | Per-component log level override, for example `LOG_LEVEL_MCP`, `LOG_LEVEL_CACHE`, `LOG_LEVEL_CONNECTOR`, `LOG_LEVEL_IDP`. |
 | `APP_ENV` | (unset) | `production` uses JSON log output. Any other value uses text output. |
 | `LOG_TO_STDERR` | (unset) | `true` writes logs to stderr. The server sets this automatically in stdio mode. |
-| `ERP_PRIMARY_KEY` | (unset) | Example environment credential referenced by generated ERP tools. The local API registry stores only the variable name. |
-| `<ERP_CREDENTIAL_REF>` | (unset) | Any environment variable named by an ERP tool `credentialRef`; resolved at request time and never persisted by `bridgectl`. |
-| `PLUGIN_<NAME>` | (unset) | Environment credential named by a plugin `credentialRef`; use only for plugin bearer or API-key values. Never persist the resolved value. |
-| `API_AUTH_TOKEN` | (unset) | Enables HTTP bearer authentication when non-empty. This is the admin credential. |
-| `API_AUTH_ADMIN_ROLES` | (unset) | Comma-separated roles assigned to the admin identity. |
-| `PLUGIN_ENDPOINT_ALLOWLIST` | (unset) | Exact normalized `host:port` values allowed for credentialed plugin endpoints. |
-| `INSECURE_AUTH_ALLOWED_HOSTS` | (unset) | Exact development-only `host:port` exceptions for credentialed HTTP. |
-| `CORS_ALLOWED_ORIGINS` | wildcard in open mode; disabled in auth mode when unset | Comma-separated origins allowed for MCP CORS. |
+| `ERP_PRIMARY_KEY` | (unset) | Example environment credential for generated ERP tools. The local API registry stores only a `credentialRef`, never this value. |
+| `<ERP_CREDENTIAL_REF>` | (unset) | Any environment variable named by an API or tool `credentialRef`; resolved at request time and never persisted by `bridgectl`. |
+| `PLUGIN_<NAME>` | (unset) | Environment credential named by a plugin `credentialRef`; use only for bearer or API-key values. The resolved value is never persisted. |
+| `PLUGIN_ENDPOINT_ALLOWLIST` | (unset) | Exact normalized `host:port` values allowed for credentialed plugin endpoints. Empty or nonmatching values reject credentialed plugin admission. |
+| `INSECURE_AUTH_ALLOWED_HOSTS` | (unset) | Development-only comma-separated exact `host:port` allowlist for credentialed `http://` ERP or plugin calls. Credentialed calls otherwise require HTTPS. |
+| `API_AUTH_TOKEN` | (unset) | Enables HTTP bearer authentication when non-empty. This is the admin credential and is never returned by the server. |
+| `API_AUTH_ADMIN_ROLES` | (unset) | Comma-separated roles assigned to the admin identity. Roles must match `[a-z][a-z0-9_-]{0,63}` and the list may contain at most 32 unique roles. |
+| `CORS_ALLOWED_ORIGINS` | wildcard in open mode; disabled in auth mode when unset | Comma-separated browser origins allowed for the MCP endpoint. CORS does not apply to management or metrics routes. |
 
-:::caution Secrets
-Keep credential values out of your shell history and out of version control. The
-server resolves `credentialRef` entries from the environment at call time and
-redacts them from logs. Plugin references must use the `PLUGIN_` prefix.
-:::
+Credentialed outbound ERP and plugin calls require `https://`. For private local
+fixtures only, set `INSECURE_AUTH_ALLOWED_HOSTS` to the exact normalized
+`host:port`, for example `mock-erp:8081`. Do not use this exception in
+production. ERPBridge logs a warning for each allowed credentialed HTTP call.
 
-Credentialed ERP and plugin calls require HTTPS. For isolated development, `INSECURE_AUTH_ALLOWED_HOSTS` can contain exact normalized `host:port` entries. There is no broad insecure boolean. Credentialed plugin admission also requires exact `PLUGIN_ENDPOINT_ALLOWLIST` membership. Rotate a value in the deployment environment. Then flush affected cache entries with an authenticated `bridgectl cache flush --all`.
-
-The local API registry stores `credentialRef` names only. If an older registry contains `authKey` or `authToken`, state-changing API commands and `api test` stop until `bridgectl api scrub-credentials --yes` atomically removes those fields. The scrub creates no plaintext backup. Assign a new reference after it completes.
-
-## CLI variables (`bridgectl`)
+## CLI Variables (`bridgectl`)
 
 The CLI reads these variables to override the active context.
 
@@ -65,11 +62,25 @@ The CLI reads these variables to override the active context.
 | `BRIDGE_PASSWORD` | Parsed into the context. Not used by any command. |
 | `BRIDGE_API_TOKEN` | Overrides the active context `api-token` for bridge HTTP requests. |
 
-The persistent `bridgectl --token` flag takes precedence over
-`BRIDGE_API_TOKEN`, which takes precedence over the active context's
-`api-token` value.
+The persistent `bridgectl --token` flag has higher precedence than
+`BRIDGE_API_TOKEN`, which has higher precedence than the active context's
+`api-token` value. The CLI sends this value as a bearer token to the ERPBridge
+server; it does not change upstream ERP authentication settings.
 
-The CLI reads its defaults from `~/.bridgectl/config.yaml`. The default context uses:
+An active context can store the token in `~/.bridgectl/config.yaml`:
+
+```yaml
+contexts:
+  local:
+    server: http://localhost:8080
+    api-token: <token-from-environment>
+```
+
+`bridgectl api register` accepts `--credential-ref NAME`, and `bridgectl api set-credential-ref NAME --credential-ref ENV_NAME` assigns an environment-backed ERP credential reference. The registry stores the name only. New API entries are isolated at `~/.bridgectl/registries/<context>.json`; context names are validated before they are used in a path. API names are unique within a context. Duplicate registration fails unless `api register --force` explicitly replaces the existing definition.
+
+If the old global `~/.bridgectl/registry.json` exists, context-scoped API commands stop instead of ignoring it. Run `bridgectl api scrub-credentials --yes` to scrub the global file and every context registry. Scrubbing atomically removes `authKey` and `authToken` without creating a plaintext backup. Then run `bridgectl api migrate-registry --context NAME --yes` to copy the cleaned global entries into one selected context and remove the old global file. Migration refuses collisions unless `--force` is also supplied.
+
+The CLI reads its defaults from `~/.bridgectl/config.yaml`. `BRIDGE_CONTEXT` and `--context` select a configured context. A missing or malformed selected context is an error; the CLI does not silently create a replacement context. Context and API listings are sorted by name. The default context uses:
 
 | Key | Default |
 | :--- | :--- |
@@ -77,16 +88,24 @@ The CLI reads its defaults from `~/.bridgectl/config.yaml`. The default context 
 | `mcp-server` | `http://localhost:8080` |
 | `erp-base` | `http://localhost:8081` |
 
-:::warning Nothing listens on port `8082` by default
-Set `BRIDGE_SERVER` or edit the config file before you use `bridgectl cache` or `bridgectl log`.
-:::
+> **Note:** Nothing listens on port `8082` by default. Set `BRIDGE_SERVER` or edit the config file before you use `bridgectl cache` or `bridgectl log`.
 
-## mock-erp variables
+## Mock ERP Variables
+
+`make dev-up` is the recommended local-stack entry point. It generates an
+in-memory, ephemeral credential pair only when both credential sources are
+empty. It does not source `.env`, write credentials, or print them. Direct
+Compose use requires one of the two credential sources below.
 
 | Variable | Purpose | Default |
 | :--- | :--- | :--- |
-| `MOCK_ERP_PORT` | Host port exposed for mock-erp. | `8081` |
-| `MOCK_ERP_IMAGE` | Pinned mock-erp image. | `ghcr.io/nmdra/mockerp:0.2.1` |
-| `MOCK_ERP_VERSION` | Release used for OpenAPI specification generation. | `0.2.1` |
-| `MOCK_ERP_CREDENTIALS_JSON` | JSON credentials for local/container use. | required |
-| `MOCK_ERP_CREDENTIALS_FILE` | Mounted JSON secret path. | required alternative |
+| `MOCK_ERP_HOST_PORT` | Host port exposed for the MockERP container. | `8081` |
+| `MOCK_ERP_PORT` | Legacy host-port setting used by some local CLI commands. | `8081` |
+| `MOCK_ERP_IMAGE` | MockERP image used by Docker Compose. | `ghcr.io/nmdra/mockerp:0.2.1` |
+| `MOCK_ERP_VERSION` | MockERP release used for OpenAPI generation. | `0.2.1` |
+| `MOCK_ERP_OPENAPI_URL` | Versioned OpenAPI contract URL. | `https://raw.githubusercontent.com/nmdra/mockerp/v0.2.1/openapi.yaml` |
+| `MOCK_ERP_DB_PATH` | SQLite database path inside MockERP. | `/data/mockerp.db` |
+| `MOCK_ERP_CREDENTIALS_JSON` | JSON credential configuration for local/container use. Required when no secret file is set. | (required) |
+| `MOCK_ERP_CREDENTIALS_FILE` | Path to a JSON credential configuration file, such as a mounted Docker secret. | (required alternative) |
+| `MOCK_ERP_ENV` | Runtime environment used to gate destructive development commands. | `development` |
+| `MOCK_ERP_ALLOW_RESET` | Enables the development-only database reset command when set to `true`. | `false` |

@@ -44,14 +44,14 @@ The [Postman setup](https://github.com/nmdra/ERPBridge/blob/main/docs/connectivi
 <details>
 <summary>How do I configure the server?</summary>
 
-Set the environment variables listed in the [Environment variables reference](./environment-variables.mdx). Export them in your shell, or set them in `docker-compose.yml`.
+Set the environment variables listed in the [Environment variables reference](./environment-variables.mdx). For local development, prefer `make dev-up`; it creates ephemeral MockERP credentials only when no credential source is supplied. Compose reads `.env` as input, so use `--env-file .env` and never source the file. The development path enables demo tools and keeps RedisInsight loopback-only.
 
 </details>
 
 <details>
 <summary>How do I configure the CLI?</summary>
 
-The CLI reads `~/.bridgectl/config.yaml`. The file stores named contexts. Each context has `server`, `mcp-server`, `erp-base`, and an optional `api-token` value.
+The CLI reads `~/.bridgectl/config.yaml`. The file stores named contexts. Each context has `server`, `mcp-server`, `erp-base`, and an optional `api-token` value. New API registries are isolated at `~/.bridgectl/registries/<context>.json`; listings are deterministic and scoped to the selected context.
 
 For HTTP authentication, the CLI uses the `--token` flag first, then
 `BRIDGE_API_TOKEN`, and then the active context's `api-token`.
@@ -68,6 +68,13 @@ To override the address for one command:
 ```bash title="One-off override"
 BRIDGE_MCP_SERVER=http://localhost:8080 bridgectl tool get
 ```
+
+The configured `mcp-server` is a control-plane host root. The CLI strips only
+an exact `/mcp` or `/mcp/` suffix. Other non-empty paths return
+`CONTROL_PLANE_URL_INVALID`; `/mcp/` itself is the MCP transport, not a REST
+path. A legacy global registry is a stop condition. After confirmation, scrub
+legacy fields, then migrate the cleaned registry to one selected context with
+`bridgectl api migrate-registry --context <name> --yes`.
 
 </details>
 
@@ -143,10 +150,14 @@ The server sends MCP notifications for long-running work:
 <details>
 <summary>What are the system tools?</summary>
 
-Two built-in tools help you verify the bridge:
+Two development-only tools help verify the bridge:
 
 - `system.progress_test` — streams progress notifications
 - `system.sensitive_log_test` — exercises log redaction
+
+They are absent from discovery unless `MCP_ENABLE_TEST_TOOLS=true`. Enable that
+flag only in the development Compose path. RedisInsight is also a local-only
+inspection aid and must remain loopback-bound or opt-in.
 
 </details>
 
@@ -169,16 +180,15 @@ Two built-in tools help you verify the bridge:
 <details>
 <summary>How do I handle errors from the bridge in an agent?</summary>
 
-Failures that an agent can act on return a machine-readable JSON body:
-
-```json
-{
-  "error": "tool_execution_failed",
-  "message": "The ERP service is unreachable",
-  "suggestion": "Check that ERP_BASE_URL points at a running ERP",
-  "code": 1
-}
-```
+Control-plane failures return a bounded JSON body with stable `error`, safe
+`message`, `suggestion`, and numeric `code` fields. Common recovery keys are
+`CONTEXT_NOT_FOUND`, `LEGACY_REGISTRY`, `REGISTRY_CONFLICT`,
+`CONTROL_PLANE_URL_INVALID`, `VALIDATION_FAILED`, `AUTHENTICATION_FAILED`,
+`AUTHORIZATION_DENIED`, `UPSTREAM_UNREACHABLE`, `INSECURE_TRANSPORT`,
+`HEALTH_CHECK_FAILED`, `RECONCILIATION_FAILED`, `RESOURCE_NOT_FOUND`, and
+`API_PROBE_FAILED`. Messages do not include upstream bodies, credentials, auth
+headers, or stack details. MCP execution failures keep the MCP result envelope
+and set `isError: true`.
 
 </details>
 
@@ -187,13 +197,19 @@ Failures that an agent can act on return a machine-readable JSON body:
 <details>
 <summary>Where do tool schemas come from?</summary>
 
-The `schemas/` directory is not tracked by git. Generate the schemas from your ERP OpenAPI specification:
+Generate a temporary draft from your ERP OpenAPI specification, then keep
+only the reviewed manifest as the applied source:
 
-```bash title="Generate from OpenAPI"
-bridgectl api register --name erp --url http://localhost:8081 --module erp --description "Mock ERP"
-make generate-tools
-bridgectl tool apply -f schemas/erp/
+```bash title="Generate and apply a reviewed manifest"
+bridgectl api register --context <context> --name erp --url http://localhost:8081 --module erp --description "Mock ERP" --credential-ref ERP_PRIMARY_KEY
+bridgectl tool generate --context <context> --api erp -o yaml > /tmp/erpbridge-draft.yaml
+bridgectl tool validate --context <context> -f manifests/erp/tools.yaml
+bridgectl tool apply --context <context> -f manifests/erp/tools.yaml
 ```
+
+`make generate-tools` applies one temporary YAML stream once and removes it.
+Do not treat generated `schemas/` or per-tool JSON files as a second source of
+truth.
 
 </details>
 
@@ -255,13 +271,12 @@ Within 10 seconds. The reconciliation controller ticks every 10 seconds. A tool 
 
 Tool schemas reference a credential by name (`credentialRef`). The server resolves the reference from environment variables at call time. Schemas never contain raw secrets.
 
-The mock-erp service accepts:
+The mock-erp service accepts the configured token header, session cookie, or
+Basic Auth identity. Credential values are supplied through environment
+variables or an external secret file; they are not documented or stored in
+schemas.
 
-- Token header: `token adm_key_001:adm_sec_stu901`
-- Session cookie (`sid`)
-- Basic auth: `admin:admin`
-
-See [mock-erp in the repository](https://github.com/nmdra/ERPBridge/tree/main/mock-erp) for details.
+See the [MockERP Integration Contract](./mock-erp.mdx) for details.
 
 </details>
 

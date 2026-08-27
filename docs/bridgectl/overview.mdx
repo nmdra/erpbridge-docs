@@ -51,10 +51,12 @@ make build
 
 ## Typical workflow
 
-1. [Register your ERP API](./bridgectl_api_register.md) — `bridgectl api register --name erp --url http://localhost:8081 ...`
-2. [Generate tool schemas](./bridgectl_tool_generate.md) from an OpenAPI specification — `bridgectl tool generate --api erp --openapi mock-erp/openapi.yaml`
-3. [Apply the tools](./bridgectl_tool_apply.md) to the registry — `bridgectl tool apply -f schemas/erp/`
-4. [Verify](./bridgectl_tool_get.md) — `bridgectl tool get`
+1. Choose and verify a configured context with `bridgectl context list -o json`.
+2. [Register your ERP API](./bridgectl_api_register.md) in that context — `bridgectl api register --context <name> --name erp --url <url> --credential-ref ERP_API_KEY ...`
+3. [Test the API](./bridgectl_api_test.md) through the server — `bridgectl api test --context <name> erp`; use `--local` only for an explicit legacy diagnostic.
+4. [Generate a draft](./bridgectl_tool_generate.md) to a temporary stream, review it, and keep the applied source under `manifests/<module>/`.
+5. [Apply the reviewed manifest](./bridgectl_tool_apply.md) — `bridgectl tool apply --context <name> -f manifests/<module>/tools.yaml`.
+6. [Verify](./bridgectl_tool_get.md) — `bridgectl tool get --context <name>`
 
 :::tip New to ERPBridge?
 Follow the step-by-step [onboarding guide](../erpbridge/onboarding.mdx) — it walks through this exact workflow against `mock-erp`.
@@ -69,11 +71,11 @@ The CLI exits with a stable numeric code so scripts and AI agents can react prog
 | `0` | `SUCCESS` | Command succeeded |
 | `1` | `GENERAL_ERROR` | Server `500` or an unhandled error |
 | `2` | `BAD_ARGS` | Malformed URL, missing `http://` protocol, invalid arguments |
-| `3` | `NOT_FOUND` | `API_NOT_FOUND` in the registry |
+| `3` | `NOT_FOUND` | A requested API or resource is not in the selected registry |
 | `4` | `AUTH_FAIL` | Authentication failure |
 | `5` | `CONFLICT` | Resource conflict |
 | `6` | `TIMEOUT` | Request timed out |
-| `7` | `PRECONDITION_FAIL` | `MISCONFIGURED_CONTEXT` (URL not set), `NO_CONTEXT` |
+| `7` | `PRECONDITION_FAIL` | `MISCONFIGURED_CONTEXT` (URL not set), `NO_CONTEXT`, or another required precondition |
 
 ## Agent-friendly errors
 
@@ -81,16 +83,24 @@ When `-o json` is used, errors are written to **stdout** as a structured JSON pa
 
 ```json title="bridgectl -o json — error output"
 {
-  "error": "API_NOT_FOUND",
-  "message": "API \"unknown\" not found in local registry",
-  "suggestion": "Run 'bridgectl api list' to see available APIs.",
+  "error": "RESOURCE_NOT_FOUND",
+  "message": "The requested resource was not found",
+  "suggestion": "Check the selected context and list the available resources.",
   "code": 3
 }
 ```
 
 :::note
-Check `code` (the numeric exit code) and `error` (the machine-readable code) together. The exit code also propagates to the process exit status, so `$?` works in plain shell scripts too.
+Check `code` (the numeric exit code) and `error` (the machine-readable code)
+together. The exit code also propagates to the process exit status, so `$?`
+works in plain shell scripts too. Control-plane errors never include upstream
+bodies, credentials, or internal stack details.
 :::
+
+The configured `mcp-server` is a control-plane host root. Only an exact `/mcp`
+or `/mcp/` suffix is normalized away; other paths return
+`CONTROL_PLANE_URL_INVALID`. A legacy global API registry is not ignored: scrub
+and explicitly migrate it to one selected context before writing.
 
 ## Reference
 

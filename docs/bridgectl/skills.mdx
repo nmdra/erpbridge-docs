@@ -28,7 +28,7 @@ diagnose an integration, or prepare a redacted bug report.
 
 | Workflow | Result |
 | :--- | :--- |
-| API onboarding | Register an ERP endpoint, test connectivity, generate a tool manifest, validate it, apply it, and verify MCP discovery |
+| API onboarding | Run a deterministic preflight, register an ERP endpoint, test it through the server, generate a tool manifest, validate it, apply it, and verify MCP discovery |
 | API and tool maintenance | Inspect versions, apply reviewed changes, deactivate tools, restore soft-deleted tools, and confirm hard-delete targets |
 | Authentication and authorization | Create, list, and revoke scoped bearer tokens; assign roles; test authorized and denied guarded calls |
 | Operations | Inspect structured logs, cache statistics, cache invalidation, contexts, and runtime health |
@@ -60,6 +60,22 @@ Credentials stay in environment variables or the configured secret manager.
 Tool schemas use `credentialRef`; they never contain a raw secret. A token
 created by the CLI is disclosed once and is omitted from later summaries and
 bug reports.
+
+The onboarding preflight uses the selected context explicitly and checks stack
+health, Compose interpolation, the context-scoped API registry, and the
+control-plane root before mutation. The normal `bridgectl api test` is an
+admin-authenticated server-side probe that returns only status, content type,
+latency, and success; `--local` is reserved for an explicit offline diagnostic.
+Generated YAML is a temporary draft. Keep the reviewed applied source under
+`manifests/<module>/` and do not treat `schemas/` or generated per-tool JSON as
+a second authority.
+
+Tools may declare `security.dataClass` as `public`, `internal`, `pii`, or
+`restricted`. The `pii` and `restricted` classes require opaque,
+non-identifying `allowedRoles`; do not use personal or ERP record data in role
+names or examples. The `system.*_test` demonstrations require
+`MCP_ENABLE_TEST_TOOLS=true` and must be disabled in production. RedisInsight
+is for local inspection and must stay loopback-only or opt-in.
 
 ## Related documentation
 

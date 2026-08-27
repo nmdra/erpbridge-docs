@@ -51,7 +51,7 @@ One of the most important concepts in ERPBridge V2 is the distinction between re
 | :--- | :--- | :--- |
 | **Mental Model** | Technical Discovery | Declarative Management |
 | **Primary Focus** | The ERP System (technical) | The AI Agent (semantic) |
-| **Storage** | Local CLI Config (`config.yaml`) | Server Registry (`erpbridge.db`) |
+| **Storage** | Context-scoped local registry (`~/.bridgectl/registries/<context>.json`) | Server Registry (`erpbridge.db`) |
 | **Visibility** | **Hidden from AI** | **Visible to AI** (as an MCP Tool) |
 | **Stability** | Experimental / Internal | Versioned / Stable |
 | **Command** | `bridgectl api register ...` | `bridgectl tool apply -f ...` |
@@ -173,6 +173,13 @@ ERPBridge uses a "Template-Based Generation" approach. When generating tools (es
 
 Use the same OpenAPI specification to generate tools for different environments (Dev, Staging, Prod). Point the generator to a different registered API.
 
+Generation is pure until an explicit output or apply operation. The reviewed
+manifest under `manifests/<module>/` is the single applied source; generated
+YAML is a temporary draft and does not create a competing `schemas/` tree or
+per-tool JSON authority. CLI control-plane calls use the configured host root;
+only the exact `/mcp` or `/mcp/` transport suffix is normalized away. The
+`/mcp/` endpoint itself remains the Streamable HTTP MCP transport.
+
 ## Lifecycle of a tool change
 
 ```mermaid
@@ -208,3 +215,11 @@ sequenceDiagram
 - **Admission Controllers**: The API server rejects suspicious endpoint content, unknown authentication fields, reserved headers, raw-secret-looking values, and invalid credential references.
 - **Redaction**: All logs produced by tool executions are automatically filtered to redact sensitive keys defined in `internal/types/sensitive.go`; ERP request and response bodies are not logged.
 - **Deployment Boundary**: ERPBridge stores plugin configuration and invokes the protocol, but does not install, start, update, or schedule plugin code.
+- **Structured failures**: Control-plane HTTP errors use bounded `error`,
+  `message`, `suggestion`, and numeric `code` fields. Stable identifiers such
+  as `VALIDATION_FAILED`, `AUTHORIZATION_DENIED`, `UPSTREAM_UNREACHABLE`, and
+  `API_PROBE_FAILED` provide recovery keys without exposing upstream bodies.
+- **Sensitivity admission**: Tools may declare `security.dataClass` as
+  `public`, `internal`, `pii`, or `restricted`; the latter two require opaque
+  `allowedRoles`. Development-only `system.*_test` tools are gated, and
+  RedisInsight is loopback-only by default.

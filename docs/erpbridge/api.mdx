@@ -59,7 +59,13 @@ POST /apis/erpbridge.io/v1/tools
 Content-Type: application/json
 ```
 
-Body: one JSON tool definition (kind `MCPTool`). Returns `201 Created` on success. The `bridgectl tool apply` command also accepts the YAML sequence or multi-document YAML emitted by `bridgectl tool generate` and sends each tool definition separately:
+Body: one JSON tool definition (kind `MCPTool`). Returns `201 Created` when a
+new definition is stored and reports an update when an existing version is
+replaced. The `bridgectl tool apply` command also accepts a YAML sequence or
+multi-document YAML emitted by `bridgectl tool generate` and sends each tool
+definition separately. Keep the reviewed manifest under
+`manifests/<module>/`; generated output is a temporary draft, not a second
+source of truth:
 
 ```json title="Apply response"
 {
@@ -188,6 +194,8 @@ The server rejects tool definitions when:
 
 - The tool name starts with `get-` or `post-`.
 - The endpoint path contains embedded secrets (for example `token ` or `key=`).
+- `spec.security.dataClass` is not `public`, `internal`, `pii`, or `restricted`.
+- A `pii` or `restricted` tool has no `allowedRoles`.
 - `spec.security.allowedRoles` contains invalid, duplicate, empty, or more
   than 32 roles.
 - A guarded tool defines or requires its own `role` input.
@@ -339,7 +347,27 @@ curl http://localhost:8080/metrics | grep -E "erp_requests_total|mcp_tool_invoca
 
 ## Error responses
 
-The server uses standard HTTP status codes. For cache endpoints, `503` means the cache is not enabled.
+The server uses standard HTTP status codes. Control-plane failures return a
+bounded JSON object with `error`, `message`, `suggestion`, and numeric `code`.
+The stable `error` value is safe for automation. Common values include
+`CONTEXT_NOT_FOUND`, `LEGACY_REGISTRY`, `REGISTRY_CONFLICT`,
+`CONTROL_PLANE_URL_INVALID`, `VALIDATION_FAILED`, `AUTHENTICATION_FAILED`,
+`AUTHORIZATION_DENIED`, `UPSTREAM_UNREACHABLE`, `INSECURE_TRANSPORT`,
+`HEALTH_CHECK_FAILED`, `RECONCILIATION_FAILED`, `RESOURCE_NOT_FOUND`, and
+`API_PROBE_FAILED`. Messages and suggestions do not contain upstream bodies,
+credentials, auth headers, URLs with secrets, or stack details. MCP execution
+failures remain successful protocol responses with `isError: true`.
+
+### API probe
+
+`POST /api/apis/test` is an authenticated administrator endpoint. It accepts a
+non-secret API definition and `credentialRef`; the server resolves the
+credential and applies its ERP transport policy. It returns only status,
+normalized content type, latency, and success. ERP response bodies and upstream
+headers never cross the probe boundary. `bridgectl api test` uses this route by
+default; `--local` is an explicit legacy host-side diagnostic.
+
+For cache endpoints, `503` means the cache is not enabled.
 
 :::tip Need the full lifecycle?
 See the [MCP client guide](./mcp-client-guide.mdx) for the JSON-RPC request/response flow over the MCP endpoints.

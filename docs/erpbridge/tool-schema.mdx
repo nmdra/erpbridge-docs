@@ -79,16 +79,20 @@ Authentication strategy.
 
 - **`authType`**: `api-key`, `bearer`, or `basic`.
 - **`credentialRef`**: The name of the environment variable containing the secret. **Never embed raw secrets here.**
+- **`dataClass`**: (Optional string) Declared sensitivity: `public`, `internal`, `pii`, or `restricted`. Older manifests may omit this field.
 - **`allowedRoles`**: (Optional array) Roles that may call this tool. Values
   must match `[a-z][a-z0-9_-]{0,63}`, be unique, and contain no more than 32
-  roles.
+  roles. `pii` and `restricted` tools must provide at least one role.
 
 When `allowedRoles` is present, the tool is guarded. MCP clients select a role
 with `arguments.role`; direct callers use `X-ERPBridge-Role`. The selector
 must be present in both the caller identity and the tool allow-list, and the
 MCP selector is removed before execution. A guarded tool cannot define or
 require its own `role` argument. Without `allowedRoles`, `role` remains an
-ordinary business argument.
+ordinary business argument. Use opaque, non-identifying role slugs; never use a
+person name, email, employee number, or ERP record. ERPBridge does not infer PII
+from arbitrary ERP response data. Authorization runs before cache lookup and
+ERP work.
 
 :::danger Secrets never belong in schemas
 The admission controller rejects tool definitions whose endpoint path contains secret-like patterns (e.g., `token ` or `key=`). Credentials are resolved from environment variables at call time only.
@@ -110,6 +114,19 @@ Optional support status for a tool version.
 - **`deprecatedAt`**: (String, optional) ISO date when deprecation started.
 - **`sunsetAt`**: (String, optional) ISO date when the tool is removed.
 - **`replacement`**: (String, optional) Name of the tool that replaces this one.
+
+## Generated drafts and reviewed manifests
+
+Generation is pure: `bridgectl tool generate` writes only to its selected
+output stream. Keep reviewed manifests under `manifests/<module>/`; do not
+create competing generated JSON files or use `schemas/` as an authoritative
+source. Generated GET and HEAD tools default to a shared read-only cache with a
+five-minute TTL. Generated write methods default to no cache. Review intent,
+roles, data class, schemas, and cache policy before applying.
+
+The development-only `system.*_test` tools require
+`MCP_ENABLE_TEST_TOOLS=true` and must be absent from production discovery.
+RedisInsight is for local inspection and must remain loopback-only or opt-in.
 
 ## Annotated example
 
