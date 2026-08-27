@@ -113,10 +113,13 @@ records.
 ### Plugin authentication and transport
 
 A plugin can declare only bearer or API-key authentication. Its `credentialRef`
-must name an environment variable with a `PLUGIN_` prefix. The resource stores
-that name, never the resolved credential. API-key authentication may use a
-validated custom header, such as `X-API-Key`; raw tokens, keys, authorization
-headers, and unknown authentication fields are rejected at admission.
+must name a logical `PLUGIN_` reference. The resource stores that name, never
+the resolved credential. `credentialSource` is optional and defaults to `env`.
+Set it to `file` to read `<ERPBRIDGE_CREDENTIALS_DIR>/<credentialRef>` for each
+request; file failures fail closed and never fall back to the environment.
+API-key authentication may use a validated custom header, such as `X-API-Key`;
+raw tokens, keys, authorization headers, and unknown authentication fields are
+rejected at admission.
 
 Credentialed plugin calls require HTTPS. A development-only HTTP exception
 requires the exact normalized `host:port` in `INSECURE_AUTH_ALLOWED_HOSTS`, and
@@ -178,10 +181,19 @@ misses; the cache stores the final transformed MCP result and never stores error
 results. Plugin and binding lifecycle changes flush affected target-tool cache
 entries.
 
-Change the referenced `PLUGIN_*` environment value to rotate a credential, then
-flush affected caches using an authenticated `bridgectl cache flush --all` (or
-restart the deployment). Dynamic secret providers, OAuth, mTLS, and
-application-level encryption are not part of this contract.
+Environment-backed references remain the default. Change the referenced
+`PLUGIN_*` environment value and recreate or roll the deployment to rotate one.
+For file-backed credentials, ERPBridge reads the mounted file immediately before
+each request and bypasses affected tool cache reads and writes. Local writable
+mounts should use a complete same-directory temporary file and atomic rename;
+CSI/projected mounts update eventually and must use a directory, not Kubernetes
+`subPath`. AWS EKS ASCP, AKS Key Vault CSI, and GKE Secret Manager CSI can
+provide the mount. Use workload identity and least privilege. Adding a new
+remote secret may require changing the provider mapping and rolling the
+workload before its filename is mounted. `bridgectl api test --local` resolves
+in the CLI process and needs the same mount; the normal probe resolves in
+ERPBridge. Dynamic secret-provider SDKs, OAuth, mTLS, and application-level
+encryption are not part of this contract.
 
 ### Admission rules
 
@@ -335,6 +347,7 @@ The server exposes the following metrics in Prometheus text format. All counters
 | `mcp_tool_duration_seconds` | Histogram | `tool` | End-to-end duration of MCP tool calls. |
 | `cache_hits_total` | Counter | `type` (`exact`) | Cache hits. |
 | `cache_misses_total` | Counter | — | Cache misses. |
+| `credential_resolutions_total` | Counter | `source`, `outcome` | Credential lookup outcomes. Labels never contain credential references, values, paths, or hashes. |
 | `mcp_server_starts_total` | Counter | — | MCP server startup events. |
 | `mcp_server_stops_total` | Counter | — | MCP server shutdown events. |
 | `mcp_sessions_started_total` | Counter | — | MCP client sessions established. |
@@ -361,11 +374,14 @@ failures remain successful protocol responses with `isError: true`.
 ### API probe
 
 `POST /api/apis/test` is an authenticated administrator endpoint. It accepts a
-non-secret API definition and `credentialRef`; the server resolves the
-credential and applies its ERP transport policy. It returns only status,
-normalized content type, latency, and success. ERP response bodies and upstream
-headers never cross the probe boundary. `bridgectl api test` uses this route by
-default; `--local` is an explicit legacy host-side diagnostic.
+non-secret API definition, `credentialRef`, and optional `credentialSource`
+(`env` by default or `file`). File mode requires `ERPBRIDGE_CREDENTIALS_DIR`,
+reads the reference-named file for each probe, and never falls back to the
+environment. The server resolves the credential and applies its ERP transport
+policy. It returns only status, normalized content type, latency, and success.
+ERP response bodies and upstream headers never cross the probe boundary.
+`bridgectl api test` uses this route by default; `--local` is an explicit
+host-side diagnostic that resolves files in the CLI process.
 
 For cache endpoints, `503` means the cache is not enabled.
 

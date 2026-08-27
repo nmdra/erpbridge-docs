@@ -57,6 +57,7 @@ spec:
   auth:
     type: api-key
     credentialRef: PLUGIN_RESPONSE_API_KEY
+    # credentialSource: file # Reads ERPBRIDGE_CREDENTIALS_DIR/PLUGIN_RESPONSE_API_KEY
     header: X-API-Key
 ```
 
@@ -70,6 +71,13 @@ admission also requires a configured `API_AUTH_TOKEN`, an authenticated admin
 request, an active HTTP-backed tool, and an explicit object-shaped output
 schema. Userinfo, query parameters, fragments, redirects, and broad wildcard
 allowlists are rejected.
+
+`credentialSource` is optional and defaults to `env`. Set it to `file` only
+when `ERPBRIDGE_CREDENTIALS_DIR` is mounted in the plugin-calling ERPBridge
+process. ERPBridge reads the validated `credentialRef` filename immediately
+before each plugin request, fails closed on missing or invalid file content,
+and never falls back to the environment. Authenticated file-backed plugin
+bindings bypass the tool response cache.
 
 A `PluginBinding` connects exact plugin and tool versions:
 
@@ -214,11 +222,20 @@ directories. Use `--hard --yes` for a non-interactive permanent delete.
 
 ## Credential rotation and legacy migration
 
-Credential references resolve from the ERPBridge process environment at request
-time. To rotate a plugin credential, update the `PLUGIN_*` environment value,
-restart or reload the deployment, and flush affected cache entries with an
-authenticated `bridgectl cache flush --all`. ERPBridge never stores the resolved
-value.
+Environment references remain the default. To rotate a file-backed plugin
+credential without restarting ERPBridge, replace the mounted reference-named
+file with a complete provider-projected generation or, on a writable local
+mount, use a same-directory temporary file and atomic rename. Provider refresh
+is eventual; mount a directory rather than Kubernetes `subPath`, and expect
+replicas to observe changes at different times. AWS EKS ASCP, AKS Key Vault CSI,
+and GKE Secret Manager CSI can provide the mount. Use workload identity and
+least privilege. Adding a new cloud secret may require changing the provider
+mapping and rolling the workload before its filename is mounted.
+
+To rotate an environment-backed plugin credential, update the `PLUGIN_*`
+environment value and recreate or roll the deployment. ERPBridge never stores
+the resolved value. Cache bypass is automatic for authenticated file-backed
+plugin bindings; environment-backed bindings keep normal cache behavior.
 
 Older local API registries may contain `authKey` or `authToken`. State-changing
 API commands and `bridgectl api test` stop until an operator runs the explicit,

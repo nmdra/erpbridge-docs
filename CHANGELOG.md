@@ -8,6 +8,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- Documented environment-default credential resolution with explicit mounted-file
+  sources, bounded fail-closed reads, hot rotation without a server restart,
+  safe outcome metrics, and AWS/Azure/GCP CSI deployment guidance.
 - Synchronized public onboarding and `bridgectl` references with the reliable
   local bootstrap, context-scoped registries, server-side body-free API probe
   and explicit `--local` diagnostic, control-plane URL normalization, pure

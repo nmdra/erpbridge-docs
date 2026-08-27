@@ -64,6 +64,7 @@ Environment variables for the server are set in the `docker-compose.yml` file.
 | `RATE_LIMIT_BURST` | Token bucket burst size. | `20` |
 | `API_AUTH_TOKEN` | Admin bearer token for protected control-plane, MCP, and direct-invoke routes. | (unset) |
 | `ERP_PRIMARY_KEY` | Example environment credential referenced by generated ERP tools. | (unset) |
+| `ERPBRIDGE_CREDENTIALS_DIR` | Optional mounted directory used only by resources with `credentialSource: file`. | (unset) |
 | `PLUGIN_<NAME>` | Environment credential referenced by a plugin `credentialRef`; the value is never persisted. | (unset) |
 | `PLUGIN_ENDPOINT_ALLOWLIST` | Exact normalized `host:port` values allowed for credentialed plugin endpoints. | (unset) |
 | `INSECURE_AUTH_ALLOWED_HOSTS` | Exact development-only `host:port` exceptions for credentialed HTTP. | (unset) |
@@ -78,6 +79,35 @@ print credentials. Direct Compose use requires one of the two credential
 sources. Compose reads quoted `.env` values; do not source `.env` in your shell.
 Use `docker compose --env-file .env config --quiet` before
 `up --build --force-recreate -d` when an env file is used.
+
+### Optional mounted credentials
+
+Environment variables remain the default credential source. To rotate a
+selected credential without recreating the ERPBridge container, mount a
+read-only directory and set `ERPBRIDGE_CREDENTIALS_DIR` in the server:
+
+```yaml
+services:
+  erpbridge-server:
+    volumes:
+      - ./operator-secrets:/run/secrets/erpbridge:ro
+    environment:
+      ERPBRIDGE_CREDENTIALS_DIR: /run/secrets/erpbridge
+```
+
+Set `credentialSource: file` beside the logical `credentialRef` only on tools,
+APIs, resources, or plugins using that directory. ERPBridge reads the file on
+each operation and fails closed on missing, empty, invalid, control-character,
+non-regular, invalid UTF-8, or larger-than-64 KiB content. For local writable
+mounts, replace files with a complete same-directory temporary file and an
+atomic rename. Provider-managed CSI updates are eventual; use a normal
+volume directory, never `subPath`.
+
+AWS EKS ASCP, AKS Key Vault CSI, and GKE Secret Manager CSI can populate the
+directory. Use workload identity, least privilege, and provider rotation
+settings. Adding a new cloud secret may require a provider mapping change and
+workload rollout before the filename is mounted. Replicas may observe updates
+at different times. ERPBridge does not call cloud APIs directly.
 
 ## 3. Tool registry
 
