@@ -51,7 +51,10 @@ const sidebars: SidebarsConfig = {
       items: [
         'bridgectl/bridgectl_api',
         'bridgectl/bridgectl_api_list',
+        'bridgectl/bridgectl_api_migrate-registry',
         'bridgectl/bridgectl_api_register',
+        'bridgectl/bridgectl_api_scrub-credentials',
+        'bridgectl/bridgectl_api_set-credential-ref',
         'bridgectl/bridgectl_api_test',
       ],
     },
