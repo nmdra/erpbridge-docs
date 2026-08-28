@@ -338,8 +338,11 @@ separate from the Console BFF, which applies its own projection and redaction.
 Guarded MCP tools advertise an optional `arguments.role` selector. The server
 validates it against the authenticated identity and tool allow-list, then
 removes it before the ERP call. Open tools keep `role` as a normal business
-argument. Guarded read-only cache entries are shared; other guarded entries
-are scoped by verified role.
+argument. During `tools/list`, guarded tools also publish their non-empty
+allow-list as `io.erpbridge/allowedRoles` in namespaced `_meta` for host/model
+reference. This metadata does not grant access and may not reach the model
+through every MCP client. Guarded read-only cache entries are shared; other
+guarded entries are scoped by verified role.
 
 ## Observability
 

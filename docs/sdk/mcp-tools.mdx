@@ -53,6 +53,9 @@ await client.close()
   `mcpRetryPolicy: 'never'` for side-effecting workflows that must not replay
   an operation after an ambiguous transport failure. In that mode, the first
   transport failure becomes a `ProtocolError` and no reconnect occurs.
+- `listTools` may include standard tool annotations and namespaced `_meta`
+  guidance such as `whenToUse`, examples, and allowed roles. Custom `_meta`
+  keys are client-dependent and may not be forwarded into the model context.
 - `callTool` returns the complete MCP `McpToolResult` envelope. Inspect its
   `content` blocks and optional `structuredContent`. An unknown tool returns
   `NotFoundError`. A tool that runs but reports failure returns `{ isError: true
