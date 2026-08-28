@@ -62,6 +62,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- Documented immediate REST SSE header flushing, event framing, cancellation,
+  bounded subscriber drop behavior, and the separate Console projection.
 - Documented principal-keyed authenticated rate limits, strict rate setting
   validation, direct HTTP `429` responses with `Retry-After`, and MCP
   `tools/call` `isError` responses that remain HTTP `200`.
