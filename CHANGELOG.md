@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   and explicit `--local` diagnostic, control-plane URL normalization, pure
   reviewed-manifest workflow, structured error recovery, sensitivity/role
   admission, demo-tool gating, and loopback-only RedisInsight guidance.
+- Documented optional method-based MCP annotation hints in generated tool manifests.
 - Documented the `raw_response` plugin phase, bounded JSON/base64 media
   adaptation, secure raw binding admission, stable MCP output schemas, exact
   tool-version migration, error handling, cache behavior, and image-to-text

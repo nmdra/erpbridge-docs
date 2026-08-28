@@ -1,6 +1,6 @@
 ## bridgectl tool generate
 
-Auto-generate an MCP tool schema from a registered API or OpenAPI spec
+Auto-generate an MCP tool schema from a registered API or OpenAPI spec. Generated tools include method-based MCP annotation hints for review.
 
 ```
 bridgectl tool generate [flags]
@@ -12,6 +12,7 @@ bridgectl tool generate [flags]
       --api string       Name of the registered API to generate from
   -h, --help             help for generate
       --openapi string   URL or path to an OpenAPI spec
+      --output-dir string   Write one tool file per generated tool to this directory
 ```
 
 ### Options inherited from parent commands

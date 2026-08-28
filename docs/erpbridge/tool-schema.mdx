@@ -22,6 +22,7 @@ metadata:
   module: hr
 spec:
   description: { ... }
+  annotations: { ... }
   inputSchema: { ... }
   execution: { ... }
   security: { ... }
@@ -49,6 +50,21 @@ High-signal information to help the LLM select the correct tool.
 - **`whenNotToUse`**: (Array) List of similar scenarios where you must not use this tool.
 - **`examples`**: (Array) Sample user queries that trigger this tool.
 
+### `spec.annotations`
+
+Optional MCP behavioral hints. These fields are additive and do not change the
+input or output schema.
+
+- **`title`**: (String, optional) Human-readable display title.
+- **`readOnlyHint`**: (Boolean, optional) Whether the tool is expected not to modify its environment.
+- **`destructiveHint`**: (Boolean, optional) Whether a modifying operation may be destructive.
+- **`idempotentHint`**: (Boolean, optional) Whether repeated calls with the same arguments are expected to have no additional effect.
+- **`openWorldHint`**: (Boolean, optional) Whether the tool interacts with external entities.
+
+Generated annotations are method-based draft hints. Review them before
+applying a generated manifest. They do not replace authorization or other
+server-side controls.
+
 ### `spec.inputSchema`
 
 Standard JSON Schema defining the arguments. **Strict typing is required.**
@@ -69,7 +85,7 @@ Optional JSON Schema describing the shape of a successful ERP response. When pre
 Technical mapping to the ERP API.
 
 - **`type`**: (String) Execution style. Currently only `http`.
-- **`method`**: (String) `GET`, `POST`, `PUT`, `DELETE`.
+- **`method`**: (String) `GET`, `HEAD`, `POST`, `PUT`, `PATCH`, `DELETE`, `OPTIONS`, or `TRACE`.
 - **`endpoint`**: (String) The ERP API URL path.
 - **`mapping`**: (Map) Optional. Maps LLM arg names to ERP parameter names.
 - **`parameterLocations`**: (Map) Generated metadata mapping each LLM argument to `path`, `query`, `header`, or `body`. If absent, GET arguments use the query and other methods use one JSON object body for compatibility.
@@ -132,8 +148,10 @@ Generation is pure: `bridgectl tool generate` writes only to its selected
 output stream. Keep reviewed manifests under `manifests/<module>/`; do not
 create competing generated JSON files or use `schemas/` as an authoritative
 source. Generated GET and HEAD tools default to a shared read-only cache with a
-five-minute TTL. Generated write methods default to no cache. Review intent,
-roles, data class, schemas, and cache policy before applying.
+five-minute TTL. Generated write methods default to no cache. Generated tools
+also include method-based annotation hints for recognized HTTP methods. Unknown
+methods retain only the HTTP-backed open-world hint. Review intent, roles, data
+class, annotations, schemas, and cache policy before applying.
 
 The development-only `system.*_test` tools require
 `MCP_ENABLE_TEST_TOOLS=true` and must be absent from production discovery.
