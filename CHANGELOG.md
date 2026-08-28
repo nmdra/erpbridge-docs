@@ -62,6 +62,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- Documented explicit Redis-unavailable cache health and startup behavior,
+  including `503 HEALTH_CHECK_FAILED` and no memory substitution.
 - Documented OpenAPI request-body and parameter-location preservation,
   protected generated headers, response-path inference, and successful HEAD/204
   nil-result handling.

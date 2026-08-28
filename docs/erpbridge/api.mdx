@@ -272,7 +272,7 @@ On failure the server returns `500 Internal Server Error` with a JSON error enve
 
 | Endpoint | Method | Description |
 | :--- | :--- | :--- |
-| `/api/cache/stats` | `GET` | Cache key counts and memory usage. Works with Redis and the bounded in-memory backend. |
+| `/api/cache/stats` | `GET` | Cache key counts and memory usage. Works with Redis and the bounded in-memory backend; returns `503 HEALTH_CHECK_FAILED` when configured Redis is unavailable. |
 | `/api/cache/flush` | `GET` | Flush cache entries. Query params: `tool`, `module`, `all=true`. A module flush covers all stored versions, including inactive versions. |
 
 ### Cache stats response
@@ -401,7 +401,9 @@ ERP response bodies and upstream headers never cross the probe boundary.
 `bridgectl api test` uses this route by default; `--local` is an explicit
 host-side diagnostic that resolves files in the CLI process.
 
-For cache endpoints, `503` means the cache is not enabled.
+For cache endpoints, `503 HEALTH_CHECK_FAILED` means the cache is disabled or
+the selected Redis backend is unavailable. The server does not silently replace
+configured Redis with memory.
 
 :::tip Need the full lifecycle?
 See the [MCP client guide](./mcp-client-guide.mdx) for the JSON-RPC request/response flow over the MCP endpoints.

@@ -108,6 +108,13 @@ bridgectl cache flush --all
 
 If `REDIS_URL` is not set, the server uses the bounded in-memory cache. Set `CACHE_MEMORY_MAX_ENTRIES=0` to disable memory-cache storage while keeping tool calls available. The default capacity is 10,000 entries.
 
+If `REDIS_URL` is set to a valid but unavailable Redis server, ERPBridge keeps
+Redis selected. Cache reads continue as misses, failed writes do not fail tool
+execution, and no false cache hit is created. Cache stats and flush health
+fail with a bounded `503` and `HEALTH_CHECK_FAILED`; `/mcp/health` remains
+available. A malformed Redis URL stops startup instead of creating a nil or
+memory manager.
+
 The cache endpoints work with both backends:
 
 - `GET /api/cache/stats`
