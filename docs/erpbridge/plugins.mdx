@@ -168,7 +168,9 @@ identity, caller tokens, or ERP credentials. Request and response JSON are
 limited to 1 MiB. ERPBridge disables redirects and retries, and it applies the
 request context and configured timeout. Authentication failures and plugin
 failures use safe errors; credential values, endpoints, payloads, and plugin
-error bodies are not returned or logged.
+error bodies are not returned or logged. The sample `mock-plugin` service reads
+`MOCK_PLUGIN_API_KEY`; ERPBridge resolves the same runtime value through the
+server-side `PLUGIN_MOCK_API_KEY` reference.
 
 A raw plugin can transform the response body for the next phase. For
 successful 2xx responses, ERPBridge applies `responsePath`, validates the
@@ -177,7 +179,9 @@ result. Terminal non-2xx responses, including 3xx, remain errors and skip
 success-only phases. With `continue`, the original captured response is used
 only when it satisfies the final schema. Otherwise a safe error is returned.
 The `fail` policy returns a generic tool error without exposing the endpoint,
-payload, credentials, or plugin response body.
+payload, credentials, or plugin response body. Direct invocation returns HTTP
+`500`; MCP keeps HTTP `200` with `result.isError=true`. The `continue` policy
+returns the original schema-valid result when processing fails.
 
 ## Cache and transports
 
