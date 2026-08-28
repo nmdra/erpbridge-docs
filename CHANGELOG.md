@@ -62,6 +62,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- Documented principal-keyed authenticated rate limits, strict rate setting
+  validation, direct HTTP `429` responses with `Retry-After`, and MCP
+  `tools/call` `isError` responses that remain HTTP `200`.
 - Standardized headings, terminology, link labels, and task-oriented language across the Server, `bridgectl`, SDK, roadmap, FAQ, and homepage documentation
 - Updated homepage and metadata copy to describe existing ERP APIs and the ERP codebase
 - Standardized `ERPBridge Server`, `bridgectl`, `stdio`, OpenAPI specification, and `mock-erp` terminology across hand-written pages

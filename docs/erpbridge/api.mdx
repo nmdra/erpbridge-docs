@@ -231,6 +231,12 @@ Body:
 ```
 
 The call goes through the middleware chain: rate limiting, caching, and resilience.
+Authenticated direct calls share a limiter bucket by token principal.
+
+Excess direct calls return HTTP `429` with the stable `RATE_LIMITED` error and a
+whole-second `Retry-After` header. Streamable HTTP MCP `tools/call` requests
+remain HTTP `200` responses with `result.isError=true`; `tools/list` is not
+throttled.
 
 For guarded tools, direct callers pass the verified selector in
 `X-ERPBridge-Role`. A `role` field in the JSON body is rejected. The selector
