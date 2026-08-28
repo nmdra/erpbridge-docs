@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="820" viewBox="0 0 1600 820" role="img" aria-labelledby="title desc">
+<title id="title">ERPBridge — Team Ownership (4-Person Swimlane)</title>
+<desc id="desc">Four horizontal swimlanes: P1 MCP/bridgectl/ERPBridge, P2 Model+RAG, P3 Vector+Pipeline, P4 Workflow Frontend/Backend. Cross-lane edges show ①-④ MCP fanout.</desc>
+<rect width="1600" height="820" fill="#ffffff"/>
+<defs>
+  <marker id="ab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#0078D4"/></marker>
+  <marker id="ap" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#8b5cf6"/></marker>
+  <marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#10b981"/></marker>
+  <marker id="ao" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#d06a2c"/></marker>
+</defs>
+<style>
+  .t { font-family: Inter, Geist, Helvetica, Arial, sans-serif; }
+  .zt { font-size:12px; font-weight:700; fill:#111827; }
+  .bt { font-size:11px; font-weight:700; fill:#111827; }
+  .bs { font-size:9px; fill:#6c8ebf; }
+  .badge { font-size:9px; fill:#6c8ebf; font-family: Geist Mono, monospace; }
+</style>
+<text x="20" y="22" class="t" font-size="14" font-weight="700">ERPBridge — Team Ownership (4-Person) — Lecture Appendix</text>
+<text x="520" y="22" class="t bs">P1 dev-centric • P2 LLM+RAG • P3 Vector+Pipeline • P4 Workflow</text>
+
+<!-- Lane P1 -->
+<rect x="0" y="40" width="1600" height="170" rx="6" fill="#f5f5f5" stroke="#d0d7de" stroke-width="1.2"/>
+<rect x="0" y="40" width="110" height="170" rx="6" fill="#f5f5f5" stroke="#d0d7de" stroke-width="1.2"/>
+<line x1="110" y1="40" x2="110" y2="210" stroke="#d0d7de" stroke-width="0.8"/>
+<text x="55" y="100" class="t zt" text-anchor="middle">P1</text>
+<text x="55" y="118" class="t bs" text-anchor="middle">MCP • bridgectl</text>
+<text x="55" y="132" class="t bs" text-anchor="middle">ERPBridge</text>
+
+<g>
+  <circle cx="160" cy="115" r="14" fill="#505050"/><circle cx="160" cy="101" r="7" fill="none" stroke="#ffffff" stroke-width="1.1"/><path d="M 146 123 q 14 -10 28 0" fill="none" stroke="#ffffff" stroke-width="1.1"/><text x="160" y="145" class="t bs" text-anchor="middle">Developer</text>
+</g>
+<rect x="300" y="95" width="140" height="60" rx="6" fill="#ffffff" stroke="#6c8ebf" stroke-width="1.2"/><text x="370" y="116" class="t bt" text-anchor="middle">bridgectl</text><text x="370" y="130" class="t bs" text-anchor="middle">api register • tool apply</text>
+<rect x="620" y="95" width="170" height="70" rx="6" fill="#e8f4f8" stroke="#0078D4" stroke-width="1.5"/><text x="705" y="118" class="t bt" text-anchor="middle">ERPBridge Server</text><text x="705" y="132" class="t bs" text-anchor="middle">Container App • :8080 /mcp/</text>
+<rect x="880" y="95" width="140" height="60" rx="6" fill="#ffffff" stroke="#6c8ebf" stroke-width="1.2"/><text x="950" y="118" class="t bt" text-anchor="middle">MockERP</text><text x="950" y="132" class="t bs" text-anchor="middle">mockerp:0.2.1 :8081</text>
+<rect x="1080" y="95" width="140" height="60" rx="6" fill="#fff9e6" stroke="#d6b656" stroke-width="1.2" stroke-dasharray="6 4"/><text x="1150" y="118" class="t bt" text-anchor="middle">MCP Gateway</text><text x="1150" y="132" class="t bs" text-anchor="middle">HTTP / stdio</text>
+<text x="705" y="180" class="t bs" text-anchor="middle" fill="#0078D4">Azure VNet 10.0.0.0/16 private</text>
+
+<!-- Lane P2 -->
+<rect x="0" y="210" width="1600" height="170" rx="6" fill="#e8f4f8" stroke="#0078D4" stroke-width="1.5"/>
+<rect x="0" y="210" width="110" height="170" rx="6" fill="#e8f4f8" stroke="#0078D4" stroke-width="1.5"/>
+<line x1="110" y1="210" x2="110" y2="380" stroke="#0078D4" stroke-width="0.8"/>
+<text x="55" y="280" class="t zt" text-anchor="middle" fill="#0078D4">P2</text>
+<text x="55" y="298" class="t bs" text-anchor="middle" fill="#0078D4">LLM + RAG</text>
+<g><rect x="300" y="260" width="110" height="80" rx="8" fill="#fff0e6" stroke="#F58534" stroke-width="1.6"/><circle cx="355" cy="282" r="16" fill="#F58534"/><text x="355" y="288" text-anchor="middle" font-size="14">🧠</text><text x="355" y="318" class="t bs" text-anchor="middle">Fine-Tuned Model</text><text x="355" y="330" class="t bs" text-anchor="middle" font-size="8">brain • P2</text></g>
+<rect x="620" y="260" width="170" height="70" rx="6" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.4"/><text x="705" y="286" class="t bt" text-anchor="middle">Enterprise RAG</text><text x="705" y="300" class="t bs" text-anchor="middle">Policies • SOPs • Compliance</text><text x="705" y="312" class="t bs" text-anchor="middle" font-size="8">Company Knowledge</text>
+<text x="950" y="290" class="t bs">Vector = ERP Memory • RAG = Company Knowledge</text>
+
+<!-- Lane P3 -->
+<rect x="0" y="380" width="1600" height="170" rx="6" fill="#e8f5e9" stroke="#82b366" stroke-width="1.2"/>
+<rect x="0" y="380" width="110" height="170" rx="6" fill="#e8f5e9" stroke="#82b366" stroke-width="1.2"/>
+<line x1="110" y1="380" x2="110" y2="550" stroke="#82b366" stroke-width="0.8"/>
+<text x="55" y="450" class="t zt" text-anchor="middle">P3</text>
+<text x="55" y="468" class="t bs" text-anchor="middle">Vector + Pipeline</text>
+<rect x="300" y="430" width="200" height="60" rx="6" fill="#ffffff" stroke="#82b366" stroke-width="1.2"/><text x="400" y="454" class="t bt" text-anchor="middle">Transformation Pipeline</text><text x="400" y="468" class="t bs" text-anchor="middle">Extract • Clean • Transform • Embed</text>
+<g><ellipse cx="705" cy="470" rx="70" ry="10" fill="#d5e8d4" stroke="#82b366" stroke-width="1.2"/><rect x="635" y="470" width="140" height="45" fill="#d5e8d4" stroke="#82b366" stroke-width="1.2"/><ellipse cx="705" cy="515" rx="70" ry="10" fill="#d5e8d4" stroke="#82b366" stroke-width="1.2"/><text x="705" y="494" class="t bt" text-anchor="middle">Vector DB</text><text x="705" y="506" class="t bs" text-anchor="middle">ERP Memory</text></g>
+<text x="160" y="460" class="t bs">Legacy ERP data →</text>
+
+<!-- Lane P4 -->
+<rect x="0" y="550" width="1600" height="170" rx="6" fill="#fff9e6" stroke="#d6b656" stroke-width="1.2"/>
+<rect x="0" y="550" width="110" height="170" rx="6" fill="#fff9e6" stroke="#d6b656" stroke-width="1.2"/>
+<line x1="110" y1="550" x2="110" y2="720" stroke="#d6b656" stroke-width="0.8"/>
+<text x="55" y="620" class="t zt" text-anchor="middle">P4</text>
+<text x="55" y="638" class="t bs" text-anchor="middle">Workflow FE/BE</text>
+<g><circle cx="160" cy="610" r="14" fill="#505050"/><circle cx="160" cy="596" r="7" fill="none" stroke="#fff" stroke-width="1.1"/><path d="M 146 618 q 14 -10 28 0" fill="none" stroke="#fff" stroke-width="1.1"/><text x="160" y="640" class="t bs" text-anchor="middle">Business Users</text></g>
+<rect x="300" y="595" width="140" height="70" rx="6" fill="#ffffff" stroke="#0078D4" stroke-width="1.4"/><text x="370" y="620" class="t bt" text-anchor="middle">Web Frontend</text><text x="370" y="634" class="t bs" text-anchor="middle">chat • workflow • config</text>
+<rect x="620" y="595" width="170" height="70" rx="6" fill="#ffffff" stroke="#d6b656" stroke-width="1.4"/><text x="705" y="620" class="t bt" text-anchor="middle">Workflow / Agent</text><text x="705" y="634" class="t bt" text-anchor="middle">Backend</text><text x="705" y="646" class="t bs" text-anchor="middle">run workflows • MCP calls</text>
+<text x="850" y="630" class="t bs" font-style="italic">P4: chat, creation, config, automation</text>
+
+<!-- Cross-lane edges -->
+<path d="M 230 125 L 300 125" fill="none" stroke="#10b981" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#ag)"/>
+<path d="M 440 125 L 620 125" fill="none" stroke="#10b981" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#ag)"/>
+<text x="500" y="116" class="t bs" fill="#10b981">🔒 HTTPS/mTLS dev flow</text>
+<path d="M 790 130 L 880 130" fill="none" stroke="#0078D4" stroke-width="2" marker-start="url(#ab)" marker-end="url(#ab)"/><text x="835" y="120" class="t bs" fill="#0078D4" font-size="8">Private</text>
+<path d="M 190 610 L 300 630" fill="none" stroke="#0078D4" stroke-width="2" marker-end="url(#ab)"/><text x="230" y="618" font-size="11" fill="#0078D4" font-weight="700">①</text>
+<path d="M 440 630 L 620 630" fill="none" stroke="#0078D4" stroke-width="2" marker-end="url(#ab)"/>
+<path d="M 705 665 L 1150 430 L 1150 155" fill="none" stroke="#8b5cf6" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#ap)"/><text x="1120" y="350" font-size="9" fill="#8b5cf6">① → MCP</text>
+<path d="M 1150 155 L 705 155" fill="none" stroke="#8b5cf6" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#ap)"/><text x="880" y="146" font-size="9" fill="#8b5cf6">② MCP</text>
+<path d="M 705 630 L 355 400" fill="none" stroke="#F58534" stroke-width="1.3" stroke-dasharray="6 4" marker-end="url(#ao)" marker-start="url(#ao)"/><text x="520" y="520" font-size="8" fill="#d06a2c">AI ↔ Brain</text>
+<path d="M 1150 155 L 705 500" fill="none" stroke="#8b5cf6" stroke-width="1.3" stroke-dasharray="6 4" marker-end="url(#ap)"/><text x="950" y="350" font-size="9" fill="#6c8ebf">③ MCP — analytics</text>
+<path d="M 705 155 L 705 500" fill="none" stroke="#d06a2c" stroke-width="1.3" stroke-dasharray="6 4" marker-end="url(#ao)"/><text x="720" y="350" font-size="8" fill="#d06a2c">Plugin enrichment</text>
+<path d="M 1150 155 L 705 290" fill="none" stroke="#8b5cf6" stroke-width="1.3" stroke-dasharray="6 4" marker-end="url(#ap)"/><text x="900" y="220" font-size="9" fill="#6c8ebf">④ MCP — policy</text>
+<path d="M 500 460 L 635 480" fill="none" stroke="#82b366" stroke-width="1.3" marker-end="url(#ao)"/>
+
+<!-- Legend -->
+<rect x="0" y="730" width="1600" height="80" rx="6" fill="#ffffff" stroke="#d0d7de" stroke-width="1.2"/>
+<text x="20" y="750" class="t zt" font-size="11">Legend — ownership &amp; flows</text>
+<text x="20" y="768" class="t" font-size="9" fill="#505050">P1 dev-centric control plane • P2 brain + knowledge • P3 pipeline + memory • P4 user-facing automation — all via MCP Gateway</text>
+<text x="20" y="786" class="t" font-size="9"><tspan fill="#0078D4">━━ user</tspan>  <tspan fill="#8b5cf6">╌╌ MCP ②③④</tspan>  <tspan fill="#10b981">╌╌ 🔒 dev</tspan>  <tspan fill="#d06a2c">╌╌ plugin enrichment</tspan></text>
+</svg>

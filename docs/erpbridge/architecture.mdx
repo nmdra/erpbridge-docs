@@ -43,6 +43,66 @@ flowchart LR
     REDIS -->|response| MCP
 ```
 
+## Proposed Azure deployment (Target — University Lecture)
+
+:::note Proposed — Target architecture
+
+This section shows the **target Azure vision** used for the university research lecture (intermediate level). The current verified stack remains local **Docker Compose** (`ERPBridge :8080`, `mock-erp :8081` on `mockerp:0.2.1`, `Redis :6379`, SQLite) as described in the [Docker deployment guide](./docker.mdx) and the [high-level overview](#high-level-overview). The diagrams below are **proposed**, not yet deployed, and are labeled as such to avoid docs-vs-code drift (see [MockERP integration contract](./mock-erp.mdx), [Transports](./transports.mdx), [External plugins](./plugins.mdx)).
+
+:::
+
+These diagrams follow the grilling design tree (23 decisions, 5 rounds) for the lecture: **light paper `#ffffff`, Azure `#0078D4` + brain accent `#F58534`, left→right story `① Business User → Frontend → Backend/Agent → Model → MCP Hub → {② ERPBridge→ERP, ③ Vector, ④ RAG}`, plus a distinct dashed-green `🔒 HTTPS/mTLS` dev flow `Developer → bridgectl → ERPBridge`. Plain-language labels on nodes (`AI Tool Gateway (MCP)`, `ERP Memory (Vector DB)`, `Company Knowledge (RAG)`) with the formal glossary below.
+
+### Overview — Enterprise Target
+
+![ERPBridge Proposed Azure Overview — Intermediate Lecture](/img/architecture-azure-overview.svg)
+
+<details>
+<summary>Downloads &amp; source</summary>
+
+- **Editable:** [`architecture-azure-overview.drawio`](/img/architecture-azure-overview.drawio) — open in [app.diagrams.net](https://app.diagrams.net) or draw.io Desktop
+- **PNG (slide-16x9):** [`architecture-azure-overview.png`](/img/architecture-azure-overview.png)
+- **SVG:** [`architecture-azure-overview.svg`](/img/architecture-azure-overview.svg) (shown above)
+
+All three are generated from the same `mxGraphModel` via the draw.io MCP (`npx -y @drawio/mcp`) — `open_drawio_xml` with `libavoid` routing, `search_shapes` for official Azure icons (`azure virtual network`, `azure container apps`, `azure openai`), `cylinder3` for Vector DB, and `swimlane` zones. Assets live in `static/img/`.
+
+</details>
+
+**How to read the overview (①–④):**
+
+1. **① User → Frontend → Backend/Agent → Model** — `Business Users` use `Web Frontend` (chat • workflow • config) which talks to `Workflow / Agent Backend` (runs workflows • agents • MCP calls). The backend consults the **Fine-Tuned ERP AI Model** (centered `🧠`, `#F58534` accent, **P2**) as the reasoning/orchestration brain (`AI ↔ Brain` dashed orange).
+2. **② MCP → ERPBridge → ERP** — The agent calls `MCP Tool Gateway (Streamable HTTP / stdio)` (gold, **P1**) which fans out via `② MCP` to `ERPBridge Server` (Container App `:8080` `/mcp/`, **P1**) inside `Azure Virtual Network 10.0.0.0/16 (private)`. `ERPBridge ↔ MockERP` (`mockerp:0.2.1 :8081`, **P1**) is the **2px solid private** link; `ERPBridge → External ERP (future, Dynamics 365)` is the faded `future` dashed line.
+3. **③ MCP → Vector + Plugin enrichment** — `③ MCP — semantic search &amp; analytics` goes `MCP Hub → Vector Database (ERP Memory, P3)` for analytical/historical queries. The **second path** `Plugin — ERP response enrichment` goes `ERPBridge ↔ Vector DB` (orange dashed) — this is the `ERPBridge Plugin Interface` (`raw_response`/`after_response` in [`plugins.mdx`](./plugins.mdx)).
+4. **④ MCP → RAG** — `④ MCP — policy` goes `MCP Hub → Enterprise RAG (Company Knowledge, P2)` (`Policies • SOPs • Compliance`, book icon) — this ensures the agent uses up-to-date organizational knowledge when reasoning.
+5. **Dev flow (separate corridor, dashed green 🔒)** — `Developer (laptop icon) → bridgectl (local CLI, `api register` • `tool apply`) —🔒 HTTPS/mTLS—→ ERPBridge Server`. Kept visually distinct from the user flow, per the spec. The `P4 annotation` (right-margin, italic) lists `Workflow Automation` capabilities: chat, creation, config, automation, ERP ops.
+
+**Visual keys:** Zones are `Azure Cloud → VNet → Container Apps Environment (faint)` nested; `Data &amp; Knowledge` is split `Vector (warm #d5e8d4, P3)` vs `RAG (cool #dae8fc, P2)` inside one zone (Q14 B); `MCP Tool Gateway` is the single spine that avoids 12 crossing lines (Q12 B); `P1`–`P4` muted badges (`Geist Mono 9px #6c8ebf`, Q19 B) mark ownership without blowing the 1-accent-color budget.
+
+**Legend (on diagram):** `━━ solid blue = User → Frontend → Backend` • `╌╌ dashed purple = AI → MCP → {ERPBridge, Vector, RAG}` • `▬ 2px solid = Private VNet 10.0.0.0/16` • `╌╌ 🔒 dashed green = Dev bridgectl (HTTPS/mTLS)`
+
+**Glossary (plain → formal):** `MCP Tool Gateway = Model Context Protocol — AI-agent tool contract (Streamable HTTP / stdio)` • `Vector DB = ERP Memory` • `RAG = Company Knowledge` • `VNet = Azure Virtual Network (private)` • `Container App = serverless container (ERPBridge :8080 / MockERP :8081)` • `Fine-Tuned Model = reasoning &amp; orchestration brain (P2)`
+
+### Team Ownership — 4-Person Swimlane
+
+![ERPBridge Team Ownership — 4-Person Swimlane](/img/architecture-azure-team.svg)
+
+<details>
+<summary>Downloads &amp; source</summary>
+
+- **Editable:** [`architecture-azure-team.drawio`](/img/architecture-azure-team.drawio)
+- **PNG:** [`architecture-azure-team.png`](/img/architecture-azure-team.png)
+- **SVG:** [`architecture-azure-team.svg`](/img/architecture-azure-team.svg)
+
+Same topology re-parented into four horizontal swimlanes (`P1 MCP/bridgectl/ERPBridge`, `P2 Model+RAG`, `P3 Pipeline+Vector`, `P4 Workflow FE/BE`) for the lecture appendix. Cross-lane edges use `parent=1` so they cross swimlane boundaries cleanly. The same `①–④` and `🔒` flows are preserved — this view adds **who builds what**, not new topology.
+
+</details>
+
+:::info For lecturers
+
+Use **Overview** to tell the end-to-end story (`①` user story → `②/③/④` three MCP caller paths + separate `Dev flow`), then flip to **Team** to assign work and discuss interfaces (`P1 ↔ P2` brain call, `P1 ↔ P3` plugin enrichment, `P4 → P1` MCP). Both are `slide-16x9` and projector-tested (white paper, high contrast, 2px private line).
+
+:::
+
 ## Endpoint and tool: key concepts
 
 One of the most important concepts in ERPBridge V2 is the distinction between registering an **API Endpoint** and applying an **MCP Tool**.

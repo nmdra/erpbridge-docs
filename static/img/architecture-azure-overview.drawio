@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" version="25.0.0">
+  <diagram name="Overview — Enterprise Target" id="overview-az-lecture">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="5" value="&lt;b&gt;ERPBridge — Proposed Azure Deployment (University Lecture — Intermediate) — Overview&lt;/b&gt; &lt;span style=&quot;color:#6c8ebf;font-size:10px;&quot;&gt;Target • slide-16x9 • see footnote for Current verified&lt;/span&gt;" style="text;html=1;fontSize=14;align=left;" vertex="1" parent="1">
+          <mxGeometry x="20" y="8" width="1000" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="10" value="Local Developer Environment" style="swimlane;startSize=24;fillColor=#f5f5f5;strokeColor=#b0b0b0;html=1;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="40" width="260" height="210" as="geometry"/>
+        </mxCell>
+        <mxCell id="104" value="P1" style="text;html=1;fontColor=#6c8ebf;fontSize=9;align=right;" vertex="1" parent="10">
+          <mxGeometry x="220" y="6" width="30" height="14" as="geometry"/>
+        </mxCell>
+        <mxCell id="20" value="Azure Cloud" style="swimlane;startSize=24;fillColor=#f0f8ff;strokeColor=#0078D4;strokeWidth=2;html=1;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="640" y="40" width="620" height="360" as="geometry"/>
+        </mxCell>
+        <mxCell id="210" value="P1" style="text;html=1;fontColor=#6c8ebf;fontSize=9;align=right;" vertex="1" parent="20">
+          <mxGeometry x="580" y="6" width="30" height="14" as="geometry"/>
+        </mxCell>
+        <mxCell id="21" value="Azure Virtual Network — 10.0.0.0/16 (private)" style="swimlane;startSize=24;fillColor=#e8f4f8;strokeColor=#0078D4;strokeWidth=2;html=1;fontStyle=1;" vertex="1" parent="20">
+          <mxGeometry x="20" y="36" width="580" height="310" as="geometry"/>
+        </mxCell>
+        <mxCell id="30" value="Workflow Automation / AI Agent Platform" style="swimlane;startSize=24;fillColor=#ffffff;strokeColor=#d0d7de;html=1;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="300" y="40" width="320" height="360" as="geometry"/>
+        </mxCell>
+        <mxCell id="305" value="P4" style="text;html=1;fontColor=#6c8ebf;fontSize=9;align=right;" vertex="1" parent="30">
+          <mxGeometry x="280" y="6" width="30" height="14" as="geometry"/>
+        </mxCell>
+        <mxCell id="40" value="MCP Tool Gateway  (Streamable HTTP / stdio)" style="swimlane;startSize=24;fillColor=#fff9e6;strokeColor=#d6b656;html=1;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="500" y="420" width="240" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="400" value="P1" style="text;html=1;fontColor=#6c8ebf;fontSize=9;align=right;" vertex="1" parent="40">
+          <mxGeometry x="200" y="6" width="30" height="14" as="geometry"/>
+        </mxCell>
+        <mxCell id="50" value="Data &amp; Knowledge Services" style="swimlane;startSize=24;fillColor=#f5f5f5;strokeColor=#d0d7de;html=1;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="300" y="540" width="620" height="260" as="geometry"/>
+        </mxCell>
+        <mxCell id="51" value="ERP Memory — Vector Layer  (P3)" style="swimlane;startSize=24;fillColor=#d5e8d4;strokeColor=#82b366;html=1;fontStyle=1;" vertex="1" parent="50">
+          <mxGeometry x="20" y="36" width="280" height="200" as="geometry"/>
+        </mxCell>
+        <mxCell id="52" value="Company Knowledge — Enterprise RAG  (P2)" style="swimlane;startSize=24;fillColor=#dae8fc;strokeColor=#6c8ebf;html=1;fontStyle=1;" vertex="1" parent="50">
+          <mxGeometry x="320" y="36" width="280" height="200" as="geometry"/>
+        </mxCell>
+        <mxCell id="60" value="Legend — line styles &amp; glossary" style="swimlane;startSize=24;fillColor=#ffffff;strokeColor=#d0d7de;html=1;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="820" width="1240" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="70" value="&lt;b&gt;External ERP&lt;/b&gt;&lt;br&gt;(future, Dynamics 365)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#b0b0b0;dashed=1;fontColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="1080" y="340" width="160" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="101" value="Developer" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;strokeColor=#505050;fillColor=#505050;" vertex="1" parent="10">
+          <mxGeometry x="20" y="40" width="30" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="102" value="&lt;b&gt;Workstation&lt;/b&gt;" style="shape=image;html=1;verticalLabelPosition=bottom;verticalAlign=top;image=https://icons.diagrams.net/assets/devices/1/Laptop-28.svg;aspect=fixed;" vertex="1" parent="10">
+          <mxGeometry x="70" y="36" width="66" height="38" as="geometry"/>
+        </mxCell>
+        <mxCell id="103" value="&lt;b&gt;bridgectl&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px&quot;&gt;local CLI • P1&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;" vertex="1" parent="10">
+          <mxGeometry x="70" y="90" width="120" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="103b" value="&lt;font style=&quot;font-size:8px;color:#6c8ebf&quot;&gt;api register • tool apply&lt;/font&gt;" style="text;html=1;" vertex="1" parent="10">
+          <mxGeometry x="70" y="145" width="120" height="14" as="geometry"/>
+        </mxCell>
+        <mxCell id="301" value="Business Users" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;strokeColor=#505050;fillColor=#505050;" vertex="1" parent="1">
+          <mxGeometry x="120" y="120" width="30" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="301b" value="&lt;span style=&quot;font-size:9px;color:#6c8ebf&quot;&gt;chat • request&lt;/span&gt;" style="text;html=1;" vertex="1" parent="1">
+          <mxGeometry x="105" y="185" width="60" height="14" as="geometry"/>
+        </mxCell>
+        <mxCell id="302" value="&lt;b&gt;Web Frontend&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px&quot;&gt;chat • workflow • config&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#0078D4;" vertex="1" parent="30">
+          <mxGeometry x="20" y="50" width="140" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="303" value="&lt;b&gt;Workflow / Agent Backend&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px&quot;&gt;run workflows • agents • MCP calls&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff9e6;strokeColor=#d6b656;" vertex="1" parent="30">
+          <mxGeometry x="20" y="140" width="140" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="304" value="&lt;b&gt;Fine-Tuned ERP AI Model&lt;/b&gt;&lt;br&gt;&lt;i style=&quot;font-size:9px&quot;&gt;reasoning &amp;amp; orchestration brain&lt;/i&gt;" style="shape=image;html=1;verticalLabelPosition=bottom;verticalAlign=top;image=https://app.diagrams.net/img/lib/azure2/ai_machine_learning/Azure_OpenAI.svg;aspect=fixed;fillColor=#F58534;strokeColor=#F58534;" vertex="1" parent="30">
+          <mxGeometry x="180" y="140" width="68" height="68" as="geometry"/>
+        </mxCell>
+        <mxCell id="304b" value="P2" style="text;html=1;fontColor=#6c8ebf;fontSize=9;align=right;" vertex="1" parent="30">
+          <mxGeometry x="260" y="135" width="20" height="14" as="geometry"/>
+        </mxCell>
+        <mxCell id="304c" value="&lt;span style=&quot;font-size:8px;color:#d06a2c;font-style:italic&quot;&gt;centered • 1-2 focal only&lt;/span&gt;" style="text;html=1;" vertex="1" parent="30">
+          <mxGeometry x="170" y="215" width="90" height="14" as="geometry"/>
+        </mxCell>
+        <mxCell id="307" value="&lt;i style=&quot;font-size:9px&quot;&gt;P4 annotation:&lt;br&gt;chat, workflow creation, config,&lt;br&gt;automation, ERP ops&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff9e6;strokeColor=#d0d7de;dashed=1;fontColor=#505050;" vertex="1" parent="1">
+          <mxGeometry x="20" y="420" width="170" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="401" value="&lt;b&gt;ERPBridge Server&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px&quot;&gt;Container App • MCP Interface&lt;/font&gt;&lt;br&gt;&lt;font style=&quot;font-size:8px;color:#6c8ebf&quot;&gt;:8080 • /mcp/&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f4f8;strokeColor=#0078D4;verticalLabelPosition=bottom;verticalAlign=top;aspect=fixed;shape=mxgraph.azure.erpbridge;" vertex="1" parent="21">
+          <mxGeometry x="40" y="50" width="150" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="401icon" value="" style="shape=image;html=1;verticalLabelPosition=bottom;verticalAlign=top;image=https://app.diagrams.net/img/lib/azure2/other/Worker_Container_App.svg;aspect=fixed;" vertex="1" parent="21">
+          <mxGeometry x="90" y="40" width="50" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="402" value="&lt;b&gt;MockERP&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px&quot;&gt;mockerp:0.2.1 • :8081&lt;/font&gt;&lt;br&gt;&lt;font style=&quot;font-size:8px;color:#6c8ebf&quot;&gt;SQLite • fictional data&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;" vertex="1" parent="21">
+          <mxGeometry x="260" y="50" width="140" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="402icon" value="" style="shape=image;html=1;verticalLabelPosition=bottom;verticalAlign=top;image=https://app.diagrams.net/img/lib/azure2/other/Worker_Container_App.svg;aspect=fixed;" vertex="1" parent="21">
+          <mxGeometry x="310" y="40" width="50" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="404" value="Container Apps Environment (faint)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#a0c4e8;dashed=1;fontColor=#6c8ebf;fontSize=8;" vertex="1" parent="21">
+          <mxGeometry x="20" y="150" width="540" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="511" value="&lt;b&gt;Transformation Pipeline&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px&quot;&gt;Extract • Clean • Transform • Embed&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" vertex="1" parent="51">
+          <mxGeometry x="20" y="40" width="240" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="512" value="&lt;b&gt;Vector Database&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px&quot;&gt;ERP Memory&lt;/font&gt;" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="51">
+          <mxGeometry x="70" y="120" width="140" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="521" value="&lt;b&gt;Enterprise RAG&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px&quot;&gt;Company Knowledge&lt;/font&gt;&lt;br&gt;&lt;font style=&quot;font-size:8px;color:#6c8ebf&quot;&gt;Policies • SOPs • Compliance&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;" vertex="1" parent="52">
+          <mxGeometry x="40" y="50" width="200" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="521icon" value="" style="shape=image;html=1;verticalLabelPosition=bottom;verticalAlign=top;image=https://icons.diagrams.net/icon-cache1/Miscellaneous-2232/book-612.svg;aspect=fixed;" vertex="1" parent="52">
+          <mxGeometry x="120" y="35" width="40" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="601" value="&lt;span style=&quot;color:#0078D4&quot;&gt;━━ solid blue&lt;/span&gt; &amp;nbsp;=&amp;nbsp; User → Frontend → Backend" style="text;html=1;fontSize=10;" vertex="1" parent="60">
+          <mxGeometry x="20" y="36" width="300" height="16" as="geometry"/>
+        </mxCell>
+        <mxCell id="602" value="&lt;span style=&quot;color:#8b5cf6&quot;&gt;╌╌ dashed purple&lt;/span&gt; &amp;nbsp;=&amp;nbsp; AI → MCP → {ERPBridge, Vector, RAG}" style="text;html=1;fontSize=10;" vertex="1" parent="60">
+          <mxGeometry x="340" y="36" width="320" height="16" as="geometry"/>
+        </mxCell>
+        <mxCell id="603" value="&lt;span style=&quot;color:#0078D4&quot;&gt;▬ 2px solid&lt;/span&gt; &amp;nbsp;=&amp;nbsp; Private VNet 10.0.0.0/16" style="text;html=1;fontSize=10;" vertex="1" parent="60">
+          <mxGeometry x="680" y="36" width="280" height="16" as="geometry"/>
+        </mxCell>
+        <mxCell id="604" value="&lt;span style=&quot;color:#10b981&quot;&gt;╌╌ 🔒 dashed green&lt;/span&gt; &amp;nbsp;=&amp;nbsp; Dev bridgectl (HTTPS/mTLS)" style="text;html=1;fontSize=10;" vertex="1" parent="60">
+          <mxGeometry x="980" y="36" width="260" height="16" as="geometry"/>
+        </mxCell>
+        <mxCell id="605" value="&lt;font style=&quot;font-size:8px;color:#505050&quot;&gt;Glossary: &lt;b&gt;MCP Tool Gateway&lt;/b&gt; = Model Context Protocol — AI-agent tool contract (Streamable HTTP / stdio) • &lt;b&gt;Vector DB&lt;/b&gt; = ERP Memory • &lt;b&gt;RAG&lt;/b&gt; = Company Knowledge • &lt;b&gt;VNet&lt;/b&gt; = Azure Virtual Network (private) • &lt;b&gt;Container App&lt;/b&gt; = serverless container (ERPBridge :8080 / MockERP :8081)&lt;/font&gt;" style="text;html=1;" vertex="1" parent="60">
+          <mxGeometry x="20" y="54" width="1220" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="700" value="&lt;i style=&quot;font-size:8px;color:#b0b0b0&quot;&gt;Proposed — Target • Current verified: Docker Compose `ERPBridge :8080 • MockERP :8081 • Redis :6379 • SQLite` (see Docker guide) — not production infra&lt;/i&gt;" style="text;html=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="905" width="900" height="14" as="geometry"/>
+        </mxCell>
+        <mxCell id="900" value="①" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#0078D4;strokeWidth=2;endArrow=classic;endFill=1;fontSize=11;fontColor=#0078D4;labelBackgroundColor=#ffffff;" edge="1" source="301" target="302" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="901" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#0078D4;strokeWidth=2;endArrow=classic;endFill=1;" edge="1" source="302" target="303" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="902" value="①" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#8b5cf6;strokeWidth=1.5;dashed=1;endArrow=classic;endFill=1;fontSize=11;fontColor=#8b5cf6;labelBackgroundColor=#ffffff;" edge="1" source="303" target="40" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="902b" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#F58534;strokeWidth=1.5;endArrow=classic;endFill=1;dashed=1;" edge="1" source="303" target="304" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="902c" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#F58534;strokeWidth=1.5;endArrow=classic;endFill=1;dashed=1;" edge="1" source="304" target="303" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="903" value="②  MCP" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#8b5cf6;strokeWidth=1.5;dashed=1;endArrow=classic;endFill=1;fontSize=10;fontColor=#8b5cf6;labelBackgroundColor=#ffffff;" edge="1" source="40" target="401" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="904" value="Private  10.0.0.0/16" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#0078D4;strokeWidth=2;endArrow=classic;endFill=1;startArrow=classic;startFill=1;fontSize=8;fontColor=#0078D4;labelBackgroundColor=#ffffff;" edge="1" source="401" target="402" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="905" value="③  MCP — semantic search &amp; analytics" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#8b5cf6;strokeWidth=1.5;dashed=1;endArrow=classic;endFill=1;fontSize=9;fontColor=#6c8ebf;labelBackgroundColor=#ffffff;" edge="1" source="40" target="512" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="906" value="Plugin — ERP response enrichment" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#d06a2c;strokeWidth=1.5;dashed=1;endArrow=classic;endFill=1;fontSize=8;fontColor=#d06a2c;labelBackgroundColor=#ffffff;" edge="1" source="401" target="512" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="907" value="④  MCP — policy" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#8b5cf6;strokeWidth=1.5;dashed=1;endArrow=classic;endFill=1;fontSize=9;fontColor=#6c8ebf;labelBackgroundColor=#ffffff;" edge="1" source="40" target="521" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="908" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#82b366;strokeWidth=1.5;endArrow=classic;endFill=1;" edge="1" source="511" target="512" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="910" value="🔒  HTTPS / mTLS  •  Dev flow" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#10b981;strokeWidth=2;dashed=1;endArrow=classic;endFill=1;fontSize=9;fontColor=#10b981;labelBackgroundColor=#ffffff;" edge="1" source="103" target="401" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="911" value="future" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#b0b0b0;strokeWidth=1;dashed=1;endArrow=classic;endFill=1;fontSize=8;fontColor=#b0b0b0;" edge="1" source="401" target="70" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

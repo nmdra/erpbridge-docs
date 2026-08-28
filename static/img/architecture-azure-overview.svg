@@ -1,0 +1,256 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="940" viewBox="0 0 1600 940" role="img" aria-labelledby="title desc">
+<title id="title">ERPBridge — Proposed Azure Deployment (Overview)</title>
+<desc id="desc">Left to right: Local Developer (bridgectl) and Business Users connect via Workflow Frontend and Backend/Agent to Fine-Tuned Model brain, then via MCP Tool Gateway to Azure VNet ERPBridge/MockERP, Vector DB and RAG. Legend distinguishes user, MCP, private VNet, dev secure.</desc>
+<rect width="1600" height="940" fill="#ffffff"/>
+<defs>
+  <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#0078D4"/></marker>
+  <marker id="arrow-purple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#8b5cf6"/></marker>
+  <marker id="arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#10b981"/></marker>
+  <marker id="arrow-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#d06a2c"/></marker>
+  <marker id="arrow-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#b0b0b0"/></marker>
+</defs>
+<style>
+  .t { font-family: Inter, Geist, Helvetica, Arial, sans-serif; }
+  .title { font-size:14px; font-weight:700; fill:#111827; }
+  .subtitle { font-size:10px; fill:#6c8ebf; }
+  .zone-title { font-size:11px; font-weight:700; fill:#111827; }
+  .box-title { font-size:11px; font-weight:700; fill:#111827; }
+  .box-sub { font-size:9px; fill:#6c8ebf; }
+  .badge { font-size:9px; fill:#6c8ebf; font-family: Geist Mono, monospace; }
+  .legend { font-size:10px; fill:#111827; }
+  .glossary { font-size:8px; fill:#505050; }
+</style>
+
+<!-- Title -->
+<text x="20" y="22" class="t title">ERPBridge — Proposed Azure Deployment (University Lecture — Intermediate) — Overview</text>
+<text x="760" y="22" class="t subtitle">Target • slide-16x9 • see footnote for Current verified</text>
+
+<!-- Zones -->
+<!-- Local -->
+<rect x="20" y="40" width="260" height="210" rx="8" fill="#f5f5f5" stroke="#b0b0b0" stroke-width="1.2"/>
+<rect x="20" y="40" width="260" height="24" rx="8" fill="#f5f5f5" stroke="#b0b0b0" stroke-width="1.2"/>
+<line x1="20" y1="64" x2="280" y2="64" stroke="#b0b0b0" stroke-width="0.8" opacity="0.6"/>
+<text x="28" y="56" class="t zone-title">Local Developer Environment</text>
+<text x="250" y="56" class="t badge" text-anchor="end">P1</text>
+
+<!-- Azure Cloud -->
+<rect x="640" y="40" width="620" height="360" rx="8" fill="#f0f8ff" stroke="#0078D4" stroke-width="2"/>
+<rect x="640" y="40" width="620" height="24" rx="8" fill="#f0f8ff" stroke="#0078D4" stroke-width="2"/>
+<line x1="640" y1="64" x2="1260" y2="64" stroke="#0078D4" stroke-width="0.8"/>
+<text x="648" y="56" class="t zone-title">Azure Cloud</text>
+<text x="1220" y="56" class="t badge" text-anchor="end">P1</text>
+
+<!-- VNet -->
+<rect x="660" y="76" width="580" height="310" rx="8" fill="#e8f4f8" stroke="#0078D4" stroke-width="2"/>
+<rect x="660" y="76" width="580" height="24" rx="8" fill="#e8f4f8" stroke="#0078D4" stroke-width="2"/>
+<line x1="660" y1="100" x2="1240" y2="100" stroke="#0078D4" stroke-width="0.8"/>
+<text x="668" y="92" class="t zone-title">Azure Virtual Network — 10.0.0.0/16 (private)</text>
+
+<!-- Workflow Platform -->
+<rect x="300" y="40" width="320" height="360" rx="8" fill="#ffffff" stroke="#d0d7de" stroke-width="1.2"/>
+<rect x="300" y="40" width="320" height="24" rx="8" fill="#ffffff" stroke="#d0d7de" stroke-width="1.2"/>
+<line x1="300" y1="64" x2="620" y2="64" stroke="#d0d7de" stroke-width="0.8"/>
+<text x="308" y="56" class="t zone-title">Workflow Automation / AI Agent Platform</text>
+<text x="590" y="56" class="t badge" text-anchor="end">P4</text>
+
+<!-- MCP Hub -->
+<rect x="500" y="420" width="240" height="80" rx="8" fill="#fff9e6" stroke="#d6b656" stroke-width="1.5"/>
+<rect x="500" y="420" width="240" height="24" rx="8" fill="#fff9e6" stroke="#d6b656" stroke-width="1.5"/>
+<line x1="500" y1="444" x2="740" y2="444" stroke="#d6b656" stroke-width="0.8"/>
+<text x="508" y="436" class="t zone-title" font-size="10">MCP Tool Gateway  (HTTP / stdio)</text>
+<text x="710" y="436" class="t badge" text-anchor="end">P1</text>
+
+<!-- Data & Knowledge -->
+<rect x="300" y="540" width="620" height="260" rx="8" fill="#f5f5f5" stroke="#d0d7de" stroke-width="1.2"/>
+<rect x="300" y="540" width="620" height="24" rx="8" fill="#f5f5f5" stroke="#d0d7de" stroke-width="1.2"/>
+<line x1="300" y1="564" x2="920" y2="564" stroke="#d0d7de" stroke-width="0.8"/>
+<text x="308" y="556" class="t zone-title">Data &amp; Knowledge Services</text>
+
+<!-- Vector sub -->
+<rect x="320" y="576" width="280" height="200" rx="8" fill="#d5e8d4" stroke="#82b366" stroke-width="1.5"/>
+<rect x="320" y="576" width="280" height="24" rx="8" fill="#d5e8d4" stroke="#82b366" stroke-width="1.5"/>
+<line x1="320" y1="600" x2="600" y2="600" stroke="#82b366" stroke-width="0.8"/>
+<text x="328" y="592" class="t zone-title">ERP Memory — Vector Layer  (P3)</text>
+<!-- RAG sub -->
+<rect x="640" y="576" width="280" height="200" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<rect x="640" y="576" width="280" height="24" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5"/>
+<line x1="640" y1="600" x2="920" y2="600" stroke="#6c8ebf" stroke-width="0.8"/>
+<text x="648" y="592" class="t zone-title">Company Knowledge — RAG  (P2)</text>
+
+<!-- Legend -->
+<rect x="20" y="820" width="1240" height="70" rx="8" fill="#ffffff" stroke="#d0d7de" stroke-width="1.2"/>
+<rect x="20" y="820" width="1240" height="24" rx="8" fill="#ffffff" stroke="#d0d7de" stroke-width="1.2"/>
+<line x1="20" y1="844" x2="1260" y2="844" stroke="#d0d7de" stroke-width="0.8"/>
+<text x="28" y="836" class="t zone-title">Legend — line styles &amp; glossary</text>
+
+<!-- External ERP -->
+<rect x="1080" y="340" width="160" height="60" rx="8" fill="#f5f5f5" stroke="#b0b0b0" stroke-width="1.2" stroke-dasharray="6 4"/>
+<text x="1160" y="362" class="t box-title" text-anchor="middle">External ERP</text>
+<text x="1160" y="376" class="t box-sub" text-anchor="middle">(future, Dynamics 365)</text>
+
+<!-- Nodes -->
+<!-- Developer -->
+<g>
+  <circle cx="50" cy="110" r="14" fill="#505050" stroke="#505050"/>
+  <circle cx="50" cy="96" r="7" fill="none" stroke="#ffffff" stroke-width="1.2"/>
+  <path d="M 36 118 q 14 -10 28 0" fill="none" stroke="#ffffff" stroke-width="1.2"/>
+  <text x="50" y="150" class="t box-sub" text-anchor="middle">Developer</text>
+</g>
+<g>
+  <rect x="90" y="76" width="66" height="38" rx="4" fill="#ffffff" stroke="#505050" stroke-width="1"/>
+  <rect x="98" y="82" width="50" height="28" rx="1" fill="#f5f5f5" stroke="#b0b0b0"/>
+  <text x="123" y="126" class="t box-sub" text-anchor="middle">Workstation</text>
+</g>
+<rect x="90" y="130" width="120" height="50" rx="6" fill="#ffffff" stroke="#6c8ebf" stroke-width="1.2"/>
+<text x="150" y="148" class="t box-title" text-anchor="middle">bridgectl</text>
+<text x="150" y="162" class="t box-sub" text-anchor="middle">local CLI • P1</text>
+<text x="150" y="192" class="t box-sub" text-anchor="middle" font-size="8">api register • tool apply</text>
+
+<!-- Business Users -->
+<g>
+  <circle cx="135" cy="130" r="14" fill="#505050" stroke="#505050"/>
+  <circle cx="135" cy="116" r="7" fill="none" stroke="#ffffff" stroke-width="1.2"/>
+  <path d="M 121 138 q 14 -10 28 0" fill="none" stroke="#ffffff" stroke-width="1.2"/>
+  <text x="135" y="164" class="t box-title" text-anchor="middle" font-size="10">Business Users</text>
+  <text x="135" y="176" class="t box-sub" text-anchor="middle">chat • request</text>
+</g>
+
+<!-- Frontend -->
+<rect x="320" y="90" width="140" height="70" rx="6" fill="#ffffff" stroke="#0078D4" stroke-width="1.5"/>
+<text x="390" y="112" class="t box-title" text-anchor="middle">Web Frontend</text>
+<text x="390" y="126" class="t box-sub" text-anchor="middle">chat • workflow • config</text>
+<text x="390" y="142" class="t box-sub" text-anchor="middle" font-size="8">user-facing</text>
+
+<!-- Backend -->
+<rect x="320" y="180" width="140" height="80" rx="6" fill="#fff9e6" stroke="#d6b656" stroke-width="1.5"/>
+<text x="390" y="204" class="t box-title" text-anchor="middle">Workflow / Agent</text>
+<text x="390" y="218" class="t box-title" text-anchor="middle">Backend</text>
+<text x="390" y="232" class="t box-sub" text-anchor="middle">runs workflows • MCP calls</text>
+
+<!-- Model -->
+<rect x="480" y="180" width="110" height="80" rx="8" fill="#fff0e6" stroke="#F58534" stroke-width="1.8"/>
+<circle cx="535" cy="200" r="18" fill="#F58534" stroke="#d06a2c" stroke-width="1.2"/>
+<text x="535" y="206" text-anchor="middle" font-size="16">🧠</text>
+<text x="535" y="230" class="t box-title" text-anchor="middle" font-size="9">Fine-Tuned ERP</text>
+<text x="535" y="242" class="t box-title" text-anchor="middle" font-size="9">AI Model</text>
+<text x="535" y="254" class="t box-sub" text-anchor="middle" font-size="8">reasoning brain • P2</text>
+<text x="560" y="170" class="t badge">P2</text>
+
+<!-- P4 annotation -->
+<rect x="20" y="420" width="170" height="60" rx="6" fill="#fff9e6" stroke="#d0d7de" stroke-width="1" stroke-dasharray="6 4"/>
+<text x="28" y="436" class="t box-sub" font-style="italic">P4 annotation:</text>
+<text x="28" y="450" class="t box-sub" font-style="italic">chat, workflow creation,</text>
+<text x="28" y="464" class="t box-sub" font-style="italic">config, automation, ERP ops</text>
+
+<!-- MCP Gateway inner -->
+<text x="620" y="468" class="t box-title" text-anchor="middle" font-size="10">MCP Tool Gateway</text>
+<text x="620" y="482" class="t box-sub" text-anchor="middle">(Streamable HTTP / stdio)</text>
+
+<!-- ERPBridge -->
+<rect x="700" y="126" width="150" height="80" rx="6" fill="#e8f4f8" stroke="#0078D4" stroke-width="1.5"/>
+<text x="775" y="148" class="t box-title" text-anchor="middle">ERPBridge Server</text>
+<text x="775" y="162" class="t box-sub" text-anchor="middle">Container App • MCP Interface</text>
+<text x="775" y="176" class="t box-sub" text-anchor="middle" font-size="8">:8080 • /mcp/</text>
+<rect x="730" y="114" width="30" height="18" rx="4" fill="#0078D4" stroke="#0078D4"/>
+<text x="745" y="126" text-anchor="middle" font-size="8" fill="#ffffff">CA</text>
+
+<!-- MockERP -->
+<rect x="920" y="126" width="140" height="80" rx="6" fill="#ffffff" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="990" y="148" class="t box-title" text-anchor="middle">MockERP</text>
+<text x="990" y="162" class="t box-sub" text-anchor="middle">mockerp:0.2.1 • :8081</text>
+<text x="990" y="176" class="t box-sub" text-anchor="middle" font-size="8">SQLite • fictional data</text>
+<rect x="950" y="114" width="30" height="18" rx="4" fill="#6c8ebf" stroke="#6c8ebf"/>
+<text x="965" y="126" text-anchor="middle" font-size="8" fill="#ffffff">CA</text>
+
+<!-- Env faint -->
+<rect x="680" y="226" width="540" height="100" rx="6" fill="none" stroke="#a0c4e8" stroke-width="1" stroke-dasharray="6 4"/>
+<text x="950" y="248" class="t box-sub" text-anchor="middle" font-size="8">Container Apps Environment (faint)</text>
+
+<!-- Vector Pipeline -->
+<rect x="340" y="616" width="240" height="60" rx="6" fill="#ffffff" stroke="#82b366" stroke-width="1.5"/>
+<text x="460" y="638" class="t box-title" text-anchor="middle">Transformation Pipeline</text>
+<text x="460" y="652" class="t box-sub" text-anchor="middle">Extract • Clean • Transform • Embed</text>
+
+<!-- Vector DB -->
+<g>
+  <ellipse cx="460" cy="710" rx="70" ry="12" fill="#d5e8d4" stroke="#82b366" stroke-width="1.5"/>
+  <rect x="390" y="710" width="140" height="50" fill="#d5e8d4" stroke="#82b366" stroke-width="1.5"/>
+  <ellipse cx="460" cy="760" rx="70" ry="12" fill="#d5e8d4" stroke="#82b366" stroke-width="1.5"/>
+  <ellipse cx="460" cy="710" rx="70" ry="12" fill="none" stroke="#82b366" stroke-width="0.8"/>
+  <text x="460" y="734" class="t box-title" text-anchor="middle">Vector Database</text>
+  <text x="460" y="746" class="t box-sub" text-anchor="middle">ERP Memory</text>
+</g>
+
+<!-- RAG -->
+<rect x="680" y="626" width="200" height="80" rx="6" fill="#ffffff" stroke="#6c8ebf" stroke-width="1.5"/>
+<text x="780" y="652" class="t box-title" text-anchor="middle">Enterprise RAG</text>
+<text x="780" y="666" class="t box-sub" text-anchor="middle">Company Knowledge</text>
+<text x="780" y="680" class="t box-sub" text-anchor="middle" font-size="8">Policies • SOPs • Compliance</text>
+<text x="780" y="612" text-anchor="middle" font-size="18">📚</text>
+
+<!-- Legend rows -->
+<line x1="30" y1="864" x2="70" y2="864" stroke="#0078D4" stroke-width="3"/>
+<text x="80" y="868" class="t legend">solid blue = User → Frontend → Backend</text>
+
+<line x1="340" y1="864" x2="380" y2="864" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="6 4"/>
+<text x="390" y="868" class="t legend">dashed purple = AI → MCP → {ERPBridge, Vector, RAG}</text>
+
+<line x1="680" y1="864" x2="720" y2="864" stroke="#0078D4" stroke-width="3"/>
+<text x="730" y="868" class="t legend">2px solid = Private VNet 10.0.0.0/16</text>
+
+<line x1="980" y1="864" x2="1020" y2="864" stroke="#10b981" stroke-width="2" stroke-dasharray="6 4"/>
+<text x="1030" y="868" class="t legend">dashed green 🔒 = Dev bridgectl (HTTPS/mTLS)</text>
+
+<text x="30" y="884" class="t glossary">Glossary: MCP Tool Gateway = Model Context Protocol — AI-agent tool contract (Streamable HTTP / stdio) • Vector DB = ERP Memory • RAG = Company Knowledge • VNet = Azure Virtual Network (private) • Container App = serverless container (ERPBridge :8080 / MockERP :8081)</text>
+
+<!-- Footnote -->
+<text x="20" y="920" class="t glossary" fill="#b0b0b0">Proposed — Target • Current verified: Docker Compose `ERPBridge :8080 • MockERP :8081 • Redis :6379 • SQLite` (see Docker guide) — not production infra</text>
+
+<!-- Edges -->
+<!-- User → Frontend ① -->
+<path d="M 165 135 L 320 125" fill="none" stroke="#0078D4" stroke-width="2" marker-end="url(#arrow-blue)"/>
+<text x="240" y="118" class="t" font-size="12" fill="#0078D4" font-weight="700">①</text>
+
+<!-- Frontend → Backend -->
+<path d="M 390 160 L 390 180" fill="none" stroke="#0078D4" stroke-width="2" marker-end="url(#arrow-blue)"/>
+
+<!-- Backend → MCP ① -->
+<path d="M 460 220 L 500 440 L 620 440" fill="none" stroke="#8b5cf6" stroke-width="1.8" stroke-dasharray="6 4" marker-end="url(#arrow-purple)"/>
+<text x="520" y="430" class="t" font-size="11" fill="#8b5cf6" font-weight="700">①</text>
+
+<!-- Backend ↔ Model -->
+<path d="M 460 210 L 480 210" fill="none" stroke="#F58534" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#arrow-orange)"/>
+<path d="M 480 220 L 460 220" fill="none" stroke="#F58534" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#arrow-orange)"/>
+
+<!-- MCP → ERPBridge ② -->
+<path d="M 620 420 L 620 300 L 700 166" fill="none" stroke="#8b5cf6" stroke-width="1.8" stroke-dasharray="6 4" marker-end="url(#arrow-purple)"/>
+<text x="630" y="340" class="t" font-size="10" fill="#8b5cf6" font-weight="700">② MCP</text>
+
+<!-- ERPBridge ↔ MockERP Private -->
+<path d="M 850 166 L 920 166" fill="none" stroke="#0078D4" stroke-width="2.5" marker-start="url(#arrow-blue)" marker-end="url(#arrow-blue)"/>
+<text x="885" y="156" class="t box-sub" text-anchor="middle" fill="#0078D4">Private  10.0.0.0/16</text>
+
+<!-- MCP → Vector ③ -->
+<path d="M 620 500 L 620 600 L 460 680" fill="none" stroke="#8b5cf6" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#arrow-purple)"/>
+<text x="630" y="560" class="t box-sub" fill="#6c8ebf">③ MCP — semantic search &amp; analytics</text>
+
+<!-- Plugin enrichment -->
+<path d="M 775 206 L 775 400 L 520 700" fill="none" stroke="#d06a2c" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#arrow-orange)"/>
+<text x="720" y="500" class="t box-sub" fill="#d06a2c" font-size="8">Plugin — ERP response enrichment</text>
+
+<!-- MCP → RAG ④ -->
+<path d="M 740 460 L 780 580 L 780 626" fill="none" stroke="#8b5cf6" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#arrow-purple)"/>
+<text x="750" y="540" class="t box-sub" fill="#6c8ebf">④ MCP — policy</text>
+
+<!-- Pipeline → Vector -->
+<path d="M 460 676 L 460 700" fill="none" stroke="#82b366" stroke-width="1.5" marker-end="url(#arrow-orange)"/>
+
+<!-- Dev flow -->
+<path d="M 210 155 L 500 155 L 500 150 L 700 150" fill="none" stroke="#10b981" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrow-green)"/>
+<text x="460" y="146" class="t box-sub" fill="#10b981">🔒 HTTPS / mTLS • Dev flow</text>
+
+<!-- ERPBridge → External -->
+<path d="M 850 180 L 1080 370" fill="none" stroke="#b0b0b0" stroke-width="1" stroke-dasharray="6 4" marker-end="url(#arrow-gray)"/>
+<text x="960" y="280" class="t box-sub" fill="#b0b0b0" font-size="8">future</text>
+
+</svg>
