@@ -21,6 +21,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- Documented `bridgectl-ops` 3.4.0 persistent operational knowledge, including
+  bounded retrieval, redacted append-only execution evidence, version-aware
+  knowledge, gated skill proposals, and the WikiSkill design reference.
 - Documented environment-default credential resolution with explicit mounted-file
   sources, bounded fail-closed reads, hot rotation without a server restart,
   safe outcome metrics, and AWS/Azure/GCP CSI deployment guidance.
