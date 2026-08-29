@@ -21,7 +21,7 @@ knowledge from earlier runs.
 | | |
 | :--- | :--- |
 | **Location** | `skills/bridgectl-ops/SKILL.md` |
-| **Version** | 3.4.0 |
+| **Version** | 3.4.1 |
 | **Prerequisites** | A current `bridgectl` binary, an authorized ERPBridge context, and network access to the target services |
 | **Optional tools** | Git for repository diagnosis and GitHub CLI for approved issue creation |
 
@@ -100,16 +100,30 @@ reads no more than five full knowledge entries or two historical execution
 records. Current skill instructions, references, CLI documentation, schemas,
 and authenticated server state always take precedence over memory.
 
-After a meaningful workflow, an agent can append one redacted execution record.
-It can update an existing pattern when evidence supports a reusable lesson. A
-proposal requires repeated evidence, validation, hard safety gates, and a
-rollback path. Rejected proposals remain recorded. This process is
-instruction-driven; the current framework does not add records automatically.
+After a completed major workflow, the agent follows a completion checkpoint
+after verification and before the final handoff. A major workflow includes
+onboarding; API, tool, plugin, or binding lifecycle work; token, role, or cache
+administration; multi-step diagnosis; bundled-skill distribution; or a
+cross-system operation. It records exactly one bounded execution outcome
+(`success`, `resolved`, `unresolved`, `blocked`, or `abandoned`) rather than one
+record per command, turn, retry, or subtask. A single explanation or operation
+waiting for confirmation is not a major task.
+
+When the optional project-local store exists, the agent runs the redaction gate
+and appends one record, then consolidates only a supported reusable lesson. If
+the store is absent or safe appending fails, the agent continues the handoff,
+reports that memory recording was not completed, and never invents evidence or
+creates the store silently. A candidate skill change still requires repeated
+evidence, validation, hard safety gates, and a rollback path. Rejected
+proposals remain recorded. This checkpoint is instruction-driven best-effort
+behavior; the current framework does not provide a guaranteed runtime hook.
 
 The design takes inspiration from [WikiSkill: Compiling Agent Experience into
 Persistent Knowledge for Skill Evolution](https://arxiv.org/abs/2608.27454).
 The paper is a design reference only. It does not change ERPBridge's current
-security, authorization, validation, or confirmation rules.
+security, authorization, validation, or confirmation rules. Host-specific
+lifecycle extensions are outside this portable skill contract and must not be
+assumed to make the checkpoint deterministic.
 
 ## Related documentation
 

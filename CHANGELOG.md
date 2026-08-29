@@ -8,6 +8,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- Documented the `bridgectl-ops` 3.4.1 major-task completion checkpoint for
+  one redacted append-only execution record after verification, including
+  terminal blocked outcomes, optional-memory behavior, and the fact that
+  Markdown instructions do not provide a guaranteed runtime hook.
 - Documented the progressive topology explorer with ELK layout, expandable
   high-cardinality groups, semantic React Flow node/edge styling, and the
   accessible relationship fallback.
