@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   inspector below the topology.
 - Documented selected-tool path focus, which hides unrelated component members
   while retaining transport, ERP API, exact endpoint, and plugin relationships.
+- Documented the collapsed topology filters and the **Show filters** control.
 
 ### Added
 
