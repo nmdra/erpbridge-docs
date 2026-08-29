@@ -66,18 +66,32 @@ empty results from filtered results.
 The topology matches sanitized tool definitions to local API registry entries
 and shows exact plugin binding relationships when the plugin API is available.
 It labels API relationships `exact`, `base-prefix`, `ambiguous`, or `unresolved`.
-For filtered graphs with at least 24 nodes or 30 edges, the canvas starts with
-a compact endpoint-component overview: one safe ERP endpoint identity per
-component, its MCP tool count, and a match-state summary. Select a component to
-show its related MCP tools, endpoint,
-bindings, and plugins. Escape or the back control returns to the compact view.
-Search and facet filters cover node type, match confidence, and context state.
-Selecting a node or edge highlights the related path and opens a safe inspector
-with source, target, authority, context state, and endpoint paths. It does not
-claim cross-context ownership when the registry has no context field, and it
-shows paths rather than full upstream URLs. A keyboard-accessible relationship
-list is available beside the interactive canvas. The BFF reports when safety
-caps omit graph elements.
+For generated tools that share an ERP base, register the API at that base/root
+URL. A path-specific registration only verifies that path and can leave other
+working tool paths unresolved. The canvas starts with a bounded component
+overview: one safe ERP API component per registration, its MCP tool count, ERP
+endpoint count, and a match-state summary. Select a component or MCP tool in the sidebar to show the chain from
+MCP tool to ERP API component to exact method/path endpoint, plus bindings and
+plugins. Selecting an MCP tool narrows the canvas to its direct execution path:
+MCP transport, that tool, its ERP API component, its exact ERP endpoint, and
+any attached plugin binding and plugin. The relationship table remains complete.
+High-cardinality tool, binding, and plugin relationships collapse into
+expandable groups. Escape or the back control returns to the overview. Search and facet filters cover node type, match confidence, and
+context state.
+
+React Flow renders the read-only canvas and ELK computes layered,
+relationship-aware positions. The component sidebar and inspector sit below the
+full-width canvas to preserve horizontal graph space. Entity cards use consistent
+structure, while status icons, text, accent rails, and semantic tones communicate relationship
+state without relying on color or unique polygons. Exact relationships have no
+permanent labels, inferred relationships are static dashed edges, and unrelated
+relationships are dimmed while a path is selected. The minimap appears only for
+large focused graphs. Selecting a node or edge highlights the related path and
+opens a safe inspector with source, target, authority, context state, and
+endpoint paths. It does not claim cross-context ownership when the registry has
+no context field, and it shows paths rather than full upstream URLs. A
+keyboard-accessible relationship list remains available as the complete
+non-canvas alternative. The BFF reports when safety caps omit graph elements.
 
 The Tools page is a filterable inventory. Select a tool name to open its
 read-only manifest view. The view presents the tool description and guidance,

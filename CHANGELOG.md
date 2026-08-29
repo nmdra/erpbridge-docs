@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Changed
+
+- Documented the progressive topology explorer with ELK layout, expandable
+  high-cardinality groups, semantic React Flow node/edge styling, and the
+  accessible relationship fallback.
+- Documented the explicit ERP endpoint nodes and API-to-endpoint edges used to
+  show MCP tool → ERP API component → exact method/path endpoint relationships.
+- Documented the full-width canvas layout with component navigation and the
+  inspector below the topology.
+- Documented selected-tool path focus, which hides unrelated component members
+  while retaining transport, ERP API, exact endpoint, and plugin relationships.
+
 ### Added
 
 - Documented environment-default credential resolution with explicit mounted-file
