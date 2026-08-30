@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- Documented the Tool Details action that opens a tool's focused integration topology path.
 - Refined the detailed and presentation architecture diagrams with a consistent
   grid, clearer connector routes, stronger flow hierarchy, and accessible
   color semantics.
