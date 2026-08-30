@@ -60,5 +60,45 @@ origin/main (release-please commits); pull it separately.
   Verified against https://opencode.ai/docs/mcp-servers and a live local
   server (nested shape → config validation error; flat shape → connected).
   (**Seam:** agent onboarding instructions for OpenCode; **Files:**
-  `docs/erpbridge/agent-integrations.mdx`, `CHANGELOG.md`; **Verify:**
+   `docs/erpbridge/agent-integrations.mdx`, `CHANGELOG.md`; **Verify:**
+   `npm run build` green.)
+- [x] **Task 4: Add presentation architecture diagrams.** Add a detailed and a
+  slide-friendly ERPBridge architecture SVG to `static/img/`, embed both in the
+  architecture guide with a short explanation, and record the public-document
+  addition in the Unreleased changelog. Do not alter the existing proposed Azure
+  deployment diagrams. (**Seam:** architecture visual aids; **Files:**
+  `static/img/erpbridge-architecture-overview.svg`,
+  `static/img/erpbridge-architecture-presentation.svg`,
+  `docs/erpbridge/architecture.mdx`, `CHANGELOG.md`; **Verify:** `npm run build`
+  green.)
+- [x] **Task 5: Remove the retired Azure lecture architecture.** Remove the
+  proposed Azure deployment section and its unused Draw.io, PNG, and SVG assets.
+  Keep the current ERPBridge architecture diagrams. (**Seam:** architecture
+  documentation scope; **Files:** `docs/erpbridge/architecture.mdx`,
+  `static/img/architecture-azure-*`, `CHANGELOG.md`; **Verify:** `npm run build`
+  green.)
+- [x] **Task 6: Polish the architecture diagrams.** Refine the detailed and
+  presentation SVGs for production documentation: align their visual grid,
+  improve connector routing, standardize type hierarchy and color semantics,
+  and validate the rendered page at desktop and mobile widths. (**Seam:**
+  architecture visual quality; **Files:**
+  `static/img/erpbridge-architecture-overview.svg`,
+  `static/img/erpbridge-architecture-presentation.svg`, `CHANGELOG.md`;
+  **Verify:** SVG XML validation, `npm run build`, and browser checks.)
+- [x] **Task 7: Align the presentation plugin flow label.** Separate the plugin
+  connector from the ERP route at its source and align its label with the
+  dedicated connector segment. (**Seam:** presentation diagram connector
+  clarity; **Files:** `static/img/erpbridge-architecture-presentation.svg`;
+  **Verify:** SVG XML validation and browser rendering check.)
+- [x] **Task 8: Add editable presentation diagram sources.** Publish aligned
+  draw.io XML and Mermaid source files for the presentation diagram, and link
+  them from the architecture guide. (**Seam:** diagram editability; **Files:**
+  `static/img/erpbridge-architecture-presentation.drawio`,
+  `static/img/erpbridge-architecture-presentation.mmd`,
+  `docs/erpbridge/architecture.mdx`; **Verify:** XML validation and `npm run build`
+  green.)
+- [x] **Task 9: Keep editable diagram sources repository-only.** Remove the
+  public editable-source block from the architecture guide while retaining the
+  Draw.io XML and Mermaid files for repository reference. (**Seam:** public
+  documentation scope; **Files:** `docs/erpbridge/architecture.mdx`; **Verify:**
   `npm run build` green.)

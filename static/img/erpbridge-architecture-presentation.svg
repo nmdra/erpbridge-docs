@@ -1,0 +1,92 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">ERPBridge presentation architecture</title>
+  <desc id="desc">A simple presentation diagram. A developer selects safe tools with bridgectl. AI agents call ERPBridge through MCP. ERPBridge connects them to business systems, plugins, and external services.</desc>
+  <defs>
+    <marker id="arrow-purple" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10z" fill="#7759b5"/></marker>
+    <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10z" fill="#278c5a"/></marker>
+    <marker id="arrow-blue" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10z" fill="#287da8"/></marker>
+    <marker id="arrow-coral" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10z" fill="#c25452"/></marker>
+    <linearGradient id="server-fill" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f1f7ff"/><stop offset="1" stop-color="#f0faf3"/></linearGradient>
+    <style>
+      .title { font: 700 34px Inter, Arial, sans-serif; fill: #202b3b; }
+      .subtitle { font: 18px Inter, Arial, sans-serif; fill: #64748b; }
+      .zone { font: 700 22px Inter, Arial, sans-serif; fill: #243247; }
+      .card-title { font: 700 17px Inter, Arial, sans-serif; fill: #243247; }
+      .card-copy { font: 15px Inter, Arial, sans-serif; fill: #526176; }
+      .label { font: 700 14px Inter, Arial, sans-serif; }
+      .step { font: 700 16px Inter, Arial, sans-serif; fill: #ffffff; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="900" fill="#ffffff"/>
+  <text x="800" y="64" text-anchor="middle" class="title">ERPBridge: The Simple Story</text>
+  <text x="800" y="98" text-anchor="middle" class="subtitle">One bridge between AI agents and the business systems they need</text>
+
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M390 348 H635" stroke="#7759b5" stroke-width="4" marker-end="url(#arrow-purple)"/>
+    <path d="M470 650 H530" stroke="#278c5a" stroke-width="3" stroke-dasharray="9 7" marker-end="url(#arrow-green)"/>
+    <path d="M810 560 V620 H630 V625" stroke="#5f9f68" stroke-width="2.5"/>
+    <path d="M810 620 V625" stroke="#5f9f68" stroke-width="2.5"/>
+    <path d="M810 620 H990 V625" stroke="#5f9f68" stroke-width="2.5"/>
+    <path d="M1000 455 H1140 V298 H1210" stroke="#c25452" stroke-width="4" marker-end="url(#arrow-coral)"/>
+    <path d="M1000 498 H1210" stroke="#287da8" stroke-width="4" marker-end="url(#arrow-blue)"/>
+    <path d="M1000 498 H1140 V708 H1210" stroke="#287da8" stroke-width="4" marker-end="url(#arrow-blue)"/>
+  </g>
+
+  <circle cx="82" cy="196" r="18" fill="#7759b5"/><text x="82" y="202" text-anchor="middle" class="step">2</text>
+  <rect x="60" y="220" width="330" height="225" rx="24" fill="#f7f2fc" stroke="#9b83bd" stroke-width="2"/>
+  <text x="90" y="260" class="zone">AI agents</text>
+  <rect x="90" y="290" width="120" height="56" rx="13" fill="#24262a"/>
+  <rect x="240" y="290" width="120" height="56" rx="13" fill="#24262a"/>
+  <rect x="165" y="365" width="120" height="56" rx="13" fill="#24262a"/>
+  <text x="150" y="325" text-anchor="middle" font-family="Inter, Arial" font-size="17" fill="#ffffff">Claude</text>
+  <text x="300" y="325" text-anchor="middle" font-family="Inter, Arial" font-size="17" fill="#ffffff">Cursor</text>
+  <text x="225" y="400" text-anchor="middle" font-family="Inter, Arial" font-size="17" fill="#ffffff">Your agent</text>
+
+  <circle cx="82" cy="558" r="18" fill="#278c5a"/><text x="82" y="564" text-anchor="middle" class="step">1</text>
+  <rect x="60" y="582" width="190" height="106" rx="16" fill="#f8fafc" stroke="#94a3b8" stroke-width="2"/>
+  <text x="155" y="620" text-anchor="middle" class="card-title">Developer</text>
+  <text x="155" y="646" text-anchor="middle" class="card-copy">Chooses safe tools</text>
+  <rect x="280" y="598" width="190" height="74" rx="16" fill="#e3f4e9" stroke="#69a97e" stroke-width="2"/>
+  <text x="375" y="630" text-anchor="middle" class="card-title">bridgectl</text>
+  <text x="375" y="652" text-anchor="middle" class="card-copy">Developer tool</text>
+
+  <circle cx="552" cy="140" r="18" fill="#287da8"/><text x="552" y="146" text-anchor="middle" class="step">3</text>
+  <rect x="530" y="160" width="560" height="590" rx="30" fill="url(#server-fill)" stroke="#3d6fb6" stroke-width="3"/>
+  <text x="565" y="207" class="zone" font-size="25">ERPBridge Server</text>
+  <text x="810" y="238" text-anchor="middle" font-family="Inter, Arial" font-size="16" font-style="italic" fill="#52657f">The secure AI-to-business bridge</text>
+  <rect x="635" y="280" width="350" height="85" rx="18" fill="#e9dff3" stroke="#9b83bd" stroke-width="2"/>
+  <text x="810" y="315" text-anchor="middle" class="card-title">MCP Tool Gateway</text>
+  <text x="810" y="340" text-anchor="middle" class="card-copy">A common language for AI agents</text>
+  <rect x="620" y="435" width="380" height="125" rx="22" fill="#e2f1e5" stroke="#5f9f68" stroke-width="3"/>
+  <text x="810" y="480" text-anchor="middle" font-family="Inter, Arial" font-size="28" font-weight="700" fill="#213b27">ERPBridge</text>
+  <text x="810" y="511" text-anchor="middle" font-family="Inter, Arial" font-size="17" fill="#305039">Turns business APIs into safe,</text>
+  <text x="810" y="535" text-anchor="middle" font-family="Inter, Arial" font-size="17" fill="#305039">AI-ready tools</text>
+  <text x="810" y="605" text-anchor="middle" class="label" fill="#5c4b1f">Built-in protections</text>
+  <rect x="555" y="640" width="150" height="58" rx="15" fill="#fff4d6" stroke="#d8b562" stroke-width="2"/>
+  <rect x="735" y="640" width="150" height="58" rx="15" fill="#fff4d6" stroke="#d8b562" stroke-width="2"/>
+  <rect x="915" y="640" width="150" height="58" rx="15" fill="#fff4d6" stroke="#d8b562" stroke-width="2"/>
+  <text x="630" y="675" text-anchor="middle" class="card-title" font-size="15">Safe access</text>
+  <text x="810" y="675" text-anchor="middle" class="card-title" font-size="15">Reliable calls</text>
+  <text x="990" y="675" text-anchor="middle" class="card-title" font-size="15">Clear control</text>
+
+  <rect x="1210" y="245" width="270" height="106" rx="18" fill="#fff5f4" stroke="#d67c78" stroke-width="2"/>
+  <text x="1240" y="283" class="card-title">External plugins</text>
+  <text x="1240" y="310" class="card-copy">Enrich or transform data</text>
+  <rect x="1210" y="445" width="270" height="106" rx="18" fill="#f1faf2" stroke="#75aa7e" stroke-width="2"/>
+  <text x="1240" y="483" class="card-title">Legacy ERP system</text>
+  <text x="1240" y="510" class="card-copy">Business data and actions</text>
+  <rect x="1210" y="655" width="270" height="106" rx="18" fill="#f2f8fd" stroke="#7da9ca" stroke-width="2"/>
+  <text x="1240" y="693" class="card-title">External APIs</text>
+  <text x="1240" y="720" class="card-copy">Resend and other services</text>
+
+  <path d="M810 365 V420" fill="none" stroke="#7759b5" stroke-width="4" stroke-linecap="round" marker-end="url(#arrow-purple)"/>
+  <text x="500" y="329" text-anchor="middle" class="label" fill="#7759b5">Ask for business actions</text>
+  <text x="840" y="404" class="label" fill="#7759b5">MCP</text>
+  <text x="500" y="632" text-anchor="middle" class="label" fill="#278c5a">Choose and manage tools</text>
+  <text x="1070" y="438" text-anchor="middle" class="label" fill="#a14442">Optional enrichment</text>
+  <text x="1115" y="480" text-anchor="end" class="label" fill="#216b91">Use business data</text>
+  <text x="1115" y="700" text-anchor="end" class="label" fill="#216b91">Connect to services</text>
+
+  <text x="800" y="844" text-anchor="middle" font-family="Inter, Arial" font-size="19" fill="#4d5a6a"><tspan font-weight="700">Configure access</tspan><tspan>  -&gt;  </tspan><tspan font-weight="700">Use simple tools</tspan><tspan>  -&gt;  </tspan><tspan font-weight="700">Connect the right systems</tspan></text>
+</svg>

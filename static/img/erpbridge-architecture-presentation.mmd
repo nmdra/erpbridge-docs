@@ -1,0 +1,43 @@
+flowchart LR
+  subgraph Developer[Developer]
+    Dev[Choose safe tools] --> CLI[bridgectl]
+  end
+
+  subgraph Agents[AI agents]
+    Claude[Claude]
+    Cursor[Cursor]
+    Custom[Your agent]
+    Client[MCP client]
+    Claude --> Client
+    Cursor --> Client
+    Custom --> Client
+  end
+
+  subgraph Server[ERPBridge Server]
+    Gateway[MCP Tool Gateway]
+    Bridge[ERPBridge]
+    Protect[Built-in protections\nSafe access - Reliable calls - Clear control]
+    Gateway -->|MCP| Bridge
+    Bridge --> Protect
+  end
+
+  subgraph Systems[Business systems]
+    Plugins[External plugins\nEnrich or transform data]
+    ERP[Legacy ERP system\nBusiness data and actions]
+    APIs[External APIs\nResend and other services]
+  end
+
+  CLI -. Control plane .-> Bridge
+  Client -->|Ask for business actions| Gateway
+  Bridge -->|Optional enrichment| Plugins
+  Bridge -->|Use business data| ERP
+  Bridge -->|Connect to services| APIs
+
+  classDef developer fill:#e3f4e9,stroke:#69a97e,color:#243247
+  classDef agent fill:#e9dff3,stroke:#9b83bd,color:#243247
+  classDef bridge fill:#e2f1e5,stroke:#5f9f68,color:#213b27
+  classDef external fill:#f2f8fd,stroke:#7da9ca,color:#243247
+  class Dev,CLI developer
+  class Claude,Cursor,Custom,Client,Gateway agent
+  class Bridge,Protect bridge
+  class Plugins,ERP,APIs external

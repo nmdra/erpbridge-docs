@@ -231,7 +231,11 @@ Body:
 ```
 
 The call goes through the middleware chain: rate limiting, caching, and resilience.
-Authenticated direct calls share a limiter bucket by token principal.
+Authenticated direct calls share a limiter bucket by token principal. Tool
+execution resolves `spec.security.credentialRef` on the server and sends it in
+`spec.security.authHeader` when configured; an omitted header preserves the
+`Authorization` default. `authHeader` contains only a header name, never a
+credential value.
 
 Excess direct calls return HTTP `429` with the stable `RATE_LIMITED` error and a
 whole-second `Retry-After` header. Streamable HTTP MCP `tools/call` requests
@@ -395,11 +399,12 @@ failures remain successful protocol responses with `isError: true`.
 ### API probe
 
 `POST /api/apis/test` is an authenticated administrator endpoint. It accepts a
-non-secret API definition, `credentialRef`, and optional `credentialSource`
-(`env` by default or `file`). File mode requires `ERPBRIDGE_CREDENTIALS_DIR`,
-reads the reference-named file for each probe, and never falls back to the
-environment. The server resolves the credential and applies its ERP transport
-policy. It returns only status, normalized content type, latency, and success.
+non-secret API definition, `credentialRef`, optional `credentialSource`
+(`env` by default or `file`), and optional auth-header name. File mode requires
+`ERPBRIDGE_CREDENTIALS_DIR`, reads the reference-named file for each probe, and
+never falls back to the environment. The server resolves the credential and
+applies its ERP transport policy. It returns only status, normalized content
+type, latency, and success.
 ERP response bodies and upstream headers never cross the probe boundary.
 `bridgectl api test` uses this route by default; `--local` is an explicit
 host-side diagnostic that resolves files in the CLI process.

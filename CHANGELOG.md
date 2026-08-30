@@ -8,6 +8,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- Refined the detailed and presentation architecture diagrams with a consistent
+  grid, clearer connector routes, stronger flow hierarchy, and accessible
+  color semantics.
+- Removed the retired proposed Azure lecture architecture and its supporting
+  assets from the architecture guide.
 - Documented the `bridgectl-ops` 3.4.1 major-task completion checkpoint for
   one redacted append-only execution record after verification, including
   terminal blocked outcomes, optional-memory behavior, and the fact that
@@ -22,9 +27,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Documented selected-tool path focus, which hides unrelated component members
   while retaining transport, ERP API, exact endpoint, and plugin relationships.
 - Documented the collapsed topology filters and the **Show filters** control.
+- Documented the increased default tool-execution limit of 10 requests per
+  second with a burst of 20.
+- Documented MCP 2025-11-25 protocol-versus-tool errors, bounded retries,
+  safe namespaced error metadata, and side-effect retry protection.
+- Documented registered upstream authentication headers for generated and
+  declarative MCP tools, including `X-API-Key` for API-key services.
+- Documented the required top-level `type` for output schemas. Local validation
+  rejects untyped schemas, and MCP discovery omits legacy untyped schemas.
 
 ### Added
 
+- Added editable Draw.io XML and Mermaid sources for the presentation
+  architecture diagram.
+- Added detailed and presentation-ready ERPBridge architecture SVG diagrams,
+  covering `bridgectl`, MCP agents, the ERPBridge server boundary, external
+  plugins, legacy ERP systems, and external APIs.
 - Documented `bridgectl-ops` 3.4.0 persistent operational knowledge, including
   bounded retrieval, redacted append-only execution evidence, version-aware
   knowledge, gated skill proposals, and the WikiSkill design reference.

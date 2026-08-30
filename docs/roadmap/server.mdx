@@ -13,7 +13,7 @@ ERPBridge Server is the runtime boundary between ERP APIs and MCP clients. This 
 
 | Area | Current capability | Technical reference |
 | :--- | :--- | :--- |
-| MCP middleware | Streamable HTTP and stdio transports, tool discovery, calls, and notifications over MCP 2025-03-26; the server negotiates up to 2025-11-25. | [Transports](../erpbridge/transports.mdx) · [MCP client guide](../erpbridge/mcp-client-guide.mdx) |
+| MCP middleware | Streamable HTTP and stdio transports, tool discovery, calls, and notifications over MCP 2025-11-25 with older-version negotiation. | [Transports](../erpbridge/transports.mdx) · [MCP client guide](../erpbridge/mcp-client-guide.mdx) |
 | Tool registry | ERP registration, schema generation and validation, soft/hard delete, versioned tools, and 10-second reconciliation. | [architecture](../erpbridge/architecture.mdx) · [tool schema](../erpbridge/tool-schema.mdx) |
 | Resilience | 15-second HTTP timeout, circuit breaker, and retry with jitter for network errors and 429/5xx responses. | [connectivity](../erpbridge/connectivity.mdx) |
 | Caching | Optional exact-match cache with Redis or bounded in-memory storage, flush and stats endpoints, and per-tool `flushOn` invalidation. | [caching](../erpbridge/caching.mdx) |

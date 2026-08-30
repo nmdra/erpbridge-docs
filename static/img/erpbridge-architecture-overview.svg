@@ -1,0 +1,143 @@
+<svg width="1800" height="1050" viewBox="0 0 1800 1050" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">ERPBridge high-level architecture</title>
+  <desc id="desc">Developers manage versioned resources with bridgectl. AI agents use MCP to call ERPBridge. The ERPBridge server connects to legacy ERP systems, external plugins, and external APIs such as Resend.</desc>
+  <defs>
+    <marker id="arrow-purple" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10z" fill="#7759b5"/></marker>
+    <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10z" fill="#278c5a"/></marker>
+    <marker id="arrow-blue" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10z" fill="#287da8"/></marker>
+    <marker id="arrow-coral" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10z" fill="#c25452"/></marker>
+    <style>
+      .title { font: 700 32px Inter, Arial, sans-serif; fill: #1f2937; }
+      .subtitle { font: 16px Inter, Arial, sans-serif; fill: #64748b; }
+      .zone { font: 700 20px Inter, Arial, sans-serif; fill: #243247; }
+      .section { font: 700 14px Inter, Arial, sans-serif; fill: #ffffff; letter-spacing: .2px; }
+      .card-title { font: 700 14px Inter, Arial, sans-serif; fill: #243247; }
+      .card-copy { font: 12px Inter, Arial, sans-serif; fill: #526176; }
+      .label { font: 700 12px Inter, Arial, sans-serif; }
+      .note { font: 12px Inter, Arial, sans-serif; fill: #64748b; }
+    </style>
+  </defs>
+
+  <rect width="1800" height="1050" fill="#ffffff"/>
+  <text x="60" y="62" class="title">ERPBridge High-Level Architecture</text>
+  <text x="60" y="92" class="subtitle">Declarative MCP control plane for secure AI-to-ERP tool access</text>
+
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M205 301 V340" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-blue)"/>
+    <path d="M330 378 H450 V210 H1030 V310" stroke="#278c5a" stroke-width="3" stroke-dasharray="8 7" marker-end="url(#arrow-green)"/>
+    <path d="M325 754 H450 V375 H570" stroke="#7759b5" stroke-width="3" marker-end="url(#arrow-purple)"/>
+    <path d="M710 345 H735" stroke="#7759b5" stroke-width="2.5" marker-end="url(#arrow-purple)"/>
+    <path d="M1125 345 H1150" stroke="#5d8fb7" stroke-width="2" marker-end="url(#arrow-blue)"/>
+    <path d="M1222 380 V410 H1235" stroke="#d09f35" stroke-width="2" marker-end="url(#arrow-blue)"/>
+    <path d="M1065 445 H890 V480 H870 V380" stroke="#d09f35" stroke-width="2" marker-end="url(#arrow-blue)"/>
+    <path d="M805 380 V540 H640 V615" stroke="#7759b5" stroke-width="2.5" marker-end="url(#arrow-purple)"/>
+    <path d="M710 650 H755" stroke="#5f9f68" stroke-width="2" marker-end="url(#arrow-blue)"/>
+    <path d="M895 650 H940" stroke="#5f9f68" stroke-width="2" marker-end="url(#arrow-blue)"/>
+    <path d="M1015 685 V710 H1200 V685" stroke="#c25452" stroke-width="2" marker-end="url(#arrow-coral)"/>
+    <path d="M1285 650 H1410 V305 H1500" stroke="#c25452" stroke-width="3" marker-end="url(#arrow-coral)"/>
+    <path d="M1090 650 H1425 V530 H1500" stroke="#287da8" stroke-width="3" marker-end="url(#arrow-blue)"/>
+    <path d="M1090 665 H1440 V755 H1500" stroke="#287da8" stroke-width="3" marker-end="url(#arrow-blue)"/>
+  </g>
+
+  <!-- Developer and agent entry points. -->
+  <rect x="80" y="220" width="250" height="81" rx="14" fill="#f8fafc" stroke="#94a3b8" stroke-width="2"/>
+  <text x="205" y="252" text-anchor="middle" class="card-title">Developer</text>
+  <text x="205" y="275" text-anchor="middle" class="card-copy">Reviews and defines resources</text>
+  <rect x="80" y="340" width="250" height="76" rx="14" fill="#e3f4e9" stroke="#69a97e" stroke-width="2"/>
+  <text x="205" y="370" text-anchor="middle" class="card-title">bridgectl</text>
+  <text x="205" y="392" text-anchor="middle" class="card-copy">validate, apply, manage</text>
+  <text x="590" y="198" class="label" fill="#278c5a">Direct API control plane</text>
+
+  <rect x="50" y="545" width="340" height="270" rx="22" fill="#f7f3fc" stroke="#9b83bd" stroke-width="2" stroke-dasharray="5 5"/>
+  <text x="80" y="585" class="zone">AI Agents and IDEs</text>
+  <rect x="80" y="615" width="125" height="49" rx="11" fill="#24262a"/>
+  <rect x="235" y="615" width="125" height="49" rx="11" fill="#24262a"/>
+  <rect x="80" y="680" width="125" height="49" rx="11" fill="#24262a"/>
+  <rect x="235" y="680" width="125" height="49" rx="11" fill="#24262a"/>
+  <text x="142" y="646" text-anchor="middle" font-family="Inter, Arial" font-size="14" fill="#fff">Claude</text>
+  <text x="297" y="646" text-anchor="middle" font-family="Inter, Arial" font-size="14" fill="#fff">Cursor</text>
+  <text x="142" y="711" text-anchor="middle" font-family="Inter, Arial" font-size="14" fill="#fff">Codex</text>
+  <text x="297" y="711" text-anchor="middle" font-family="Inter, Arial" font-size="14" fill="#fff">Custom agents</text>
+  <rect x="115" y="748" width="210" height="45" rx="12" fill="#e7def2" stroke="#9b83bd" stroke-width="2"/>
+  <text x="220" y="776" text-anchor="middle" class="card-title">MCP client</text>
+  <text x="455" y="356" class="label" fill="#7759b5">MCP: HTTP or stdio</text>
+
+  <!-- Server boundary. -->
+  <rect x="500" y="130" width="860" height="755" rx="26" fill="#f7f9fc" stroke="#3d628d" stroke-width="3"/>
+  <rect x="500" y="130" width="860" height="54" rx="26" fill="#eaf0f9"/>
+  <text x="535" y="164" class="zone" font-size="23">ERPBridge Server</text>
+
+  <!-- Runtime section. -->
+  <rect x="540" y="250" width="360" height="250" rx="18" fill="#fcfaff" stroke="#b098ce" stroke-width="2"/>
+  <rect x="540" y="250" width="360" height="34" rx="10" fill="#24262a"/>
+  <text x="560" y="273" class="section">MCP RUNTIME AND TRANSPORT</text>
+  <rect x="570" y="310" width="140" height="70" rx="12" fill="#e9dff3" stroke="#9b83bd" stroke-width="2"/>
+  <rect x="735" y="310" width="135" height="70" rx="12" fill="#e9dff3" stroke="#9b83bd" stroke-width="2"/>
+  <rect x="570" y="410" width="300" height="55" rx="12" fill="#f4effa" stroke="#b9a8d0" stroke-width="1.5"/>
+  <text x="640" y="338" text-anchor="middle" class="card-title">MCP transport</text>
+  <text x="640" y="359" text-anchor="middle" class="card-copy">HTTP and stdio</text>
+  <text x="802" y="338" text-anchor="middle" class="card-title">Tool runtime</text>
+  <text x="802" y="359" text-anchor="middle" class="card-copy">Active tools</text>
+  <text x="720" y="438" text-anchor="middle" class="card-title">Visibility filter and version resolver</text>
+  <text x="720" y="457" text-anchor="middle" class="card-copy">Only reviewed, active tools are shown</text>
+
+  <!-- Control plane section. -->
+  <rect x="950" y="250" width="380" height="250" rx="18" fill="#fafdff" stroke="#87a9c8" stroke-width="2"/>
+  <rect x="950" y="250" width="380" height="34" rx="10" fill="#24262a"/>
+  <text x="970" y="273" class="section">CONTROL PLANE</text>
+  <rect x="980" y="310" width="145" height="70" rx="12" fill="#e2effb" stroke="#76a3c7" stroke-width="2"/>
+  <rect x="1150" y="310" width="145" height="70" rx="12" fill="#fff3cf" stroke="#d4aa4f" stroke-width="2"/>
+  <rect x="1065" y="410" width="170" height="70" rx="12" fill="#fff3cf" stroke="#d4aa4f" stroke-width="2"/>
+  <text x="1052" y="338" text-anchor="middle" class="card-title">Registry API</text>
+  <text x="1052" y="359" text-anchor="middle" class="card-copy">Tools, plugins, bindings</text>
+  <text x="1222" y="338" text-anchor="middle" class="card-title">SQLite registry</text>
+  <text x="1222" y="359" text-anchor="middle" class="card-copy">Versioned desired state</text>
+  <text x="1150" y="438" text-anchor="middle" class="card-title">Reconciliation</text>
+  <text x="1150" y="459" text-anchor="middle" class="card-copy">Aligns the runtime</text>
+
+  <!-- Execution section. -->
+  <rect x="540" y="560" width="790" height="180" rx="18" fill="#fbfefb" stroke="#80ad88" stroke-width="2"/>
+  <rect x="540" y="560" width="790" height="34" rx="10" fill="#24262a"/>
+  <text x="560" y="583" class="section">TOOL EXECUTION AND PROTECTION</text>
+  <rect x="570" y="615" width="140" height="70" rx="12" fill="#e2f1e5" stroke="#69a97e" stroke-width="2"/>
+  <rect x="755" y="615" width="140" height="70" rx="12" fill="#e2f1e5" stroke="#69a97e" stroke-width="2"/>
+  <rect x="940" y="615" width="150" height="70" rx="12" fill="#e2f1e5" stroke="#69a97e" stroke-width="2"/>
+  <rect x="1125" y="615" width="160" height="70" rx="12" fill="#f9e1df" stroke="#c25452" stroke-width="2"/>
+  <text x="640" y="643" text-anchor="middle" class="card-title">Tool executor</text>
+  <text x="640" y="664" text-anchor="middle" class="card-copy">Schema validation</text>
+  <text x="825" y="643" text-anchor="middle" class="card-title">Exact cache</text>
+  <text x="825" y="664" text-anchor="middle" class="card-copy">Redis or memory</text>
+  <text x="1015" y="643" text-anchor="middle" class="card-title">ERP connector</text>
+  <text x="1015" y="664" text-anchor="middle" class="card-copy">Limits, retries, breaker</text>
+  <text x="1205" y="643" text-anchor="middle" class="card-title">Plugin pipeline</text>
+  <text x="1205" y="664" text-anchor="middle" class="card-copy">Safe response enrichment</text>
+
+  <!-- Cross-cutting section. -->
+  <rect x="540" y="795" width="790" height="55" rx="16" fill="#fff9ec" stroke="#d7ae5a" stroke-width="1.8" stroke-dasharray="5 4"/>
+  <text x="575" y="820" class="card-title">Cross-cutting services</text>
+  <text x="575" y="839" class="card-copy">Credentials, authorization, redacted logs, metrics, and health checks apply across ERPBridge.</text>
+
+  <!-- External systems. -->
+  <rect x="1500" y="250" width="240" height="110" rx="18" fill="#fff5f4" stroke="#d67c78" stroke-width="2"/>
+  <text x="1530" y="286" class="zone" font-size="17">External plugins</text>
+  <text x="1530" y="314" class="card-title">Response services</text>
+  <text x="1530" y="336" class="card-copy">OCR, transform, enrich</text>
+  <rect x="1500" y="475" width="240" height="110" rx="18" fill="#f1faf2" stroke="#75aa7e" stroke-width="2"/>
+  <text x="1530" y="511" class="zone" font-size="17">Legacy ERP</text>
+  <text x="1530" y="539" class="card-title">ERP APIs</text>
+  <text x="1530" y="561" class="card-copy">Business data and actions</text>
+  <rect x="1500" y="700" width="240" height="110" rx="18" fill="#f2f8fd" stroke="#7da9ca" stroke-width="2"/>
+  <text x="1530" y="736" class="zone" font-size="17">External APIs</text>
+  <text x="1530" y="764" class="card-title">Resend and other SaaS</text>
+  <text x="1530" y="786" class="card-copy">Registered HTTP tools</text>
+
+  <!-- Labels sit in whitespace, not on connector lines. -->
+  <text x="1350" y="289" class="label" fill="#a14442">Plugin protocol</text>
+  <text x="1350" y="514" class="label" fill="#216b91">Protected ERP calls</text>
+  <text x="1350" y="739" class="label" fill="#216b91">External HTTP tools</text>
+  <text x="510" y="946" class="note">Color key:</text>
+  <circle cx="590" cy="942" r="6" fill="#7759b5"/><text x="603" y="946" class="note">MCP</text>
+  <circle cx="680" cy="942" r="6" fill="#278c5a"/><text x="693" y="946" class="note">control plane</text>
+  <circle cx="815" cy="942" r="6" fill="#287da8"/><text x="828" y="946" class="note">outbound calls</text>
+  <circle cx="965" cy="942" r="6" fill="#c25452"/><text x="978" y="946" class="note">plugins</text>
+</svg>

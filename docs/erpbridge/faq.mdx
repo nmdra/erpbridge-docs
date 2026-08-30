@@ -24,7 +24,7 @@ See the [Connectivity and transport guide](./connectivity.mdx) for session setup
 <details>
 <summary>Which MCP protocol version does the server negotiate?</summary>
 
-The server speaks MCP 2025-03-26 and negotiates up to 2025-11-25 during the `initialize` handshake. Clients send the `initialize` request to `POST /mcp/`, then continue with session-managed requests.
+The server speaks MCP 2025-11-25 and negotiates older supported protocol versions during the `initialize` handshake. Clients send the `initialize` request to `POST /mcp/`, then continue with session-managed requests.
 
 </details>
 

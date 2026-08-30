@@ -65,6 +65,20 @@ Generated annotations are method-based draft hints. Review them before
 applying a generated manifest. They do not replace authorization or other
 server-side controls.
 
+### `spec.rateLimit` and `spec.concurrency`
+
+Optional execution protection for high-volume or expensive tools.
+
+- **`rateLimit.requestsPerSecond`**: Positive finite per-tool token-bucket rate.
+- **`rateLimit.burst`**: Positive per-tool token-bucket burst size.
+- **`concurrency.limit`**: Positive maximum number of active calls.
+- **`concurrency.perPrincipal`**: When `true`, apply the active-call limit per
+  authenticated principal or MCP session; when `false`, share it across the
+  tool. The global principal/session limiter remains in effect for every tool.
+
+Unconfigured tools retain the server defaults. Side-effecting ERP methods are
+not automatically retried.
+
 ### MCP discovery metadata
 
 During MCP `tools/list`, ERPBridge projects existing guidance into namespaced
@@ -94,6 +108,9 @@ Optional JSON Schema describing the shape of a successful ERP response. When pre
 
 - A response that violates the schema fails the tool call with a validation error instead of returning malformed data to the agent.
 - Generated schemas come from the OpenAPI `200`/`201` response definitions and are dereferenced (no `$ref`).
+- The schema must have a non-empty top-level string `type`, such as `object` or `array`.
+- `bridgectl tool validate` rejects an untyped schema. MCP discovery omits an untyped legacy schema. Runtime accepts any JSON result for that legacy schema.
+- OpenAPI generation omits `outputSchema` when the response has no top-level type.
 
 ### `spec.execution`
 
@@ -119,6 +136,7 @@ result without JSON decoding.
 Authentication strategy.
 
 - **`authType`**: `api-key`, `bearer`, or `basic`.
+- **`authHeader`**: (Optional) The outbound HTTP header that carries the resolved credential, such as `X-API-Key`. When omitted, the connector uses `Authorization` for backward compatibility. This is a header name only; never put a credential value here.
 - **`credentialRef`**: A logical reference, normally the name of the environment variable containing the secret. **Never embed raw secrets here.**
 - **`credentialSource`**: (Optional) `env` or `file`; omitted means `env`. `file` reads `<ERPBRIDGE_CREDENTIALS_DIR>/<credentialRef>` immediately before each request and never falls back to the environment.
 - **`dataClass`**: (Optional string) Declared sensitivity: `public`, `internal`, `pii`, or `restricted`. Older manifests may omit this field.
@@ -204,6 +222,7 @@ spec:
     responsePath: "data" # ERP returns { "data": { ... } }, we only want the inner object
   security:
     authType: api-key
+    authHeader: X-API-Key # Optional; defaults to Authorization
     credentialRef: ERP_FINANCE_KEY # Logical reference; resolves from the environment by default
     # credentialSource: file # Reads ERPBRIDGE_CREDENTIALS_DIR/ERP_FINANCE_KEY
     allowedRoles: [finance_reader, finance_writer]
