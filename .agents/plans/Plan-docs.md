@@ -102,3 +102,12 @@ origin/main (release-please commits); pull it separately.
   Draw.io XML and Mermaid files for repository reference. (**Seam:** public
   documentation scope; **Files:** `docs/erpbridge/architecture.mdx`; **Verify:**
   `npm run build` green.)
+- [x] **Task 10: Sync current ERPBridge and SDK releases.** Update the
+   centralized ERPBridge and SDK release constants and all current-release
+   status surfaces to ERPBridge `v0.5.0-alpha.2` and `@erpbridge/sdk` `v1.1.0`.
+   Keep historical compatibility and changelog references unchanged. Add an
+   Unreleased changelog entry. (**Seam:** site chrome and product status pages;
+   **Files:** `src/constants/releases.ts`, `docs/roadmap/overview.mdx`,
+   `docs/roadmap/server.mdx`, `docs/roadmap/sdk.mdx`, `docs/sdk/overview.mdx`,
+   `CHANGELOG.md`;
+   **Verify:** `npm run build` green and no stale current-release indicators.)

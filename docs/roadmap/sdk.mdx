@@ -9,11 +9,12 @@ keywords: [roadmap, sdk, typescript, mcp, browser]
 
 `@erpbridge/sdk` is a TypeScript client for applications and agent workflows. The current release provides typed MCP, operational access, and consume-only authentication. Additional language ports remain future work.
 
-## Shipped in v1.0.0
+## Shipped through v1.1.0
 
 | Area | Current capability | Technical reference |
 | :--- | :--- | :--- |
 | MCP client | Programmatic tool discovery and execution through the built-in MCP client. | [MCP Tools](../sdk/mcp-tools.mdx) |
+| MCP resilience | Configurable `mcpRetryPolicy` controls replay after ambiguous transport failures. | [MCP Tools](../sdk/mcp-tools.mdx) |
 | Tool proxy | Exact-name `client.tools.<name>(args)` calls with input-schema validation. | [MCP Tools](../sdk/mcp-tools.mdx) |
 | REST access | Typed wrappers for direct invocation, tool registry, logs, metrics, health, and cache operations. | [API reference](../sdk/api-reference.mdx) · [Logs and metrics](../sdk/logs-metrics.mdx) |
 | Browser support | ESM MCP client and exact-name tool proxy for browser bundles when the server CORS policy exposes `/mcp/`. | [Installation](../sdk/installation.mdx) |

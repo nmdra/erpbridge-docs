@@ -10,6 +10,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 - Refined the ERPBridge benchmarking page with responsive scope, command, and
   result cards, plus an accessible mobile table-scroll cue.
+- Updated current-release indicators for ERPBridge Server and `bridgectl` to
+  `v0.5.0-alpha.2` and for `@erpbridge/sdk` to `v1.1.0`.
 - Documented the Tool Details action that opens a tool's focused integration topology path.
 - Refined the detailed and presentation architecture diagrams with a consistent
   grid, clearer connector routes, stronger flow hierarchy, and accessible
