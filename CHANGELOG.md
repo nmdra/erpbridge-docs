@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- Refined the ERPBridge benchmarking page with responsive scope, command, and
+  result cards, plus an accessible mobile table-scroll cue.
 - Documented the Tool Details action that opens a tool's focused integration topology path.
 - Refined the detailed and presentation architecture diagrams with a consistent
   grid, clearer connector routes, stronger flow hierarchy, and accessible
@@ -39,6 +41,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- Added ERPBridge benchmarking guidance with deterministic microbenchmark and
+  concurrent cache-hit stress-test commands, local baseline results, and
+  capacity-claim limitations.
 - Added editable Draw.io XML and Mermaid sources for the presentation
   architecture diagram.
 - Added detailed and presentation-ready ERPBridge architecture SVG diagrams,

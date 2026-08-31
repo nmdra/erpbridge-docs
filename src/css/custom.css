@@ -188,3 +188,193 @@
     transition: none;
   }
 }
+
+/* Benchmark page: local, in-process measurements with clear scope boundaries. */
+.benchmark-hero,
+.benchmark-stress-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(15rem, 0.8fr);
+  gap: 1.25rem;
+  margin: 1.5rem 0 2rem;
+  padding: 1.35rem;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-top: 3px solid var(--ifm-color-primary);
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--ifm-background-surface-color), var(--ifm-color-emphasis-100));
+}
+
+.benchmark-eyebrow,
+.benchmark-card-label {
+  margin: 0 0 0.45rem;
+  color: var(--ifm-color-primary);
+  font-size: 0.72rem;
+  font-weight: 750;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.benchmark-lead {
+  max-width: 38rem;
+  margin: 0;
+  color: var(--ifm-font-color-base);
+  font-size: 1.1rem;
+  line-height: 1.55;
+}
+
+.benchmark-scope-grid,
+.benchmark-highlight-grid,
+.benchmark-stress-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin: 0;
+}
+
+.benchmark-scope-grid div,
+.benchmark-highlight-card,
+.benchmark-stress-grid div {
+  padding: 0.8rem;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 10px;
+  background: var(--ifm-background-surface-color);
+}
+
+.benchmark-scope-grid dt,
+.benchmark-highlight-card span,
+.benchmark-stress-grid span {
+  color: var(--ifm-color-emphasis-700);
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.benchmark-scope-grid dd {
+  margin: 0.28rem 0 0;
+  color: var(--ifm-font-color-base);
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+
+.benchmark-command-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1.25rem 0;
+}
+
+.benchmark-command-card {
+  min-height: 12.5rem;
+  padding: 1.2rem;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 12px;
+  background: var(--ifm-background-surface-color);
+}
+
+.benchmark-command-card h3,
+.benchmark-stress-panel h3 {
+  margin: 0;
+  font-size: 1.08rem;
+}
+
+.benchmark-command-card p:not(.benchmark-card-label),
+.benchmark-stress-panel p:not(.benchmark-card-label) {
+  color: var(--ifm-color-emphasis-700);
+}
+
+.benchmark-command-card pre,
+.benchmark-stress-panel pre {
+  margin: 1rem 0 0;
+  white-space: pre-wrap;
+}
+
+.benchmark-highlight-grid {
+  margin: 1.25rem 0;
+}
+
+.benchmark-highlight-card strong,
+.benchmark-stress-grid strong {
+  display: block;
+  margin: 0.35rem 0 0.2rem;
+  color: var(--ifm-color-primary-darkest);
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 1.25rem;
+}
+
+[data-theme='dark'] .benchmark-highlight-card strong,
+[data-theme='dark'] .benchmark-stress-grid strong {
+  color: var(--ifm-color-primary-lightest);
+}
+
+.benchmark-highlight-card small,
+.benchmark-stress-grid small {
+  color: var(--ifm-color-emphasis-700);
+}
+
+.benchmark-table-wrap {
+  overflow-x: auto;
+  margin: 0.5rem 0 2rem;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 12px;
+}
+
+.benchmark-table-wrap table {
+  width: 100%;
+  margin: 0;
+}
+
+.benchmark-table-wrap th {
+  background: var(--ifm-color-emphasis-100);
+  color: var(--ifm-font-color-base);
+}
+
+.benchmark-table-wrap th:not(:first-child),
+.benchmark-table-wrap td:not(:first-child) {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.benchmark-table-note {
+  margin: 1.25rem 0 0;
+  color: var(--ifm-color-emphasis-700);
+  font-size: 0.88rem;
+}
+
+.benchmark-stress-panel {
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.benchmark-stress-panel pre {
+  justify-self: end;
+  width: 100%;
+}
+
+.benchmark-stress-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 1.25rem 0;
+}
+
+@media screen and (max-width: 996px) {
+  .benchmark-hero,
+  .benchmark-stress-panel,
+  .benchmark-command-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .benchmark-stress-panel pre {
+    justify-self: stretch;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .benchmark-scope-grid,
+  .benchmark-highlight-grid,
+  .benchmark-stress-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .benchmark-hero,
+  .benchmark-stress-panel,
+  .benchmark-command-card {
+    padding: 1rem;
+  }
+}

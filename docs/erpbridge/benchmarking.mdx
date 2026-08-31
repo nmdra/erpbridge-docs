@@ -1,0 +1,134 @@
+---
+sidebar_position: 13
+title: Benchmarking
+description: Run ERPBridge's deterministic cache and request-preparation microbenchmarks.
+keywords: [benchmark, performance, cache, stress test]
+---
+
+# Benchmarking
+
+ERPBridge includes deterministic Go microbenchmarks for cache and
+request-preparation paths. They run in process and do not require Redis,
+MockERP, Docker, credentials, or a live MCP connection.
+
+<section className="benchmark-hero" aria-label="Benchmark scope">
+  <div>
+    <p className="benchmark-eyebrow">Local performance baseline</p>
+    <p className="benchmark-lead">Measure the code paths that run for every cached tool call, then compare the same workload on the same machine.</p>
+  </div>
+  <dl className="benchmark-scope-grid">
+    <div>
+      <dt>Measures</dt>
+      <dd>Latency, memory, and allocations</dd>
+    </div>
+    <div>
+      <dt>Excludes</dt>
+      <dd>ERP, Redis, plugins, and HTTP</dd>
+    </div>
+    <div>
+      <dt>Use</dt>
+      <dd>Local regression comparison</dd>
+    </div>
+  </dl>
+</section>
+
+## Run microbenchmarks
+
+<div className="benchmark-command-grid">
+  <section className="benchmark-command-card">
+    <p className="benchmark-card-label">Core suite</p>
+    <h3>Run all microbenchmarks</h3>
+    <p>Runs only benchmark functions and reports latency and allocation metrics.</p>
+    <pre><code>make bench</code></pre>
+  </section>
+  <section className="benchmark-command-card">
+    <p className="benchmark-card-label">Compare locally</p>
+    <h3>Collect five samples</h3>
+    <p>Keep the machine otherwise idle before comparing a change.</p>
+    <pre><code>go test -run '^$' -bench . -benchmem -count=5 ./internal/cache ./internal/mcp</code></pre>
+  </section>
+</div>
+
+The commands use `-run '^$'`, so they do not run ordinary tests. They report
+`ns/op`, `B/op`, and `allocs/op`.
+
+## Local baseline
+
+The following five-sample medians were measured on 2026-08-31 with Go 1.26.2
+on Linux/amd64, using an 11th Gen Intel Core i5-1135G7. They are a local
+baseline only.
+
+<div className="benchmark-highlight-grid">
+  <div className="benchmark-highlight-card">
+    <span>Empty argument hash</span>
+    <strong>2.5 ns</strong>
+    <small>0 allocations</small>
+  </div>
+  <div className="benchmark-highlight-card">
+    <span>Memory cache hit</span>
+    <strong>8.5 us</strong>
+    <small>22 allocations</small>
+  </div>
+  <div className="benchmark-highlight-card">
+    <span>Full cache middleware hit</span>
+    <strong>17.3 us</strong>
+    <small>58 allocations</small>
+  </div>
+</div>
+
+<p className="benchmark-table-note">On small screens, scroll this table horizontally to view all result columns.</p>
+
+<div className="benchmark-table-wrap">
+  <table>
+    <thead><tr><th>Benchmark</th><th>Median</th><th>Allocation</th></tr></thead>
+    <tbody>
+      <tr><td><code>ArgsHash/empty</code></td><td>2.5 ns/op</td><td>0 B/op, 0 allocs/op</td></tr>
+      <tr><td><code>ArgsHash/small</code></td><td>2348 ns/op</td><td>384 B/op, 7 allocs/op</td></tr>
+      <tr><td><code>ArgsHash/nested</code></td><td>4352 ns/op</td><td>656 B/op, 12 allocs/op</td></tr>
+      <tr><td><code>ExactKey</code></td><td>2910 ns/op</td><td>528 B/op, 11 allocs/op</td></tr>
+      <tr><td><code>MemoryManager/hit</code></td><td>8500 ns/op</td><td>1082 B/op, 22 allocs/op</td></tr>
+      <tr><td><code>MemoryManager/set</code></td><td>5548 ns/op</td><td>977 B/op, 18 allocs/op</td></tr>
+      <tr><td><code>CacheMiddleware/hit</code></td><td>17287 ns/op</td><td>2662 B/op, 58 allocs/op</td></tr>
+      <tr><td><code>CacheMiddleware/disabled</code></td><td>236 ns/op</td><td>144 B/op, 3 allocs/op</td></tr>
+      <tr><td><code>PrepareERPCall/legacy_get_query</code></td><td>2193 ns/op</td><td>613 B/op, 11 allocs/op</td></tr>
+      <tr><td><code>PrepareERPCall/generated_locations</code></td><td>5211 ns/op</td><td>1625 B/op, 24 allocs/op</td></tr>
+      <tr><td><code>PrepareERPCall/complete_body</code></td><td>1329 ns/op</td><td>240 B/op, 6 allocs/op</td></tr>
+    </tbody>
+  </table>
+</div>
+
+## Concurrent cache-hit stress test
+
+The stress benchmark shares one pre-seeded in-memory cache entry across
+parallel callers. It exercises cache-key creation, the cache middleware,
+JSON decoding, the lifecycle read lock, and the memory LRU lock. It does not
+call Redis, an ERP, plugins, or an HTTP server.
+
+<section className="benchmark-stress-panel">
+  <div>
+    <p className="benchmark-card-label">Shared-cache contention</p>
+    <h3>Stress concurrent in-memory cache hits</h3>
+    <p>Run the cache-hit path for five seconds at one and eight CPUs.</p>
+  </div>
+  <pre><code>make stress</code></pre>
+</section>
+
+This command runs `CacheMiddleware/hit_parallel` for five seconds at one and
+eight CPUs. On the same local environment, five-sample medians were:
+
+<div className="benchmark-stress-grid">
+  <div>
+    <span>1 CPU</span>
+    <strong>77,206 ops/s</strong>
+    <small>12,952 ns/op · 2,656 B/op</small>
+  </div>
+  <div>
+    <span>8 CPUs</span>
+    <strong>176,903 ops/s</strong>
+    <small>5,653 ns/op · 2,664 B/op</small>
+  </div>
+</div>
+
+The eight-CPU samples varied from 171757 to 255476 ops/s because callers
+contend for the shared in-memory LRU lock. Use the median for local regression
+comparison. Do not use these values to size a production deployment.

@@ -24,6 +24,7 @@ const sidebars: SidebarsConfig = {
         'erpbridge/docker',
         'erpbridge/environment-variables',
         'erpbridge/caching',
+        'erpbridge/benchmarking',
         'erpbridge/api',
         'erpbridge/mock-erp',
         'erpbridge/faq',
