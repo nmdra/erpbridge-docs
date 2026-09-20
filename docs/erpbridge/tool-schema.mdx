@@ -34,12 +34,15 @@ spec:
 
 ### `metadata`
 
-Identity and grouping information.
+Identity and grouping information. On first apply, ERPBridge records a canonical executable-content SHA-256 digest and server-authored admission bookkeeping. The digest includes the tool contract, schemas, policy, and ERP mapping. It excludes runtime lifecycle fields and review bookkeeping. Identical reapply requests are idempotent. Changed content under an admitted name and version returns `REGISTRY_CONFLICT`; create and review a new version.
+
+The first active version becomes the unqualified serving revision. Set `isServing: true` while applying an admitted active version to move that pointer. Other active versions remain available through their exact MCP names or resource digests.
 
 - **`name`**: (String) Unique identifier. Use **intent-based names** such as `list_employees`, not technical names such as `get_resource_employee`.
 - **`version`**: (String) SemVer version (e.g., `1.0.0`).
 - **`module`**: (String) Logical grouping for access control and organization.
-- **`isActive`**: (Boolean, optional) Soft-delete flag. When `false`, the tool disappears from MCP `tools/list` and direct resolution but stays in the registry.
+- **`isActive`**: (Boolean, optional) Soft-delete flag. When `false`, the exact revision cannot execute but stays in the registry.
+- **`isServing`**: (Boolean, optional) Selects this active version for future unqualified calls. It does not change in-flight calls.
 
 ### `spec.description`
 
@@ -88,6 +91,11 @@ During MCP `tools/list`, ERPBridge projects existing guidance into namespaced
 - `io.erpbridge/whenNotToUse`
 - `io.erpbridge/examples`
 - `io.erpbridge/allowedRoles`
+- `toolplane.resourceDigest`
+- `toolplane.resourceVersion`
+- `toolplane.serving`
+
+Every active revision also appears under a protocol-safe exact name ending in `.rev_<encoded-version>`. The `.rev_` marker is reserved and cannot occur in a declarative tool name. An MCP client can instead send the discovered digest as `params._meta.toolplane.resourceDigest`. Exact and digest-bound calls validate and execute that active revision and never fall forward to another revision. ERPBridge clones the selected resource before schema validation and middleware construction, so serving-pointer changes do not alter an in-flight call. Cache entries are scoped by resource digest, or by version for programmatic tools without a digest.
 
 These values are informational. `allowedRoles` describes the server's tool
 allow-list; it does not grant access or replace server-side authorization. MCP
@@ -119,6 +127,7 @@ Technical mapping to the ERP API.
 - **`type`**: (String) Execution style. Currently only `http`.
 - **`method`**: (String) `GET`, `HEAD`, `POST`, `PUT`, `PATCH`, `DELETE`, `OPTIONS`, or `TRACE`.
 - **`endpoint`**: (String) The ERP API URL path.
+- **`approvedOrigins`**: (Array) Exact normalized `scheme://host[:port]` values allowed after runtime endpoint rewriting. When omitted, apply binds the effective origin derived from `endpoint` and the current `ERP_BASE_URL`. A later rewrite to another origin fails before connector entry.
 - **`mapping`**: (Map) Optional. Maps LLM arg names to ERP parameter names.
 - **`parameterLocations`**: (Map) Generated metadata mapping each LLM argument to `path`, `query`, `header`, or `body`. If absent, GET arguments use the query and other methods use one JSON object body for compatibility.
 - **`bodyArgument`**: (String) Generated complete-body argument for primitive or array JSON request bodies. Its value is serialized as the complete body instead of an object property.

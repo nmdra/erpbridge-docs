@@ -59,9 +59,7 @@ POST /apis/erpbridge.io/v1/tools
 Content-Type: application/json
 ```
 
-Body: one JSON tool definition (kind `MCPTool`). Returns `201 Created` when a
-new definition is stored and reports an update when an existing version is
-replaced. The `bridgectl tool apply` command also accepts a YAML sequence or
+Body: one JSON tool definition (kind `MCPTool`). Tool names cannot contain the reserved `.rev_` exact-revision marker. The authenticated apply creates an admission record and returns `201 Created` with the canonical executable-content digest. Reapplying identical content is idempotent. ERPBridge does not replace an admitted version with changed content; it returns `409 REGISTRY_CONFLICT`, and the operator must create and review a new version. The `bridgectl tool apply` command also accepts a YAML sequence or
 multi-document YAML emitted by `bridgectl tool generate` and sends each tool
 definition separately. Keep the reviewed manifest under
 `manifests/<module>/`; generated output is a temporary draft, not a second
@@ -71,11 +69,12 @@ source of truth:
 {
   "status": "applied",
   "name": "list_employees",
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "resourceDigest": "<sha256>"
 }
 ```
 
-When the admission rules reject the definition, the server returns `422 Unprocessable Entity` with an error message.
+When validation rejects the definition, the server returns `422 Unprocessable Entity`. An immutable-revision conflict returns `409 Conflict`.
 
 ### Delete a tool
 
@@ -355,9 +354,7 @@ guarded entries are scoped by verified role.
 | `/metrics` | `GET` | Prometheus-formatted metrics. |
 | `/api/info` | `GET` | Authenticated safe build and runtime metadata. |
 
-`/api/info` returns the ERPBridge version, optional commit and build date,
-cache backend label, active tool count, and observation timestamp. It does not
-return credentials or ERP configuration. Older deployments may not implement
+`/api/info` returns the ERPBridge version, optional commit and build date, cache backend label, active tool count, observation timestamp, and safe process-local reconciliation status. Reconciliation fields include attempt count, last attempt and success, safe error state, desired-state hash, observed generation, and convergence. Cycle measurements reset on restart; desired resources and withdrawal tombstones remain in SQLite. It does not return credentials or ERP configuration. Older deployments may not implement
 this optional endpoint; clients should treat a `404` as unavailable.
 
 ### Prometheus Metrics

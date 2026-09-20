@@ -8,6 +8,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- Documented immutable canonical tool admissions, serving-version selection,
+  exact revision names, digest-bound calls, per-call revision snapshots,
+  revision-scoped caching, single-process withdrawal/dispatch ordering,
+  effective-origin binding, redirect suppression, and process-local
+  reconciliation recovery status.
 - Refined the ERPBridge benchmarking page with responsive scope, command, and
   result cards, plus an accessible mobile table-scroll cue.
 - Updated current-release indicators for ERPBridge Server and `bridgectl` to
