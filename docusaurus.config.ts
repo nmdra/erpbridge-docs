@@ -16,10 +16,9 @@ const config: Config = {
   },
 
   // Set the production url of your site here
-  url: 'https://blog.nimendra.xyz',
-  // Set the /<baseUrl>/ pathname under which your site is served
-  // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/erpbridge-docs/',
+  url: 'https://toolplane.nimendra.online',
+  // The custom domain serves the site from the domain root.
+  baseUrl: '/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
@@ -118,7 +117,7 @@ const config: Config = {
     announcementBar: {
       id: 'alpha-notice',
       content:
-        `🚧 ERPBridge Server and bridgectl are in <b>Alpha (${ERPBRIDGE_RELEASE})</b>; the SDK follows its own release line (<b>${SDK_RELEASE}</b>). <a href="/erpbridge-docs/docs/roadmap/overview">View release status →</a>`,
+        `🚧 ERPBridge Server and bridgectl are in <b>Alpha (${ERPBRIDGE_RELEASE})</b>; the SDK follows its own release line (<b>${SDK_RELEASE}</b>). <a href="/docs/roadmap/overview">View release status →</a>`,
       backgroundColor: '#1b1b1d',
       textColor: '#e0e0e0',
       isCloseable: true,

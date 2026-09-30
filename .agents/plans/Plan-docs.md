@@ -111,3 +111,11 @@ origin/main (release-please commits); pull it separately.
    `docs/roadmap/server.mdx`, `docs/roadmap/sdk.mdx`, `docs/sdk/overview.mdx`,
    `CHANGELOG.md`;
    **Verify:** `npm run build` green and no stale current-release indicators.)
+- [x] **Task 11: Serve the site from its custom domain root.** Set the production
+  URL to `https://toolplane.nimendra.online`, use `/` as Docusaurus `baseUrl`,
+  add the GitHub Pages `CNAME`, and update current public site links and setup
+  instructions. Keep old URLs in historical changelog entries unchanged.
+  (**Seam:** GitHub Pages site routing; **Files:** `docusaurus.config.ts`,
+  `static/CNAME`, `README.md`, `docs/bridgectl/skills.mdx`, `CHANGELOG.md`;
+  **Verify:** `npm run build` green and generated routes/assets use the root
+  path.)

@@ -115,6 +115,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- Pointed the documentation site at `https://toolplane.nimendra.online/`, switched Docusaurus to the domain-root base path, and added the GitHub Pages custom-domain file.
 - Documented explicit Redis-unavailable cache health and startup behavior,
   including `503 HEALTH_CHECK_FAILED` and no memory substitution.
 - Documented OpenAPI request-body and parameter-location preservation,

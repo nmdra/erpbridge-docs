@@ -2,7 +2,7 @@
 
 Documentation site for [ERPBridge](https://github.com/nmdra/ERPBridge) and related projects, built with [Docusaurus](https://docusaurus.io) and published to GitHub Pages.
 
-**Live site:** https://blog.nimendra.xyz/erpbridge-docs/
+**Live site:** https://toolplane.nimendra.online/
 
 ## Local development
 
@@ -11,7 +11,7 @@ npm install
 npm start
 ```
 
-Opens a dev server with live reload at http://localhost:3000/erpbridge-docs/.
+Opens a dev server with live reload at http://localhost:3000/.
 
 ## Build
 
@@ -36,7 +36,7 @@ docs/
 
 The site is optimized for LLM consumption:
 
-- **`llms.txt` / `llms-full.txt`** — generated at build time by `docusaurus-plugin-llms` (llmstxt.org standard) and served at `/erpbridge-docs/llms.txt` and `/erpbridge-docs/llms-full.txt`.
+- **`llms.txt` / `llms-full.txt`** — generated at build time by `docusaurus-plugin-llms` (llmstxt.org standard) and served at `/llms.txt` and `/llms-full.txt`.
 - **Per-page Markdown** — every doc is also served as raw Markdown at `/{path}.md`.
 - **Copy page button** — `docusaurus-plugin-copy-page-button` adds a "copy as Markdown / open in ChatGPT / Claude / Gemini" button to every page, plus a one-click MCP server install for Cursor/VS Code.
 
