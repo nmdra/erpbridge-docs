@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- Updated current-release indicators for ERPBridge Server and `bridgectl` to
+  `v0.5.0-alpha.3`.
 - Documented connector response-body lifetime: returned bodies keep the
   connector context until EOF, a read error, or close, so delayed success and
   preserved error responses survive past header receipt while existing
