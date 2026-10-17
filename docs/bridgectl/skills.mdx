@@ -1,6 +1,6 @@
 ---
 title: Skill usage
-description: AI agent workflows for ERPBridge onboarding, maintenance, authentication, observability, troubleshooting, bug reporting, and persistent operational knowledge with bridgectl.
+description: Safe CLI and management MCP workflows for ERPBridge onboarding, maintenance, diagnosis, and operational knowledge with action-specific preflight.
 keywords: [bridgectl, skills, ai agent, onboarding, troubleshooting, operational memory, sdk, mcp]
 ---
 
@@ -14,22 +14,24 @@ ERPBridge repository under `skills/bridgectl-ops/`.
 Use the skill when an agent must onboard an ERP API, manage MCP tools or
 external plugins and bindings, manage tokens or roles, inspect cache and logs,
 diagnose an integration, prepare a redacted bug report, or reuse operational
-knowledge from earlier runs.
+knowledge from earlier runs. It supports both the CLI and the separate
+`bridgectl mcp --stdio` management server.
 
 ## `bridgectl-ops`
 
 | | |
 | :--- | :--- |
 | **Location** | `skills/bridgectl-ops/SKILL.md` |
-| **Version** | 3.4.1 |
-| **Prerequisites** | A current `bridgectl` binary, an authorized ERPBridge context, and network access to the target services |
+| **Version** | 3.5.0 (repository source; release binaries retain their bundled version) |
+| **Prerequisites** | A current `bridgectl` binary or management MCP connection; authorized context and network access for deployment operations only |
 | **Optional tools** | Git for repository diagnosis and GitHub CLI for approved issue creation |
 
 ## Supported workflows
 
 | Workflow | Result |
 | :--- | :--- |
-| API onboarding | Run a deterministic preflight, register an ERP endpoint, test it through the server, generate a tool manifest, validate it, apply it, and verify MCP discovery |
+| API onboarding | Run applicable preflight checks, register an ERP endpoint, approve its server-side test, generate and validate a manifest, approve apply, and verify publication |
+| Management MCP | Discover available management tools, verify the pinned context, serialize calls, check result envelopes, and verify approved changes |
 | API and tool maintenance | Inspect versions, apply reviewed changes, deactivate tools, restore soft-deleted tools, and confirm hard-delete targets |
 | Authentication and authorization | Create, list, and revoke scoped bearer tokens; assign roles; test authorized and denied guarded calls |
 | Operations | Inspect structured logs, cache statistics, cache invalidation, contexts, and runtime health |
@@ -40,10 +42,12 @@ knowledge from earlier runs.
 
 ## Safety behavior
 
-The skill records the active context and CLI version before it acts. It uses
-the narrowest target for changes and asks for confirmation before it applies or
-deletes a tool, plugin, or plugin binding; creates or revokes a token; or
-flushes cache entries.
+The skill records the selected context and known CLI/MCP version. CLI commands
+use an explicit context; management MCP uses its verified pinned context.
+It asks for exact-action confirmation before every mutation or server-side API
+probe, including registration, credential-reference changes, apply/delete,
+token creation/revocation, cache flush, and saved-context changes. Local MCP
+write grants and confirmation fields do not replace human approval.
 
 Install the bundled skill with:
 
@@ -56,7 +60,11 @@ bridgectl skill install --dir /path/to/bridgectl-ops
 ```
 
 The global destination is `~/.agents/skills/bridgectl-ops`; project installs use
-`./.agents/skills/bridgectl-ops`. Existing destinations require `--force`.
+`./.agents/skills/bridgectl-ops`. Existing destinations require `--force` and
+confirmation of the exact destination before replacement. A release binary
+installs the skill embedded in that release. For unreleased source changes,
+validate a temporary source-built helper and a fresh installation first; do
+not replace an installed release CLI merely to refresh the skill.
 
 Credentials stay in environment variables or mounted credential files under
 `ERPBRIDGE_CREDENTIALS_DIR`. Tool schemas use `credentialRef` and an optional
@@ -64,11 +72,18 @@ Credentials stay in environment variables or mounted credential files under
 fail closed and do not fall back to environment values. A token created by the
 CLI is disclosed once and is omitted from later summaries and bug reports.
 
-The onboarding preflight uses the selected context explicitly and checks stack
-health, Compose interpolation, the context-scoped API registry, and the
-control-plane root before mutation. The normal `bridgectl api test` is an
-admin-authenticated server-side probe that returns only status, content type,
-latency, and success; `--local` is reserved for an explicit offline diagnostic.
+Preflight starts with selected-context, endpoint, credential-source,
+authorization, and exact-target evidence. Load only profiles needed for the
+action: remote control-plane access, local Compose, API onboarding, or plugin
+bindings. Remote reads do not require local Docker, localhost health, MockERP,
+RedisInsight, or an API probe. Local validation and skill installation do not
+need deployment connectivity. Reuse unchanged evidence within the workflow;
+recheck affected evidence after a mutation, configuration change, or new failure.
+
+The normal `bridgectl api test` is an admin-authenticated server-side probe.
+Its bounded status, content type, latency, and success output does not make it
+read-only: it can cause downstream effects and needs exact approval. `--local`
+is reserved for a separately approved host-side diagnostic.
 Generated YAML is a temporary draft. Use `bridgectl tool generate --output-dir`
 for one JSON or YAML file per tool, review the exact tool-name files, and
 validate them before applying the reviewed directory. Keep the reviewed applied
@@ -86,6 +101,41 @@ names or examples. The `system.*_test` demonstrations require
 `MCP_ENABLE_TEST_TOOLS=true` and must be disabled in production. RedisInsight
 is for local inspection and must stay loopback-only or opt-in.
 
+## Use management MCP
+
+Prefer an available authorized management connection for operations in its
+live catalogue. Discover tool names and schemas rather than assuming a client
+namespace or fixed tool count. Keep runtime ERP tools on a separate connection;
+adding management MCP must not replace existing runtime access.
+
+Start read-only, with an absolute executable path and explicit context:
+
+```bash
+/absolute/path/to/bridgectl mcp --stdio --context staging
+```
+
+Run one management call at a time. Check MCP `isError` and the text JSON's
+`success` and `error.code`; a resolved promise is not proof of success. Wait
+for an active call before retrying a call refused with `busy`.
+
+A session pins context, endpoints, and credential at launch. After an approved
+credential, endpoint, or grant change, restart or reconnect the process before
+retesting. A missing write tool is not permission to switch interfaces or
+expand grants without approval.
+
+Redacted inspection views are not applicable manifests. Review retained free
+text and enum values before sharing; `redacted: true` does not certify all text
+as secret-free. Use the reviewed source or generate a draft, then validate it.
+Most resource writes return `effect: "command_completed"` and `verified: false`;
+cache flush returns deletion counters and context selection returns the saved
+and active context. All require independent readback. If it returns `outcome_unknown`, read the exact target before deciding
+whether to retry; never assume rollback or retry automatically. Token creation,
+remote OpenAPI import, file output, and detailed validation remain CLI tasks.
+
+See [Management MCP](./mcp.mdx) for grants, confirmation targets, and client
+setup. The bundled skill adds a Pi configuration example without personal
+credentials or deployment-specific names.
+
 ## Persistent operational knowledge
 
 The skill can use the optional project-local store at
@@ -94,11 +144,15 @@ append-only monthly execution evidence, and append-only skill-impact history.
 It is not part of the bundled or installed skill. The repository skill remains
 the source of truth.
 
-Retrieval starts in the most specific area, then searches exact stable error
-codes, resource kinds, operations, resolution codes, and versions. It normally
-reads no more than five full knowledge entries or two historical execution
-records. Current skill instructions, references, CLI documentation, schemas,
-and authenticated server state always take precedence over memory.
+When history can help, start with the optional index, choose one relevant
+area, and search exact identifiers. Stop on no strong match; the store's
+presence alone does not require loading the full knowledge reference. Read
+its detailed sections only for retrieval ambiguity, stale/conflicting matches,
+record writing, consolidation, or skill evolution. Across a workflow, bound
+retrieval to 20 candidate paths, 10 metadata reads, five full knowledge entries,
+and two exact historical records. A new clue does not reset those limits.
+Current safety gates, skill instructions, references, CLI/schema contracts,
+and authenticated server state always take precedence over untrusted memory.
 
 After a completed major workflow, the agent follows a completion checkpoint
 after verification and before the final handoff. A major workflow includes
@@ -109,6 +163,7 @@ cross-system operation. It records exactly one bounded execution outcome
 record per command, turn, retry, or subtask. A single explanation or operation
 waiting for confirmation is not a major task.
 
+The checkpoint still applies when retrieval found no match or was skipped.
 When the optional project-local store exists, the agent runs the redaction gate
 and appends one record, then consolidates only a supported reusable lesson. If
 the store is absent or safe appending fails, the agent continues the handoff,

@@ -25,6 +25,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- Align the repository `bridgectl-ops` 3.5.0 guide with CLI and management MCP
+  usage, action-specific preflight, portable installed-skill references, and
+  lazy bounded memory retrieval; preserve exact approvals and terminal records
 - Update ERPBridge Server and `bridgectl` current-release indicators to
   `v0.6.0-alpha.1`, record the shipped management MCP feature, and document its
   release-version identity; keep the SDK release at `v1.1.0`
