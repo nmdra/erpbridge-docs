@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+
+- Add a `bridgectl` MCP management server page: start a stdio session for an AI
+  coding agent, understand the stdout/stderr contract, session pinning, write
+  groups, and execution limits.
+
 ### Changed
 
 - Updated current-release indicators for ERPBridge Server and `bridgectl` to

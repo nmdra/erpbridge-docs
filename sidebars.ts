@@ -41,6 +41,12 @@ const sidebars: SidebarsConfig = {
     'bridgectl/overview',
     {
       type: 'category',
+      label: 'Agent integration',
+      collapsed: false,
+      items: ['bridgectl/mcp'],
+    },
+    {
+      type: 'category',
       label: 'Skill usage',
       collapsed: false,
       items: ['bridgectl/skills'],
