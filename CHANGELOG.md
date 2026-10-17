@@ -25,6 +25,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- Update ERPBridge Server and `bridgectl` current-release indicators to
+  `v0.6.0-alpha.1`, record the shipped management MCP feature, and document its
+  release-version identity; keep the SDK release at `v1.1.0`
 - Updated current-release indicators for ERPBridge Server and `bridgectl` to
   `v0.5.0-alpha.3`.
 - Documented connector response-body lifetime: returned bodies keep the
