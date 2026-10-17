@@ -13,6 +13,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   argument rules, and the validation-result behaviour.
 - Document the structured `bridgectl log stats` output and the `bridgectl tool
   get` list output fix.
+- Document the approved write and probe tools, their startup groups, canonical
+  confirmation targets, unknown-outcome behaviour, and the saved-default context
+  update.
 
 ### Changed
 
