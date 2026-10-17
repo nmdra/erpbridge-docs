@@ -156,6 +156,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- Document literal tool deletion query values, canonical endpoint field spellings,
+  shared sensitive-key screening, and explicit empty resource inventories in the
+  management MCP guide
 - The OpenCode section of the Agentic Tools MCP Integration guide now shows
   the validated flat `mcp.<name>` config shape instead of the rejected
   `mcp.servers.<name>` nesting, adds `"enabled": true`, documents
