@@ -8,9 +8,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
-- Add a `bridgectl` MCP management server page: start a stdio session for an AI
-  coding agent, understand the stdout/stderr contract, session pinning, write
-  groups, and execution limits.
+- Add the `bridgectl` management MCP catalogue: the twelve read, local
+  validation, and generation tools, the result-redaction contract, the strict
+  argument rules, and the validation-result behaviour.
+- Document the structured `bridgectl log stats` output and the `bridgectl tool
+  get` list output fix.
 
 ### Changed
 
