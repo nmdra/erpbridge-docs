@@ -134,6 +134,7 @@ const sidebars: SidebarsConfig = {
       label: 'Other commands',
       collapsed: true,
       items: [
+        'bridgectl/bridgectl_mcp',
         'bridgectl/bridgectl_completion',
         'bridgectl/bridgectl_completion_bash',
         'bridgectl/bridgectl_completion_fish',

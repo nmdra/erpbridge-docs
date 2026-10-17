@@ -16,6 +16,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Document the approved write and probe tools, their startup groups, canonical
   confirmation targets, unknown-outcome behaviour, and the saved-default context
   update.
+- Document Codex CLI and Claude Code registration for the management server,
+  keeping it separate from the runtime `erpbridge-server --stdio` registration,
+  and add the generated `bridgectl mcp` command reference.
 
 ### Changed
 
