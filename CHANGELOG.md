@@ -6,6 +6,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+
+- Add the `bridgectl` management MCP catalogue: the twelve read, local
+  validation, and generation tools, the result-redaction contract, the strict
+  argument rules, and the validation-result behaviour.
+- Document the structured `bridgectl log stats` output and the `bridgectl tool
+  get` list output fix.
+- Document the approved write and probe tools, their startup groups, canonical
+  confirmation targets, unknown-outcome behaviour, and the saved-default context
+  update.
+- Document the manifest safety rules, the staging order, the unknown-outcome
+  rule for any answered write, and the recognized not-found behaviour for named
+  reads.
+- Document Codex CLI and Claude Code registration for the management server,
+  keeping it separate from the runtime `erpbridge-server --stdio` registration,
+  and add the generated `bridgectl mcp` command reference.
+
 ### Changed
 
 - Updated current-release indicators for ERPBridge Server and `bridgectl` to

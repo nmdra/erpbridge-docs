@@ -41,6 +41,12 @@ const sidebars: SidebarsConfig = {
     'bridgectl/overview',
     {
       type: 'category',
+      label: 'Agent integration',
+      collapsed: false,
+      items: ['bridgectl/mcp'],
+    },
+    {
+      type: 'category',
       label: 'Skill usage',
       collapsed: false,
       items: ['bridgectl/skills'],
@@ -128,6 +134,7 @@ const sidebars: SidebarsConfig = {
       label: 'Other commands',
       collapsed: true,
       items: [
+        'bridgectl/bridgectl_mcp',
         'bridgectl/bridgectl_completion',
         'bridgectl/bridgectl_completion_bash',
         'bridgectl/bridgectl_completion_fish',
