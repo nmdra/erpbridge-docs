@@ -95,6 +95,15 @@ When `-o json` is used, errors are written to **stdout** as a structured JSON pa
 ```
 
 :::note
+Every command checks the control-plane status before it decodes a typed body, so a
+rejected or missing credential is always reported as the server's own
+`AUTHENTICATION_FAILED` envelope with exit code `4`, never as a decoding failure.
+
+A listing rendered as `-o json` or `-o yaml` always contains a list. An empty
+collection is `[]`, never `null`.
+:::
+
+:::note
 Check `code` (the numeric exit code) and `error` (the machine-readable code)
 together. The exit code also propagates to the process exit status, so `$?`
 works in plain shell scripts too. Control-plane errors never include upstream
