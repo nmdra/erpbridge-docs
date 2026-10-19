@@ -14,6 +14,14 @@ the configured ERPBridge deployment. It is not the runtime server: use
 `erpbridge-server --stdio` or `<erpbridge-host>/mcp/` to call published ERP
 tools.
 
+## Windows clients
+
+See [management MCP on Windows](./windows.mdx#management-mcp-on-windows)
+for escaped Windows executable paths, direct argument arrays, and host-environment
+credential forwarding. Do not put token values in client configuration.
+Native Ctrl+C shutdown and default-browser launch require manual Windows checks;
+Linux SIGTERM behavior is unchanged.
+
 ## Start a session
 
 ```sh

@@ -8,6 +8,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- Add PowerShell-first native Windows CLI installation, checksums, configuration,
+  completion, skills, Console and management MCP guidance, with validation limits
+- Document Windows-only context registry safety checks and manual recovery;
+  preserve Linux context names, paths, and workflows
+
 - Add the `bridgectl` management MCP catalogue: the twelve read, local
   validation, and generation tools, the result-redaction contract, the strict
   argument rules, and the validation-result behaviour.
