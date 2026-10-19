@@ -39,6 +39,7 @@ const sidebars: SidebarsConfig = {
   ],
   bridgectlSidebar: [
     'bridgectl/overview',
+    'bridgectl/windows',
     {
       type: 'category',
       label: 'Agent integration',
